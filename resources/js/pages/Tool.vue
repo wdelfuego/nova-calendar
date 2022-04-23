@@ -1,0 +1,113 @@
+<template>
+  <div>
+    <Head title="Nova Calendar" />
+
+    <div id="nc-control">
+    
+      <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
+        <span>{{ $data.title }}</span>
+      </h1>
+      
+      <a @click="prevMonth" class="left" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
+      </a>
+  
+      <a @click="nextMonth" class="right" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
+      </a>
+            
+    </div>
+        
+    <Card
+      class="flex flex-col items-center justify-center"
+      style="min-height: 300px"
+    >
+
+        <table class="nova-calendar noselect w-full table py-31 px-6">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th v-for="column in $data.columns" class="border-r border-l border-t border-white dark:border-gray-800 dark:text-gray-300 dark:bg-gray-800"><span>{{ column }}</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="week in $data.days" >
+                    <td v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':(day.isToday == 1), 'withinMonth':(day.isWithinMonth == 1), 'weekend':(day.isWeekend == 1)}">
+                      <div>
+                          <span class="daynum text-gray-400 noselect">{{ day.dayNum }}</span>
+                          <div v-for="event in day.events" class="nc-event" :style="styles.default">
+                              <span class="name">{{ event.name }}</span>
+                              <span class="time">{{ event.time }}</span>
+                              <span class="notes">Faltan 6</span>
+                              <div class="badges">
+                                <span class="badge bg-white text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
+                              </div>
+                          </div>
+                      </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </Card>
+  </div>
+</template>
+
+<script>
+export default {
+        
+  mounted() {
+    this.reset();
+  },
+
+  methods: {
+
+    reset() {
+      this.month = null;
+      this.year = null;
+      this.reload();
+    },
+
+    prevMonth() {
+      this.month -= 1;
+      this.reload();
+    },
+  
+    nextMonth() {
+      this.month += 1;
+      this.reload();
+    },
+
+    reload() {
+      let vue = this;
+      Nova.request().get(Nova.config('base')+'/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
+        .then(response => {
+            vue.year = response.data.year;
+            vue.month = response.data.month;
+            vue.title = response.data.title;
+            vue.columns = response.data.columns;
+            vue.days = response.data.days;
+        });
+    }
+  
+  },
+
+  data () {
+      return {
+          year: null,
+          month: null,
+          title: '',
+          columns: Array(7).fill('-'),
+          days: Array(6).fill(Array(7).fill({})),
+          styles: {
+            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.4)' }
+          }
+      }
+  }
+
+}
+</script>
+
+<style>
+/* Scoped Styles */
+</style>
