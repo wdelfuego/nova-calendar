@@ -9,9 +9,8 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
-
-use Wdelfuego\NovaCalendar\Http\Middleware\Authorize;
 use Jenssegers\Date\Date as LocalizedDate;
+use Wdelfuego\NovaCalendar\Http\Middleware\Authorize;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -47,7 +46,7 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], 'nova-calendar')
+        Nova::router(['nova', Authorize::class], 'wdelfuego/nova-calendar')
             ->group(__DIR__.'/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
@@ -62,6 +61,6 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 }

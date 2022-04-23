@@ -4,16 +4,20 @@ namespace Wdelfuego\NovaCalendar\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
+use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 
 class CalendarController extends BaseController
 {
+    private $request;
     private $dataProvider;
+
     
-    public function __construct()
+    public function __construct(NovaRequest $request, CalendarDataProviderInterface $dataProvider)
     {
-        $this->dataProvider = new MonthCalendar();
+        $this->request = $request;
+        $this->dataProvider = $dataProvider;
     }
     
     public function getMonthCalendarData($year = null, $month = null)
@@ -31,7 +35,7 @@ class CalendarController extends BaseController
             'month' => $month,
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),
-            'days' => $this->dataProvider->days(),
+            'days' => $this->dataProvider->calendarDays(),
         ];
     }
     

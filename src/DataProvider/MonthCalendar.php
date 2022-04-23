@@ -2,17 +2,35 @@
 
 namespace Wdelfuego\NovaCalendar\DataProvider;
 
+use DateTimeInterface;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Resource as NovaResource;
+
 use Jenssegers\Date\Date as LocalizedDate;
+use Wdelfuego\Nova\DateTime\Filters\NotBeforeDate;
+use Wdelfuego\Nova\DateTime\Filters\NotAfterDate;
+use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
+
+use Wdelfuego\NovaCalendar\CalendarDay;
+use Wdelfuego\NovaCalendar\Event;
 
 class MonthCalendar implements MonthDataProviderInterface
 {
     const MONDAY = 1;
+    const TUESDAY = 2;
+    const WEDNESDAY = 3;
+    const THURSDAY = 4;
+    const FRIDAY = 5;
+    const SATURDAY = 6;
     const SUNDAY = 7;
     
-    private $weekStartsOn;
-    private $year;
-    private $month;
+    const CALENDAR_WEEKS = 6;
+    
+    protected $weekStartsOn;
+    protected $year;
+    protected $month;
+    
+    private $allEvents = null;
     
     public function __construct(int $year = null, int $month = null)
     {
@@ -37,6 +55,11 @@ class MonthCalendar implements MonthDataProviderInterface
         $this->startWeekOn(self::SUNDAY);
     }
 
+    public function title() : string
+    {
+        return ucfirst($this->firstDayOfMonth()->format('F \'y'));
+    }
+
     public function daysOfTheWeek() : array
     {
         $out = [];
@@ -49,50 +72,93 @@ class MonthCalendar implements MonthDataProviderInterface
         return $out;
     }
 
-    private function firstDayOfMonth() : LocalizedDate
+    public function calendarDays() : array
+    {
+        $out = [];
+        $dateCursor = $this->firstDayOfCalendar();
+
+        for($i = 0; $i < 6; $i++)
+        {
+            $week = [];
+            for($j = 0; $j < 7; $j++)
+            {
+                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month);
+                $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
+                
+                $dateCursor = $dateCursor->addDay();
+            }
+            $out[] = $week;
+        }
+        
+        return $out;
+    }
+    
+    protected function customizeEvent(Event $event) : Event
+    {
+        return $event;
+    }
+    
+    protected function firstDayOfMonth() : LocalizedDate
     {
         return LocalizedDate::createFromFormat('Y-m-d', $this->year.'-'.$this->month.'-1');
     }
 
-    private function firstDayOfCalendar(): LocalizedDate
+    protected function firstDayOfCalendar(): LocalizedDate
     {
         $firstOfMonth = $this->firstDayOfMonth();
         return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - $this->weekStartsOn);
     }
-
-    public function days() : array
+    
+    protected function lastDayOfCalendar(): LocalizedDate
     {
-        $out = [];
-        $currentDay = $this->firstDayOfCalendar();
+        return $this->firstDayOfCalendar()->addDays(7 * self::CALENDAR_WEEKS);
+    }
 
-        // 6 weeks
-        for($i = 0; $i < 6; $i++)
+    protected function eventDataForDate(DateTimeInterface $date) : array
+    {
+        $events = array_filter($this->allEvents(), function($e) use ($date) {
+            return $e->start()->isSameDay($date);
+        });
+
+        return array_map(fn($e): array => $e->toArray(), $events);
+    }
+    
+    private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
+    {
+        $out = new Event($resource->title(), $resource->resource->$dateAttribute);
+        return $this->customizeEvent($out);
+    }
+    
+    private function allEvents() : array
+    {
+        if(is_null($this->allEvents))
         {
-            $week = [];
-            // 7 days per week
-            for($j = 0; $j < 7; $j++)
-            {
-                $week[] = [
-                    'dayNum' => $currentDay->format('j'),
-                    'isWithinMonth' => $currentDay->month == $this->month,
-                    'isToday' => $currentDay->isToday(),
-                    'isWeekend' => $currentDay->isWeekend(),
-                    'events' => [
-                        new class { public $time = '10:00'; public $name = 'Event X'; public $badges = ['🔸']; },
-                        new class { public $name = 'Event Y'; public $badges = ['✓', '🔸', 'X']; },
-                    ]
-                ];
-                
-                $currentDay = $currentDay->addDay();
-            }
-            $out[] = $week;
-        }
-        return $out;
-    }
+            $this->allEvents = [];
+            $firstDayOfCalendar = $this->firstDayOfCalendar();
+            $lastDayOfCalendar = $this->lastDayOfCalendar();
         
-    public function title() : string
-    {
-        return ucfirst($this->firstDayOfMonth()->format('F \'y'));
-    }
+            foreach($this->novaResources() as $novaResourceClass => $dateAttribute)
+            {
+                if(!is_subclass_of($novaResourceClass, NovaResource::class))
+                {
+                    throw new \Exception("Only Nova Resources can be automatically fetched for event generation ($novaResourceClass is not a Nova Resource)");
+                }
+            
+                $notBefore = new NotBeforeDate('', $dateAttribute);
+                $notAfter = new NotAfterDate('', $dateAttribute);
+            
+                $eloquentModelClass = $novaResourceClass::$model;
+                $models = $eloquentModelClass::orderBy($dateAttribute);
+                $models = $notBefore->modulateQuery($models, $firstDayOfCalendar);
+                $models = $notAfter->modulateQuery($models, $lastDayOfCalendar);
 
+                foreach($models->cursor() as $model)
+                {
+                    $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $dateAttribute);
+                }
+            }
+        }
+        
+        return $this->allEvents;
+    }
 }

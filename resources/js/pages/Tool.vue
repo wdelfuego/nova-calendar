@@ -31,13 +31,13 @@
             </thead>
             <tbody>
                 <tr v-for="week in $data.days" >
-                    <td v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':(day.isToday == 1), 'withinMonth':(day.isWithinMonth == 1), 'weekend':(day.isWeekend == 1)}">
+                    <td valign="top" v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':(day.isToday == 1), 'withinRange':(day.isWithinRange == 1), 'weekend':(day.isWeekend == 1)}">
                       <div>
-                          <span class="daynum text-gray-400 noselect">{{ day.dayNum }}</span>
+                          <span class="daylabel text-gray-400 noselect">{{ day.label }}</span>
                           <div v-for="event in day.events" class="nc-event" :style="styles.default">
                               <span class="name">{{ event.name }}</span>
                               <span class="time">{{ event.time }}</span>
-                              <span class="notes">Faltan 6</span>
+                              <span class="notes">{{ event.notes }}</span>
                               <div class="badges">
                                 <span class="badge bg-white text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
                               </div>
@@ -87,6 +87,8 @@ export default {
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.days = response.data.days;
+            
+            console.log(vue.days);
         });
     }
   

@@ -2,7 +2,7 @@
   --nc-transparent: rgba(255, 255, 255, 0);
   --nc-highlight-bg: rgba(var(--colors-primary-500), 0.02);
   --nc-highlight-border: rgba(var(--colors-primary-500), 0.4);
-  --nc-disabled-bg: rgba(var(--colors-gray-500), 0.1);
+  --nc-disabled-bg: rgba(var(--colors-black), 0.1);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0.02);
   --nc-event-border: rgba(var(--colors-primary-500), 0.4);
@@ -60,6 +60,7 @@ table.nova-calendar th, table.nova-calendar td {
 
 table.nova-calendar th {
   padding: 0.5em 1em;
+  text-align: left;
 }
 
 table.nova-calendar th span {
@@ -71,15 +72,13 @@ table.nova-calendar td {
   border-width: 1px;
 }
 
-table.nova-calendar td:not(.withinMonth) {
+table.nova-calendar td:not(.withinRange) {
   opacity: 0.3;
   background-color: var(--nc-disabled-bg);
 }
 
-table.nova-calendar td.weekend.withinMonth {
+table.nova-calendar td.weekend.withinRange {
   background-color: var(--nc-weekend-bg);
-  border-left: 1px solid var(--nc-weekend-border);
-  border-right: 1px solid var(--nc-weekend-border);
 }
 
 table.nova-calendar td > div {
@@ -89,7 +88,7 @@ table.nova-calendar td > div {
   padding-top: 2.5em;
 }
 
-table.nova-calendar span.daynum {
+table.nova-calendar span.daylabel {
   display: block;
   position: absolute;
   top: 0.5em;
@@ -104,9 +103,9 @@ table.nova-calendar td.today ,table.nova-calendar td.weekend.today {
   outline-offset: -2px;
 }
 
-table.nova-calendar td.today > div > span.daynum {
+table.nova-calendar td.today > div > span.daylabel {
   font-weight: bold;
-  font-size: 16pt;
+  font-size: 14pt;
   margin-top: -0.2em;
 }
 
@@ -137,19 +136,18 @@ table.nova-calendar div.nc-event > div.badges {
   display: inline-block;
   position: absolute;
   margin: 0;
-  top: -0.3em;
-  right: -0.2em;
-  font-size: 20px;
+  top: 0.05em;
+  right: 0.1em;
 }
 
 table.nova-calendar div.nc-event > div.badges > span.badge {
   display: inline-block;
-  border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
-  font-size: 10pt;
+/*  border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;*/
+  font-size: 9pt;
   min-width: 26px;
   text-align: center;
   border-radius: 50%;
   padding: 0.2em;
-  margin-right: -1pt;
+  margin-right: 0pt;
 
 }

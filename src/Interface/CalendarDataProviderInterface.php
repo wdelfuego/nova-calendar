@@ -1,12 +1,12 @@
 <?php
 
-namespace Wdelfuego\NovaCalendar\DataProvider;
+namespace Wdelfuego\NovaCalendar\Interface;
 
-interface DataProviderInterface
+interface CalendarDataProviderInterface
 {
     public function __construct();
     
     public function title() : string;
     public function daysOfTheWeek() : array;
-    public function days() : array;
+    public function calendarDays() : array;
 }
