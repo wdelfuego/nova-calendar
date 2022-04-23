@@ -3,14 +3,23 @@
 namespace Wdelfuego\NovaCalendar;
 
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Laravel\Nova\Resource as NovaResource;
 
 class Event
 {
+    public static function fromResource(NovaResource $resource, string $dateAttribute) : self
+    {
+        return (new self($resource->title(), $resource->resource->$dateAttribute))->withResource($resource);
+    }
+            
     protected $name;
     protected $start;
     protected $end;
     protected $notes;
     protected $badges;
+    
+    protected $novaResource = null;
     
     public function __construct(
         string $name, 
@@ -26,12 +35,33 @@ class Event
         $this->badges = $badges;
     }
 
+    public function resource(NovaResource $v = null) : ?NovaResource
+    {
+        if(!is_null($v))
+        {
+            $this->novaResource = $v;
+        }
+        
+        return $this->novaResource;
+    }
+    
+    public function withResource(NovaResource $v) : self
+    {
+        $this->resource($v);
+        return $this;
+    }
+    
+    public function model() : ?EloquentModel
+    {
+        return $this->novaResource ? $this->novaResource->resource : null;
+    }
+
     public function toArray() : array
     {
         return [
             'name' => $this->name,
-            'time' => $this->start->format("H:i"),
-            'timeEnd' => $this->end ? $this->end->format("H:i") : null,
+            'start' => $this->start->format("H:i"),
+            'end' => $this->end ? $this->end->format("H:i") : null,
             'notes' => $this->notes,
             'badges' => $this->badges
         ];
@@ -109,23 +139,24 @@ class Event
         return $this->badges;
     }
     
-    public function withBadges(array $v) : self
+    public function addBadges(string ...$v) : self
     {
-        $this->badges($v);
+        foreach($v as $badge)
+        {
+            $this->badges[] = $badge;            
+        }
+        
         return $this;
     }
     
-    public function addBadge(string $v) : self
+    public function removeBadges(string ...$v) : self
     {
-        $this->badges[] = $v;
-        return $this;
-    }
-    
-    public function removeBadge(string $v) : self
-    {
-        $this->badges = array_filter($this->badges, function($b) use ($v) {
-            return $b != $v;
-        });
+        foreach($v as $badge)
+        {
+            $this->badges = array_filter($this->badges, function($b) use ($badge) {
+                return $b != $badge;
+            });
+        }
         return $this;
     }
 }

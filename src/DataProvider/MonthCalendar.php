@@ -125,8 +125,7 @@ class MonthCalendar implements MonthDataProviderInterface
     
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
     {
-        $out = new Event($resource->title(), $resource->resource->$dateAttribute);
-        return $this->customizeEvent($out);
+        return $this->customizeEvent(Event::fromResource($resource, $dateAttribute));
     }
     
     private function allEvents() : array

@@ -31,17 +31,20 @@
             </thead>
             <tbody>
                 <tr v-for="week in $data.days" >
-                    <td valign="top" v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':(day.isToday == 1), 'withinRange':(day.isWithinRange == 1), 'weekend':(day.isWeekend == 1)}">
+                    <td valign="top" v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':day.isToday, 'withinRange':day.isWithinRange, 'weekend':day.isWeekend}">
                       <div>
-                          <span class="daylabel text-gray-400 noselect">{{ day.label }}</span>
-                          <div v-for="event in day.events" class="nc-event" :style="styles.default">
-                              <span class="name">{{ event.name }}</span>
-                              <span class="time">{{ event.time }}</span>
-                              <span class="notes">{{ event.notes }}</span>
-                              <div class="badges">
-                                <span class="badge bg-white text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
-                              </div>
-                          </div>
+                          <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
+                          <template v-for="event in day.events">
+                            <div v-if="day.isWithinRange" @click="open" class="nc-event" :style="styles.default">
+                                <span class="name">{{ event.name }}</span>
+                                <span class="time" v-if="event.end">{{ event.start }} - {{ event.end }}</span>
+                                <span class="time" v-else>{{ event.start }}</span>
+                                <span class="notes">{{ event.notes }}</span>
+                                <div class="badges">
+                                  <span class="badge bg-gray-100 text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
+                                </div>
+                            </div>
+                          </template>
                       </div>
                     </td>
                 </tr>
@@ -58,6 +61,14 @@ export default {
         
   mounted() {
     this.reset();
+    
+    Nova.addShortcut('alt+right', event => {
+        this.nextMonth();
+    })
+    
+    Nova.addShortcut('alt+left', event => {
+        this.prevMonth();
+    })
   },
 
   methods: {
@@ -87,9 +98,11 @@ export default {
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.days = response.data.days;
-            
-            console.log(vue.days);
         });
+    },
+    
+    open(event) {
+      console.log(event);
     }
   
   },
@@ -102,7 +115,7 @@ export default {
           columns: Array(7).fill('-'),
           days: Array(6).fill(Array(7).fill({})),
           styles: {
-            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.4)' }
+            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.7)' }
           }
       }
   }
