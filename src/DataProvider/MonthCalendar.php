@@ -16,6 +16,7 @@ use Wdelfuego\NovaCalendar\Event;
 
 abstract class MonthCalendar implements MonthDataProviderInterface
 {
+    // TODO move these constants to a more generic level and update docs
     const MONDAY = 1;
     const TUESDAY = 2;
     const WEDNESDAY = 3;

@@ -32,7 +32,7 @@ The following features are not yet supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 ## What can you do?
-Developers who are interested in working together on this Tool are highly welcomed -- take a look at the `CONTRIBUTING.md` file in this repo.
+Developers who are interested in working together on this Tool are highly welcomed. Respond to or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
 
 # Installation
 ```sh
@@ -130,7 +130,7 @@ protected function customizeEvent(Event $event) : Event
     if($event->model())
     {
         // Prefix each event's name with its ID
-        $event->name($event->model()->id .' - ' $event->name());
+        $event->name($event->model()->id .' - ' .$event->name());
 
         // Add a warning emoji badge if the end user should 
         // be warned about the model's state
@@ -160,15 +160,15 @@ The following customization methods with regard to the display of the `Event` in
 ### Chainable customization methods
 All of these methods return the `Event` itself so you can chain them in the `customizeEvent` method:
 - `hideTime()` hides start and (if available) end times in the calendar view. 
-- `displayTime()` enables the display of start and end times
-- `withName(string $v)` updates the name of the event
-- `withStart(DateTimeInterface $v)` updates the date and start time of the event (it will be displayed on the calendar accordingly)
+- `displayTime()` enables the display of start and end times.
+- `withName(string $v)` updates the name of the event.
+- `withStart(DateTimeInterface $v)` updates the date and start time of the event (it will be displayed on the calendar accordingly).
 - `withEnd(DateTimeInterface $v)` updates the end time of the event. **Note**: if you supply an `end` timestamp, its date value is completely ignored by this package for now. All events are assumed to be single day events. Its time value will be used as the event's end time.
-- `withNotes(string $v)` updates the notes displayed below the name and, if enabled, the time info of the event
+- `withNotes(string $v)` updates the notes displayed below the name and, if enabled, the time info of the event.
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
 - `removeBadge(string $v)` and `removeBadges(string ...$v)` do the same but they remove rather than add badges.
-- `withStyle(string $v)` to set the CSS style applied to the div of this specific event (see 'Adding custom event styles' below)
+- `withStyle(string $v)` to set the CSS style applied to the div of this specific event (see 'Adding custom event styles' below).
 
 ### Non-chainable customization methods
 Corresponding methods are available in non-chainable form, if you prefer to work with those. 
@@ -279,7 +279,7 @@ protected function urlForResource(NovaResource $resource)
     ]);
 }
 ```
-This example shows the default behavior. If you change `nova.pages.detail` into `nova.pages.edit` they are sent directly to the resource's Edit view, instead of its Detail view.
+This example shows the default behavior. If you change `nova.pages.detail` into `nova.pages.edit` users will be sent directly to the resource's Edit view, instead of to its Detail view.
 
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.
@@ -302,7 +302,7 @@ protected function nonNovaEvents() : array
 
 If you are going to return a long list of events here, or do a request to an external service, you can use the `firstDayOfCalendar()` and `lastDayOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
 
-Any events you return here that fall outside that date range are never displayed, so it's a waste to your and your users' resources if you still generate them.
+Any events you return here that fall outside that date range are never displayed, so it's a waste of your and your users' resources if you still generate them.
 
 # Support
 
