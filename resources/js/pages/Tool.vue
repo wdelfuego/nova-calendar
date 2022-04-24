@@ -36,7 +36,7 @@
                           <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
 
                           <template v-for="event in day.events">
-                            <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="styles.default" v-bind:class="{'clickable':event.url}">
+                            <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="this.stylesForEvent(event)" v-bind:class="{'clickable':event.url}">
                                 <span class="name">{{ event.name }}</span>
 
                                 <template v-if="event.options.displayTime">
@@ -100,11 +100,17 @@ export default {
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.days = response.data.days;
+            vue.styles = response.data.styles;
+            console.log(vue.styles);
         });
     },
     
     open(url) {
       Nova.visit(url);
+    },
+  
+    stylesForEvent(event) {
+      return (event.options.style) ? [this.styles.default, this.styles[event.options.style]] : this.styles.default;
     }
   
   },

@@ -36,7 +36,17 @@ class CalendarController extends BaseController
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),
             'days' => $this->dataProvider->calendarDays(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
     
+    public function defaultStyles() : array
+    {
+        return [
+            'default' => [
+                'color' => '#fff',
+                'background-color' => 'rgba(var(--colors-primary-500), 0.7)',
+            ]
+        ];
+    }
 }

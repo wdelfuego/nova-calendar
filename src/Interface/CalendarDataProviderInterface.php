@@ -9,4 +9,5 @@ interface CalendarDataProviderInterface
     public function title() : string;
     public function daysOfTheWeek() : array;
     public function calendarDays() : array;
+    public function eventStyles() : array;
 }

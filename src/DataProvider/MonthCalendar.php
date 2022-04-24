@@ -93,6 +93,11 @@ class MonthCalendar implements MonthDataProviderInterface
         return $out;
     }
     
+    public function eventStyles() : array
+    {
+        return [];
+    }
+    
     protected function customizeEvent(Event $event) : Event
     {
         return $event;

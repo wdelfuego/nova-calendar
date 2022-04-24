@@ -22,6 +22,7 @@ class Event
     protected $novaResource = null;
     protected $displayTime = true;
     protected $url = null;
+    protected $style = null;
     
     public function __construct(
         string $name, 
@@ -47,8 +48,9 @@ class Event
             'badges' => $this->badges,
             'url' => $this->url,
             'options' => [
-                'displayTime' => $this->displayTime ? 1 : 0
-            ]
+                'style' => $this->style,
+                'displayTime' => $this->displayTime ? 1 : 0,
+            ],
         ];
     }
     
@@ -65,6 +67,22 @@ class Event
     public function withResource(NovaResource $v) : self
     {
         $this->resource($v);
+        return $this;
+    }
+    
+    public function style(string $v = null)
+    {
+        if(!is_null($v))
+        {
+            $this->style = $v;
+        }
+        
+        return $this->style;
+    }
+    
+    public function withStyle(string $v)
+    {
+        $this->style($v);
         return $this;
     }
     
