@@ -70,6 +70,16 @@ class Event
         return $this;
     }
     
+    public function hasNovaResource(string $class = null) : bool
+    {
+        if(is_null($class))
+        {
+            return !is_null($this->novaResource);
+        }
+
+        return ($this->novaResource instanceof $class);
+    }
+    
     public function style(string $v = null)
     {
         if(!is_null($v))
@@ -190,6 +200,11 @@ class Event
         return $this->badges;
     }
     
+    public function addBadge(string $v) : self
+    {
+        return $this->addBadges($v);
+    }
+    
     public function addBadges(string ...$v) : self
     {
         foreach($v as $badge)
@@ -198,6 +213,11 @@ class Event
         }
         
         return $this;
+    }
+    
+    public function removeBadge(string $v) : self
+    {
+        return $this->removeBadges($v);
     }
     
     public function removeBadges(string ...$v) : self

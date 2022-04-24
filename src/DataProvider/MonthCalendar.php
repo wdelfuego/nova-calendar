@@ -14,7 +14,7 @@ use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
 use Wdelfuego\NovaCalendar\CalendarDay;
 use Wdelfuego\NovaCalendar\Event;
 
-class MonthCalendar implements MonthDataProviderInterface
+abstract class MonthCalendar implements MonthDataProviderInterface
 {
     const MONDAY = 1;
     const TUESDAY = 2;
@@ -38,6 +38,8 @@ class MonthCalendar implements MonthDataProviderInterface
         $this->year = $year ?? now()->year;
         $this->month = $month ?? now()->month;
     }
+    
+    abstract public function novaResources();
 
     public function setYearAndMonth(int $year, int $month)
     {
@@ -103,7 +105,17 @@ class MonthCalendar implements MonthDataProviderInterface
         return $event;
     }
     
-    protected function firstDayOfMonth() : LocalizedDate
+    protected function nonNovaEvents() : array
+    {
+        return [];
+    }
+    
+    protected function urlForResource(NovaResource $resource)
+    {
+        return route('nova.pages.detail', ['resource' => $resource::uriKey(), 'resourceId' => $resource->resource->id]);
+    }
+    
+    private function firstDayOfMonth() : LocalizedDate
     {
         return LocalizedDate::createFromFormat('Y-m-d', $this->year.'-'.$this->month.'-1');
     }
@@ -119,18 +131,13 @@ class MonthCalendar implements MonthDataProviderInterface
         return $this->firstDayOfCalendar()->addDays(7 * self::CALENDAR_WEEKS);
     }
 
-    protected function eventDataForDate(DateTimeInterface $date) : array
+    private function eventDataForDate(DateTimeInterface $date) : array
     {
         $events = array_filter($this->allEvents(), function($e) use ($date) {
             return $e->start()->isSameDay($date);
         });
 
         return array_map(fn($e): array => $e->toArray(), $events);
-    }
-    
-    protected function urlForResource(NovaResource $resource)
-    {
-        return route('nova.pages.detail', ['resource' => $resource::uriKey(), 'resourceId' => $resource->resource->id]);
     }
     
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
@@ -168,6 +175,8 @@ class MonthCalendar implements MonthDataProviderInterface
                     $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $dateAttribute);
                 }
             }
+            
+            $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
         }
         
         return $this->allEvents;
