@@ -23,6 +23,9 @@ __webpack_require__.r(__webpack_exports__);
     Nova.addShortcut('alt+left', function (event) {
       _this.prevMonth();
     });
+    Nova.addShortcut('alt+h', function (event) {
+      _this.reset();
+    });
   },
   methods: {
     reset: function reset() {
@@ -46,11 +49,10 @@ __webpack_require__.r(__webpack_exports__);
         vue.title = response.data.title;
         vue.columns = response.data.columns;
         vue.days = response.data.days;
+        console.log(vue);
       });
     },
-    open: function open(event) {
-      console.log(event);
-    }
+    open: function open(event) {}
   },
   data: function data() {
     return {

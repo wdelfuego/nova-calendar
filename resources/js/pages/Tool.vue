@@ -62,13 +62,9 @@ export default {
   mounted() {
     this.reset();
     
-    Nova.addShortcut('alt+right', event => {
-        this.nextMonth();
-    })
-    
-    Nova.addShortcut('alt+left', event => {
-        this.prevMonth();
-    })
+    Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
+    Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
+    Nova.addShortcut('alt+h', event =>    {   this.reset(); });
   },
 
   methods: {
@@ -98,11 +94,12 @@ export default {
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.days = response.data.days;
+            console.log(vue);
         });
     },
     
     open(event) {
-      console.log(event);
+      
     }
   
   },
