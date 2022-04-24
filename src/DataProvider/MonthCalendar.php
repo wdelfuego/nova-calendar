@@ -123,9 +123,16 @@ class MonthCalendar implements MonthDataProviderInterface
         return array_map(fn($e): array => $e->toArray(), $events);
     }
     
+    protected function urlForResource(NovaResource $resource)
+    {
+        return route('nova.pages.detail', ['resource' => $resource::uriKey(), 'resourceId' => $resource->resource->id]);
+    }
+    
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
     {
-        return $this->customizeEvent(Event::fromResource($resource, $dateAttribute));
+        $out = Event::fromResource($resource, $dateAttribute);
+        $out->url($this->urlForResource($resource));
+        return $this->customizeEvent($out);
     }
     
     private function allEvents() : array

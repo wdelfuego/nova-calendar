@@ -83,9 +83,11 @@ table.nova-calendar td.weekend.withinRange {
 
 table.nova-calendar td > div {
   position: relative;
-  min-height: 8em;
+  min-height: 9.5em;
+  max-height: 9.5em;
   padding: 0em;
   padding-top: 2.5em;
+  overflow: scroll;
 }
 
 table.nova-calendar span.daylabel {
@@ -114,8 +116,12 @@ table.nova-calendar td > div div.nc-event {
   border-radius: 5px;
   padding: 0.2em 0.5em;
   text-align: left;
-  margin-bottom: 0.2em;
+  margin-top: 0.2em;
   border-bottom: 1px var(--nc-event-border) solid;
+}
+
+table.nova-calendar td > div div.nc-event.clickable {
+  cursor: pointer;
 }
 
 table.nova-calendar span.name {
@@ -139,8 +145,8 @@ table.nova-calendar div.nc-event > div.badges {
   max-width: 50%;
   text-align: right;
   margin: 0;
-  top: 0.2em;
-  right: 0.2em;
+  top: 0.11em;
+  right: 0.12em;
 }
 
 table.nova-calendar div.nc-event > div.badges > span.badge {

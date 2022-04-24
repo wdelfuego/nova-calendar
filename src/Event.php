@@ -20,6 +20,8 @@ class Event
     protected $badges;
     
     protected $novaResource = null;
+    protected $displayTime = true;
+    protected $url = null;
     
     public function __construct(
         string $name, 
@@ -35,6 +37,21 @@ class Event
         $this->badges = $badges;
     }
 
+    public function toArray() : array
+    {
+        return [
+            'name' => $this->name,
+            'start' => $this->start->format("H:i"),
+            'end' => $this->end ? $this->end->format("H:i") : null,
+            'notes' => $this->notes,
+            'badges' => $this->badges,
+            'url' => $this->url,
+            'options' => [
+                'displayTime' => $this->displayTime ? 1 : 0
+            ]
+        ];
+    }
+    
     public function resource(NovaResource $v = null) : ?NovaResource
     {
         if(!is_null($v))
@@ -51,22 +68,38 @@ class Event
         return $this;
     }
     
+    public function url(string $v = null)
+    {
+        if(!is_null($v))
+        {
+            $this->url = $v;
+        }
+        
+        return $this->url;
+    }
+    
+    public function withUrl(string $v)
+    {
+        $this->url($v);
+        return $this;
+    }
+    
+    public function displayTime(bool $v = true)
+    {
+        $this->displayTime = $v;
+        return $this;
+    }
+    
+    public function hideTime()
+    {
+        return $this->displayTime(false);
+    }
+    
     public function model() : ?EloquentModel
     {
         return $this->novaResource ? $this->novaResource->resource : null;
     }
 
-    public function toArray() : array
-    {
-        return [
-            'name' => $this->name,
-            'start' => $this->start->format("H:i"),
-            'end' => $this->end ? $this->end->format("H:i") : null,
-            'notes' => $this->notes,
-            'badges' => $this->badges
-        ];
-    }
-    
     public function name(string $v = null) : string
     {
         if(!is_null($v)) 

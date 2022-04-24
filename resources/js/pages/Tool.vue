@@ -34,17 +34,23 @@
                     <td valign="top" v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':day.isToday, 'withinRange':day.isWithinRange, 'weekend':day.isWeekend}">
                       <div>
                           <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
+
                           <template v-for="event in day.events">
-                            <div v-if="day.isWithinRange" @click="open" class="nc-event" :style="styles.default">
+                            <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="styles.default" v-bind:class="{'clickable':event.url}">
                                 <span class="name">{{ event.name }}</span>
-                                <span class="time" v-if="event.end">{{ event.start }} - {{ event.end }}</span>
-                                <span class="time" v-else>{{ event.start }}</span>
+
+                                <template v-if="event.options.displayTime">
+                                  <span class="time" v-if="event.end">{{ event.start }} - {{ event.end }}</span>
+                                  <span class="time" v-else>{{ event.start }}</span>
+                                </template>
+
                                 <span class="notes">{{ event.notes }}</span>
                                 <div class="badges">
                                   <span class="badge bg-gray-100 text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
                                 </div>
                             </div>
                           </template>
+                          
                       </div>
                     </td>
                 </tr>
@@ -94,12 +100,11 @@ export default {
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.days = response.data.days;
-            console.log(vue);
         });
     },
     
-    open(event) {
-      
+    open(url) {
+      Nova.visit(url);
     }
   
   },
