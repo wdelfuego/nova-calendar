@@ -12,7 +12,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "wdelfuego/nova-datetime": "^1.0",
+        "wdelfuego/nova-datetime": "^1.0.1",
         "jenssegers/date": "^4.0"
         
     },

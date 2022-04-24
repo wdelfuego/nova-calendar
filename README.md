@@ -97,7 +97,9 @@ The calendar just needs a single data provider class that supplies event data to
     }
     ```
 
-5. If you're using Nova's default main menu, you're now done. If you've defined your main menu manually in the `boot()` method of your `NovaServiceProvider`, don't forget to add a `MenuSection` that links to the calendar:
+5. If you're using Nova's default main menu, you're now done. 
+
+    If you've defined your main menu manually in the `boot()` method of your `NovaServiceProvider`, don't forget to add a `MenuSection` that links to the calendar:
 
     ```
     MenuSection::make('Calendar')

@@ -46,11 +46,11 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], 'wdelfuego/nova-calendar')
+        Nova::router(['nova', Authorize::class], '/wdelfuego/nova-calendar')
             ->group(__DIR__.'/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
-            ->prefix('wdelfuego/nova-calendar')
+            ->prefix(config('nova.path').'/wdelfuego/nova-calendar')
             ->group(__DIR__.'/../routes/api.php');
     }
 
