@@ -11,20 +11,12 @@ use Wdelfuego\Nova\DateTime\Filters\NotBeforeDate;
 use Wdelfuego\Nova\DateTime\Filters\NotAfterDate;
 use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
 
+use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\CalendarDay;
 use Wdelfuego\NovaCalendar\Event;
 
 abstract class MonthCalendar implements MonthDataProviderInterface
 {
-    // TODO move these constants to a more generic level and update docs
-    const MONDAY = 1;
-    const TUESDAY = 2;
-    const WEDNESDAY = 3;
-    const THURSDAY = 4;
-    const FRIDAY = 5;
-    const SATURDAY = 6;
-    const SUNDAY = 7;
-    
     const CALENDAR_WEEKS = 6;
     
     protected $weekStartsOn;
@@ -35,7 +27,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     
     public function __construct(int $year = null, int $month = null)
     {
-        $this->weekStartsOn = self::MONDAY;
+        $this->weekStartsOn = NovaCalendar::MONDAY;
         $this->year = $year ?? now()->year;
         $this->month = $month ?? now()->month;
     }
@@ -50,12 +42,12 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 
     public function startWeekOn(int $dayOfWeekIso)
     {
-        $this->weekStartsOn = min(self::SUNDAY, max($dayOfWeekIso, self::MONDAY));
+        $this->weekStartsOn = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
     }
 
     public function startWeekOnSunday()
     {
-        $this->startWeekOn(self::SUNDAY);
+        $this->startWeekOn(NovaCalendar::SUNDAY);
     }
 
     public function title() : string

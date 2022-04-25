@@ -9,7 +9,15 @@ use Laravel\Nova\Tool;
 
 class NovaCalendar extends Tool
 {
-    private $menuLabel = 'Nova Calendar';
+    const MONDAY = 1;
+    const TUESDAY = 2;
+    const WEDNESDAY = 3;
+    const THURSDAY = 4;
+    const FRIDAY = 5;
+    const SATURDAY = 6;
+    const SUNDAY = 7;
+    
+    private $menuLabel = 'Calendar';
     private $menuIcon = 'calendar';
     
     public function boot()

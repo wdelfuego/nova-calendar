@@ -254,6 +254,17 @@ protected function customizeEvent(Event $event) : Event
 
 
 ## Calendar customization
+### Changing the default menu icon and label
+In your `NovaServiceProvider`, update the `tools()` method as follows:
+```
+public function tools()
+{
+    return [
+        (new NovaCalendar)->withMenuLabel('Label')->withMenuIcon('HeroIcon'),
+    ];
+}    
+```
+
 ### Changing the first day of the week
 In your calendar data provider, implement the constructor to call its parent constructor and make a call to `startWeekOn()` to let the weeks start on the day of your choice. You can use the constants defined in MonthCalendar to specify the day.
 
@@ -269,19 +280,18 @@ public function __construct(int $year = null, int $month = null)
     
 ```
 
-### Changing what happens when the end user clicks an event
+### Changing what happens when an event is clicked
 Implement the following method in your calendar data provider to change the URL that the user is sent to when they click the event:
 
 ```
 protected function urlForResource(NovaResource $resource)
 {
-    return route('nova.pages.detail', [
-        'resource' => $resource::uriKey(),
-        'resourceId' => $resource->resource->id
-    ]);
+    return '/resources/' .$resource::uriKey() .'/' .$resource->id;
 }
 ```
-This example shows the default behavior. If you change `nova.pages.detail` into `nova.pages.edit` users will be sent directly to the resource's Edit view, instead of to its Detail view.
+This example shows the default behavior. If you append `/edit` to the string, users will be sent directly to the resource's Edit view, instead of to its Detail view.
+
+A future release will offer a more reliable way to generate these type of URL parts based on route names such as `nova.pages.edit` and `nova.pages.detail`.
 
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.

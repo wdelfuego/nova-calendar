@@ -13,7 +13,6 @@ class CalendarController extends BaseController
     private $request;
     private $dataProvider;
 
-    
     public function __construct(NovaRequest $request, CalendarDataProviderInterface $dataProvider)
     {
         $this->request = $request;
