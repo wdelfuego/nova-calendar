@@ -26,10 +26,8 @@ class ToolServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            // Nova::provideToScript([
-            //     'now_year' => date('Y'),
-            //     'now_month' => date('M'),
-            // ]);
+            Nova::provideToScript([
+            ]);
         });
         
         LocalizedDate::setLocale(config('app.locale'));
@@ -46,11 +44,11 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], '/wdelfuego/nova-calendar')
+        Nova::router(['nova', Authorize::class], 'wdelfuego/nova-calendar')
             ->group(__DIR__.'/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
-            ->prefix(config('nova.path').'/wdelfuego/nova-calendar')
+            ->prefix('nova-vendor/wdelfuego/nova-calendar')
             ->group(__DIR__.'/../routes/api.php');
     }
 

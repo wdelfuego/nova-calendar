@@ -93,7 +93,7 @@ export default {
 
     reload() {
       let vue = this;
-      Nova.request().get(Nova.config('base')+'/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
+      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;
@@ -101,7 +101,6 @@ export default {
             vue.columns = response.data.columns;
             vue.days = response.data.days;
             vue.styles = response.data.styles;
-            console.log(vue.styles);
         });
     },
     
