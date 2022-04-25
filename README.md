@@ -266,16 +266,16 @@ public function tools()
 ```
 
 ### Changing the first day of the week
-In your calendar data provider, implement the constructor to call its parent constructor and make a call to `startWeekOn()` to let the weeks start on the day of your choice. You can use the constants defined in MonthCalendar to specify the day.
+In your calendar data provider, implement the constructor to call its parent constructor and make a call to `startWeekOn()` to let the weeks start on the day of your choice. You can use the constants defined in `NovaCalendar` to specify the day.
 
 For example, to start your weeks on wednesday:
 ```
-use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
+use Wdelfuego\NovaCalendar\NovaCalendar;
 
 public function __construct(int $year = null, int $month = null)
 {
     parent::__construct($year, $month);
-    $this->startWeekOn(MonthCalendar::WEDNESDAY);
+    $this->startWeekOn(NovaCalendar::WEDNESDAY);
 }    
     
 ```
