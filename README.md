@@ -118,7 +118,21 @@ Read the section on Customization below to find out how to completely customize 
 ## Event customization
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
 
-For example:
+By default, your events get the title that the Nova resource's `title()` method returns and the start time is set to the value of the attribute specified in your data provider's `novaResources()` method. Other event fields are left empty by default but can easily be loaded from the event's associated model:
+```
+protected function customizeEvent(Event $event) : Event
+{
+    if($event->model())
+    {
+        $event->end($event->model()->datetime_end);
+        $event->name($event->model()->name);
+        $event->notes($event->model()->notes);
+    }
+    return $event;
+}
+```
+
+Your customization can be a lot more complex, too:
 
 ```
 use Wdelfuego\NovaCalendar\Event;
@@ -151,7 +165,6 @@ protected function customizeEvent(Event $event) : Event
 
     // Display all events without time info
     $event->hideTime();
-
 
     return $event;
 }
