@@ -11,6 +11,7 @@ use Laravel\Nova\Nova;
 
 use Jenssegers\Date\Date as LocalizedDate;
 use Wdelfuego\NovaCalendar\Http\Middleware\Authorize;
+use Wdelfuego\NovaCalendar\Console\Commands\CreateDefaultCalendarDataProvider;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,12 @@ class ToolServiceProvider extends ServiceProvider
         });
         
         LocalizedDate::setLocale(config('app.locale'));
+        
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CreateDefaultCalendarDataProvider::class,
+            ]);
+        }
     }
 
     /**

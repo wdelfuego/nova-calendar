@@ -31,7 +31,7 @@ The following features are not yet supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 ## What can you do?
-Developers who are interested in working together on this Tool are highly welcomed. Respond to or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
+Developers who are interested in working together on this tool are highly welcomed. Take a look at the [open issues](https://github.com/wdelfuego/nova-calendar/issues) (those labelled 'good first issue' are great for new contributors) or at the [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
 
 # Installation
 ```sh
@@ -42,16 +42,17 @@ composer require wdelfuego/nova-calendar
 
 The calendar just needs a single data provider class that supplies event data to the frontend, and for the data provider and tool to be added to your `NovaServiceProvider`:
 
-1. Create a data provider class with a name of your choice anywhere you like in your project. 
+1. Create a data provider class with a name of your choice anywhere you like in your project, or run the following artisan command to create the default data provider:
 
-	These instructions will assume you created class `App/Providers/CalendarDataProvider` in `App/Providers/CalendarDataProvider.php`, but you can choose any location and any name. If you have no idea, just create that class at that location.
+    ```sh
+    php artisan create:default-calendar-data-provider
+    ```
 
-2. Make the data provider a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
+    If you choose to make the data provider yourself, make it a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
 
+2. In the data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's attributes should be used to determine the date and start time of your event. 
 
-3. In the data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's attributes should be used to determine the date and start time of your event. 
-
-	The `novaResources()` method must return an array that maps Nova resource classes to attribute names. The attribute must be casted to a `DateTime` object by the underlying Eloquent model.
+	The `novaResources()` method must return an array that maps Nova resource classes to attribute names. The attribute must be casted to a `DateTime` object by the underlying Eloquent model. If you return an empty array, the calendar will work but will not contain any events.
 
     For example, to make the calendar show your users as events on the date their accounts were created, implement `novaResources()` as follows:
 
@@ -74,7 +75,7 @@ The calendar just needs a single data provider class that supplies event data to
 
    This is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes to the `novaResources()` method.
 
-4. Finally, edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar to its `tools()` method and to register your data provider class as the default calendar data provider:
+3. Finally, edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar to its `tools()` method and to register your data provider class as the default calendar data provider:
 
     ```
     use Wdelfuego\NovaCalendar\NovaCalendar;
@@ -96,7 +97,7 @@ The calendar just needs a single data provider class that supplies event data to
     }
     ```
 
-5. If you're using Nova's default main menu, you're now done. 
+4. If you're using Nova's default main menu, you're already done. 
 
     If you've defined your main menu manually in the `boot()` method of your `NovaServiceProvider`, don't forget to add a `MenuSection` that links to the calendar:
 
@@ -108,11 +109,12 @@ The calendar just needs a single data provider class that supplies event data to
 
 That's it! Your calendar should now be up and running.
 
-You can navigate through the months using the hotkeys `Alt + arrow right` or `Alt + arrow left` and jump back to the current month using `Alt + H` or by clicking the month name that's displayed above the calendar.
+## Hotkeys
+You can navigate through the months using the hotkeys `Alt + arrow right` or `Alt + arrow left` and jump back to the current month using `Alt + H` (or by clicking the month name that's displayed above the calendar).
 
-Read the section on Customization below to find out how to completely customize the display of your events and how to add badges and notes to them to make the calendar even more usable for your end users.
 
 # Customization
+You can customize the display of your events and add badges and notes to them to make the calendar even more usable for your end users.
 
 ## Event customization
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
