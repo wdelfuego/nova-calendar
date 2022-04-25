@@ -4,6 +4,7 @@ namespace Wdelfuego\NovaCalendar\DataProvider;
 
 use DateTimeInterface;
 use Illuminate\Support\Carbon;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
 
 use Jenssegers\Date\Date as LocalizedDate;
@@ -105,7 +106,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     
     protected function urlForResource(NovaResource $resource)
     {
-        return '/resources/' .$resource::uriKey() .'/' .$resource->id;
+        return Nova::url('/resources/' .$resource::uriKey() .'/' .$resource->id);
     }
     
     private function firstDayOfMonth() : LocalizedDate
