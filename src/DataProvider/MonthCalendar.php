@@ -105,7 +105,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     
     protected function urlForResource(NovaResource $resource)
     {
-        return Nova::url('/resources/' .$resource::uriKey() .'/' .$resource->id);
+        return '/resources/' .$resource::uriKey() .'/' .$resource->id;
     }
     
     private function firstDayOfMonth() : Carbon
