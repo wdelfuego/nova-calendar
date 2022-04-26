@@ -11,8 +11,8 @@ class CalendarDataProvider extends MonthCalendar
     //
     // Must return an array with string keys and string values;
     // - each key is a Nova resource class name (eg: 'App/Nova/User::class')
-    // - each value is an attribute names for a DateTime property of the  
-    //   underlying Eloquent model (eg: 'created_at')
+    // - each value is the attribute name of a DateTime casted property   
+    //   of the underlying Eloquent model (eg: 'created_at')
     //
     // See README.md for info on how to customize the way the events are displayed
     // 

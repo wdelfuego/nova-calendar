@@ -3,11 +3,11 @@
 namespace Wdelfuego\NovaCalendar;
 
 use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
-use Jenssegers\Date\Date as LocalizedDate;
+use Illuminate\Support\Carbon;
 
 class CalendarDay implements CalendarDayInterface
 {
-    public static function forDateInYearAndMonth(LocalizedDate $date, int $year, int $month) : self
+    public static function forDateInYearAndMonth(Carbon $date, int $year, int $month) : self
     {
         return new self(
             $date->format('j'),

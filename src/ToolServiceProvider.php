@@ -9,7 +9,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
 
-use Jenssegers\Date\Date as LocalizedDate;
 use Wdelfuego\NovaCalendar\Http\Middleware\Authorize;
 use Wdelfuego\NovaCalendar\Console\Commands\CreateDefaultCalendarDataProvider;
 
@@ -30,8 +29,6 @@ class ToolServiceProvider extends ServiceProvider
             Nova::provideToScript([
             ]);
         });
-        
-        LocalizedDate::setLocale(config('app.locale'));
         
         if ($this->app->runningInConsole()) {
             $this->commands([

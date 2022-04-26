@@ -21,6 +21,7 @@ The following features are supported:
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
+- Month and day names are automatically presented in your app's locale
 
 ## What can it not do (yet)?
 The following features are not yet supported:

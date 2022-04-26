@@ -13,8 +13,8 @@
     "require": {
         "php": "^8.1",
         "laravel/nova": "^4.2.4",
-        "wdelfuego/nova-datetime": "^1.0.1",
-        "jenssegers/date": "^4.0"
+        "illuminate/support": "^9.9",
+        "wdelfuego/nova-datetime": "^1.0.1"
         
     },
     "autoload": {

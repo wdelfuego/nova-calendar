@@ -7,7 +7,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
 
-use Jenssegers\Date\Date as LocalizedDate;
 use Wdelfuego\Nova\DateTime\Filters\NotBeforeDate;
 use Wdelfuego\Nova\DateTime\Filters\NotAfterDate;
 use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
@@ -53,13 +52,13 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 
     public function title() : string
     {
-        return ucfirst($this->firstDayOfMonth()->format('F \'y'));
+        return ucfirst($this->firstDayOfMonth()->translatedFormat('F \'y'));
     }
 
     public function daysOfTheWeek() : array
     {
         $out = [];
-        $currentDay = new LocalizedDate(Carbon::getDays()[$this->weekStartsOn % 7]);
+        $currentDay = new Carbon(Carbon::getDays()[$this->weekStartsOn % 7]);
         for($i = 0; $i < 7; $i++)
         {
             $out[] = $currentDay->dayName;
@@ -109,18 +108,18 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return Nova::url('/resources/' .$resource::uriKey() .'/' .$resource->id);
     }
     
-    private function firstDayOfMonth() : LocalizedDate
+    private function firstDayOfMonth() : Carbon
     {
-        return LocalizedDate::createFromFormat('Y-m-d', $this->year.'-'.$this->month.'-1');
+        return Carbon::createFromFormat('Y-m-d', $this->year.'-'.$this->month.'-1');
     }
 
-    protected function firstDayOfCalendar(): LocalizedDate
+    protected function firstDayOfCalendar(): Carbon
     {
         $firstOfMonth = $this->firstDayOfMonth();
         return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - $this->weekStartsOn);
     }
     
-    protected function lastDayOfCalendar(): LocalizedDate
+    protected function lastDayOfCalendar(): Carbon
     {
         return $this->firstDayOfCalendar()->addDays(7 * self::CALENDAR_WEEKS);
     }
