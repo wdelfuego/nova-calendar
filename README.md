@@ -1,11 +1,14 @@
-Event calendar for Laravel Nova 4
-=================================
+<h1 align="center">Event calendar for Laravel Nova 4</h1>
 
-An event calendar that displays Nova resources or other time-related data in your [Nova 4](https://nova.laravel.com) project on a monthly calendar view. This package requires that you use Laravel Nova 4.2.4 or newer.
-
-The calendar view adapts nicely to clear and dark mode:
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
+
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view.</p>
+
+<p align="center">The calendar view adapts nicely to clear and dark mode:</p>
+
 ![Clear and dark mode next to each other](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot-both.png?raw=true)
+
+
 ## What can it do?
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
@@ -22,7 +25,7 @@ The following features are supported:
 ## What can it not do (yet)?
 The following features are not yet supported:
 
-- Multi-day events
+- Multi-day events (first new feature in the pipeline)
 - Creating new events directly from the calendar view
 - Drag and drop support to change event dates
 - Proper responsiveness for display on small screens
