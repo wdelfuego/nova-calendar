@@ -23,6 +23,7 @@ class Event
     protected $displayTime = true;
     protected $url = null;
     protected $style = null;
+    protected $timeFormat = 'H:i';
     
     public function __construct(
         string $name, 
@@ -42,8 +43,10 @@ class Event
     {
         return [
             'name' => $this->name,
-            'start' => $this->start->format("H:i"),
-            'end' => $this->end ? $this->end->format("H:i") : null,
+            'start_date' => $this->start->format("Y-m-d"),
+            'start_time' => $this->start->format($this->timeFormat),
+            'end_date' => $this->end ? $this->end->format("Y-m-d") : null,
+            'end_time' => $this->end ? $this->end->format($this->timeFormat) : null,
             'notes' => $this->notes,
             'badges' => $this->badges,
             'url' => $this->url,
@@ -96,6 +99,23 @@ class Event
         return $this;
     }
     
+    
+    public function timeFormat(string $v = null)
+    {
+        if(!is_null($v))
+        {
+            $this->timeFormat = $v;
+        }
+        
+        return $this->timeFormat;
+    }
+    
+    public function withTimeFormat(string $v)
+    {
+        $this->timeFormat($v);
+        return $this;
+    }
+    
     public function url(string $v = null)
     {
         if(!is_null($v))
@@ -144,7 +164,7 @@ class Event
         return $this;
     }
     
-    public function start(DateTimeInterface $v = null) : ?DateTimeInterface
+    public function start(DateTimeInterface $v = null) : DateTimeInterface
     {
         if(!is_null($v)) {
             $this->start = $v;

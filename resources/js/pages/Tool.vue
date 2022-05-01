@@ -40,13 +40,13 @@
                                 <span class="name">{{ event.name }}</span>
 
                                 <template v-if="event.options.displayTime">
-                                  <span class="time" v-if="event.end">{{ event.start }} - {{ event.end }}</span>
-                                  <span class="time" v-else>{{ event.start }}</span>
+                                  <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
+                                  <span class="time" v-else>{{ event.start_time }}</span>
                                 </template>
 
                                 <span class="notes">{{ event.notes }}</span>
                                 <div class="badges">
-                                  <span class="badge bg-gray-100 text-gray-400 dark:bg-gray-800" v-for="badge in event.badges">{{ badge }}</span>
+                                  <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                                 </div>
                             </div>
                           </template>

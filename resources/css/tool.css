@@ -5,7 +5,7 @@
   --nc-disabled-bg: rgba(var(--colors-primary-900), 0.3);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
-  --nc-event-border: rgba(var(--colors-primary-500), 0.4);
+  --nc-event-border: rgba(var(--colors-gray-900), 0.2);
 }
 
 #nc-control {
@@ -120,7 +120,7 @@ table.nova-calendar td > div div.nc-event {
   padding: 0.2em 0.5em;
   text-align: left;
   margin: 0.1em;
-  border-bottom: 1px var(--nc-event-border) solid;
+  border-bottom: 2px var(--nc-event-border) solid;
 }
 
 table.nova-calendar td > div div.nc-event.clickable {
@@ -151,18 +151,19 @@ table.nova-calendar div.nc-event > div.badges {
   max-width: 50%;
   text-align: right;
   margin: 0;
-  top: 0.08em;
+  top: 0.1em;
   right: 0.12em;
 }
 
 table.nova-calendar div.nc-event > div.badges > span.badge {
   display: inline-block;
-  border-top: 1px rgba(var(--colors-primary-500), 0.5) solid;
+  border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
+  opacity: 0.8;
   font-size: 9pt;
   line-height: 12pt;
   min-width: 22px;
   text-align: center;
-  border-radius: 40%;
+  border-radius: 5px;
   padding: 0.25em;
   margin-left: 2px;
 

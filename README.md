@@ -179,8 +179,9 @@ The following customization methods with regard to the display of the `Event` in
 
 ### Chainable customization methods
 All of these methods return the `Event` itself so you can chain them in the `customizeEvent` method:
-- `hideTime()` hides start and (if available) end times in the calendar view. 
-- `displayTime()` enables the display of start and end times.
+- `hideTime()` hides start and end times in the calendar view. 
+- `displayTime()` enables the display of start and (if available) end times.
+- `withTimeFormat(string $v)` sets the format in which times are displayed, using PHP's [DateTime format](https://www.php.net/manual/en/datetime.format.php).
 - `withName(string $v)` updates the name of the event.
 - `withStart(DateTimeInterface $v)` updates the date and start time of the event (it will be displayed on the calendar accordingly).
 - `withEnd(DateTimeInterface $v)` updates the end time of the event. **Note**: if you supply an `end` timestamp, its date value is completely ignored by this package for now. All events are assumed to be single day events. Its time value will be used as the event's end time.
@@ -194,11 +195,11 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 Corresponding methods are available in non-chainable form, if you prefer to work with those. 
 
 These function as `set`ters when you supply an argument, and as `get`ters when you don't.
-- `name(string $v = null)`
-- `start(DateTimeInterface $v = null)`
-- `end(DateTimeInterface $v = null)`
-- `notes(string $v = null)`
-- `badges(array $v = null)`
+- `name(string $v = null) : string`
+- `start(DateTimeInterface $v = null) : DateTimeInterface`
+- `end(DateTimeInterface $v = null) : ?DateTimeInterface`
+- `notes(string $v = null) : string`
+- `badges(array $v = null) : array`
 
 ## Customizing the CSS
 You can customize the CSS that is applied to the event divs in the calendar view on a per-event basis, or on a global basis by customizing the default event style.
