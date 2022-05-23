@@ -28,7 +28,7 @@ class CalendarDay implements CalendarDayInterface
         bool $isWithinRange = true,
         bool $isToday = false,
         bool $isWeekend = false,
-        array $events = [], 
+        array $events = []
     )
     {
         $this->label = $label;
