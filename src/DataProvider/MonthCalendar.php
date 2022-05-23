@@ -9,7 +9,7 @@ use Laravel\Nova\Resource as NovaResource;
 
 use Wdelfuego\Nova\DateTime\Filters\NotBeforeDate;
 use Wdelfuego\Nova\DateTime\Filters\NotAfterDate;
-use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
+use Wdelfuego\NovaCalendar\Contracts\MonthDataProviderInterface;
 
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\CalendarDay;

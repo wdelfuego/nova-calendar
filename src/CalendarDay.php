@@ -2,7 +2,7 @@
 
 namespace Wdelfuego\NovaCalendar;
 
-use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
+use Wdelfuego\NovaCalendar\Contracts\CalendarDayInterface;
 use Illuminate\Support\Carbon;
 
 class CalendarDay implements CalendarDayInterface
