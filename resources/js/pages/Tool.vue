@@ -31,7 +31,7 @@
             </thead>
             <tbody>
                 <tr v-for="week in $data.days" >
-                    <td valign="top" v-for="day in week" class="text-center border-r border-t border-gray-800 dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':day.isToday, 'withinRange':day.isWithinRange, 'weekend':day.isWeekend}">
+                    <td valign="top" v-for="day in week" class="text-center border-r border-t dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':day.isToday, 'withinRange':day.isWithinRange, 'weekend':day.isWeekend}">
                       <div>
                           <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
 
