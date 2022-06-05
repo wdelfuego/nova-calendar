@@ -23,6 +23,45 @@
       style="min-height: 300px"
     >
 
+      <div class="nova-calendar noselect">
+
+        <div class="nc-header">
+          <div v-for="column in $data.columns" class="border-l border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
+        </div>
+
+        <div class="nc-content">
+          <div v-for="(week, weekIndex) in $data.days" class="week">
+            <template v-for="(day, dayIndex) in week">
+
+              <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800">
+                <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
+                <template v-for="eventBlock in day.eventBlocks">
+                  <template v-if="eventBlock.event">
+                    <div v-if="day.isWithinRange" @click="open(eventBlock.event.url)" class="nc-event" :style="this.stylesForEvent(eventBlock.event, weekIndex, dayIndex)" v-bind:class="{'clickable': eventBlock.event.url, 'first-day': eventBlock.isFirstDayOfEvent, 'last-day': eventBlock.isLastDayOfEvent }">
+                        <span class="name">{{ eventBlock.event.name }}</span>
+
+                        <template v-if="eventBlock.event.options.displayTime">
+                          <span class="time" v-if="eventBlock.event.end_time">{{ eventBlock.event.start_time }} - {{ eventBlock.event.end_time }}</span>
+                          <span class="time" v-else>{{ eventBlock.event.start_time }}</span>
+                        </template>
+
+                        <span class="notes">{{ eventBlock.event.notes }}</span>
+                        <div class="badges">
+                          <span class="badge bg-gray-100 text-gray-500 dark:text-white" v-for="badge in eventBlock.event.badges">{{ badge }}</span>
+                        </div>
+                    </div>
+                  </template>
+                </template>
+              </div>
+
+            </template>
+          </div>
+        </div>
+
+      </div>
+
+<!--      <br/><br/>
+
         <table class="nova-calendar noselect w-full table py-31 px-6">
             <thead class="bg-gray-100">
                 <tr>
@@ -56,7 +95,7 @@
                 </tr>
             </tbody>
         </table>
-
+-->
 
     </Card>
   </div>
@@ -107,9 +146,17 @@ export default {
     open(url) {
       Nova.visit(url);
     },
+
+    styleForGridPosition(weekIndex, dayIndex)
+    { 
+      return {
+        'grid-row-start': weekIndex + 1,
+        'grid-column-start': dayIndex + 1
+      };
+    },
   
-    stylesForEvent(event) {
-      return (event.options.style) ? [this.styles.default, this.styles[event.options.style]] : this.styles.default;
+    stylesForEvent(event, weekIndex, dayIndex) {
+      return (event.options.style) ? [this.styles.default, this.styles[event.options.style], this.styleForGridPosition(weekIndex, dayIndex)] : this.styles.default;
     }
   
   },

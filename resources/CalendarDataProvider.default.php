@@ -14,11 +14,13 @@ class CalendarDataProvider extends MonthCalendar
     // - each value is the attribute name of a DateTime casted property   
     //   of the underlying Eloquent model (eg: 'created_at')
     //
-    // See README.md for info on how to customize the way the events are displayed
+    // See https://github.com/wdelfuego/nova-calendar to find out
+    // how to customize the way the events are displayed
     // 
     public function novaResources() : array
     {
         return [
+            // 'App/Nova/User::class' => 'created_at',
         ];
     }
 }
