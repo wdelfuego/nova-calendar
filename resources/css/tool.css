@@ -75,19 +75,71 @@ div.nova-calendar div.day {
   padding-top: 0.5em;
   z-index: 0;
   min-height: 9em;
-/*  border: 1px #fff dashed;*/
 }
 
 div.nova-calendar span.daylabel {
   padding: 0.6em;
   z-index: 10;
-/*  border: 1px #0f0 solid;*/
 }
 
 div.nova-calendar div.nc-event {
-  padding: 0.5em;
-  height: 2em;
+  position: relative;
+  padding: 0.2em 0.2em 0.5em 0.5em;
+  border-radius: 5px;
+  text-align: left;
+  margin: 0.1em;
+  border-bottom: 2px var(--nc-event-border) solid;
+  font-size: 11pt;
 }
+
+div.nova-calendar div.nc-event.clickable {
+  cursor: pointer;
+}
+
+div.nova-calendar span.name {
+/*  display: inline-block;*/
+  font-weight: bold;
+  margin-right: 0.2em;
+}
+
+div.nova-calendar span.time {
+  display: inline-block;
+  font-size: 8pt;
+}
+
+div.nova-calendar span.notes {
+  display: block;
+  font-size: 8pt;
+  line-height: 10pt;
+}
+
+div.nova-calendar div.nc-event > div.badges {
+  display: inline-block;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  float:right;
+  max-width: 30%;
+  text-align: right;
+  margin: 0;
+  border: 0px #0f0 solid;
+}
+
+div.nova-calendar div.nc-event > div.badges > span.badge {
+  display: inline-block;
+  border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
+  opacity: 0.8;
+  font-size: 9pt;
+  line-height: 12pt;
+  min-width: 22px;
+  text-align: center;
+  border-radius: 4px;
+  padding: 0.25em;
+  margin-left: 2px;
+}
+
+
+
 
 
 
@@ -143,8 +195,6 @@ table.nova-calendar td > div {
 }
 
 table.nova-calendar span.daylabel {
-  display: block;
-  position: absolute;
   top: 0.5em;
   left: 0.5em;
   width: 1em;

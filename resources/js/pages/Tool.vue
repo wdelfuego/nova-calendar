@@ -35,22 +35,21 @@
 
               <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800">
                 <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
-                <template v-for="eventBlock in day.eventBlocks">
-                  <template v-if="eventBlock.event">
-                    <div v-if="day.isWithinRange" @click="open(eventBlock.event.url)" class="nc-event" :style="this.stylesForEvent(eventBlock.event, weekIndex, dayIndex)" v-bind:class="{'clickable': eventBlock.event.url, 'first-day': eventBlock.isFirstDayOfEvent, 'last-day': eventBlock.isLastDayOfEvent }">
-                        <span class="name">{{ eventBlock.event.name }}</span>
 
-                        <template v-if="eventBlock.event.options.displayTime">
-                          <span class="time" v-if="eventBlock.event.end_time">{{ eventBlock.event.start_time }} - {{ eventBlock.event.end_time }}</span>
-                          <span class="time" v-else>{{ eventBlock.event.start_time }}</span>
-                        </template>
+                <template v-for="event in day.events">
 
-                        <span class="notes">{{ eventBlock.event.notes }}</span>
-                        <div class="badges">
-                          <span class="badge bg-gray-100 text-gray-500 dark:text-white" v-for="badge in eventBlock.event.badges">{{ badge }}</span>
-                        </div>
-                    </div>
-                  </template>
+                  <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="this.stylesForEvent(event, weekIndex, dayIndex)" v-bind:class="{'clickable': event.url }">
+                      <div class="badges">
+                        <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                      </div>
+                      <span class="name">{{ event.name }}</span>
+                      <template v-if="event.options.displayTime">
+                        <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
+                        <span class="time" v-else>{{ event.start_time }}</span>
+                      </template>
+                      <span class="notes">{{ event.notes }}</span>
+                  </div>
+
                 </template>
               </div>
 
