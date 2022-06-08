@@ -39,12 +39,13 @@ class Event
         $this->badges = $badges;
     }
 
-    public function toArray() : array
+    public function toArray(int $firstDayOfWeek = 1) : array
     {
         return [
             'name' => $this->name,
             'start_date' => $this->start->format("Y-m-d"),
             'start_time' => $this->start->format($this->timeFormat),
+            'weekday_column' => $this->weekdayColumn($firstDayOfWeek),
             'end_date' => $this->end ? $this->end->format("Y-m-d") : null,
             'end_time' => $this->end ? $this->end->format($this->timeFormat) : null,
             'notes' => $this->notes,
@@ -81,6 +82,12 @@ class Event
         }
 
         return ($this->novaResource instanceof $class);
+    }
+    
+    public function weekdayColumn(int $firstDayOfWeek = 1) : int
+    {
+        $absDay = (int)$this->start->format('N');
+        return ($absDay - $firstDayOfWeek) % 7 + 1;
     }
     
     public function style(string $v = null)

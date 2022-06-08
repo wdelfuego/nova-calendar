@@ -50,7 +50,7 @@ div.nova-calendar {
 div.nova-calendar div.nc-header {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(7, 14.285%);
+  grid-template-columns: repeat(7, 1fr);
 }
 
 div.nova-calendar div.nc-header div {
@@ -61,35 +61,64 @@ div.nova-calendar div.nc-header div {
 }
 
 div.nova-calendar div.nc-content {
-  display: grid;
-  grid-auto-rows: 1fr  
+  
 }
 
-div.nova-calendar div.week {
-  display: grid;
+div.nova-calendar .week {
   width: 100%;
-  grid-template-columns: repeat(7, 14.285%);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+/*  grid-auto-flow: dense;*/
 }
 
-div.nova-calendar div.day {
-  padding-top: 0.5em;
+div.nova-calendar .day {
+  grid-row: 1/-1;
   z-index: 0;
   min-height: 9em;
 }
 
-div.nova-calendar span.daylabel {
+div.nova-calendar .day:nth-child(1), div.nova-calendar .nc-col-1 { grid-column: 1 / 2; }
+div.nova-calendar .day:nth-child(2), div.nova-calendar .nc-col-2 { grid-column: 2 / 3; }
+div.nova-calendar .day:nth-child(3), div.nova-calendar .nc-col-3 { grid-column: 3 / 4; }
+div.nova-calendar .day:nth-child(4), div.nova-calendar .nc-col-4 { grid-column: 4 / 5; }
+div.nova-calendar .day:nth-child(5), div.nova-calendar .nc-col-5 { grid-column: 5 / 6; }
+div.nova-calendar .day:nth-child(6), div.nova-calendar .nc-col-6 { grid-column: 6 / 7; }
+div.nova-calendar .day:nth-child(7), div.nova-calendar .nc-col-7 { grid-column: 7 / -1; }
+
+div.nova-calendar .dayheader {
   padding: 0.6em;
-  z-index: 10;
+  z-index: 1;
 }
 
-div.nova-calendar div.nc-event {
-  position: relative;
+div.nova-calendar .dayheader.today {
+  font-weight: bold;
+}
+
+div.nova-calendar .dayheader.today .daylabel {
+  font-weight: bold;
+  background-color: rgba(var(--colors-primary-500), 0.2);
+  padding: 0.2em 0.6em;
+  border-radius: 100%;
+  margin-left: -0.2em;
+}
+
+div.nova-calendar .week-events {
+  z-index: 2;
+  padding-top: 2.4em;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-flow: column dense;
+}
+
+div.nova-calendar .nc-event {
   padding: 0.2em 0.2em 0.5em 0.5em;
   border-radius: 5px;
   text-align: left;
   margin: 0.1em;
   border-bottom: 2px var(--nc-event-border) solid;
-  font-size: 11pt;
+  font-size: 12pt;
 }
 
 div.nova-calendar div.nc-event.clickable {
@@ -104,12 +133,13 @@ div.nova-calendar span.name {
 
 div.nova-calendar span.time {
   display: inline-block;
-  font-size: 8pt;
+  font-size: 9pt;
+  opacity: 0.8;
 }
 
 div.nova-calendar span.notes {
   display: block;
-  font-size: 8pt;
+  font-size: 10pt;
   line-height: 10pt;
 }
 
@@ -119,7 +149,7 @@ div.nova-calendar div.nc-event > div.badges {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   float:right;
-  max-width: 30%;
+  max-width: 40%;
   text-align: right;
   margin: 0;
   border: 0px #0f0 solid;

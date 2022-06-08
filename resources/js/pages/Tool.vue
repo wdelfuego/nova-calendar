@@ -17,86 +17,68 @@
       </a>
             
     </div>
-        
-    <Card
-      class="flex flex-col items-center justify-center"
-      style="min-height: 300px"
-    >
+    
+    <div style="width:100%;overflow:scroll">
+      <Card
+        class="flex flex-col items-center justify-center"
+        style="min-height: 300px;min-width:800px"
+      >
 
-      <div class="nova-calendar noselect">
+        <div class="nova-calendar noselect">
 
-        <div class="nc-header">
-          <div v-for="column in $data.columns" class="border-l border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
-        </div>
+          <div class="nc-header">
+            <div v-for="column in $data.columns" class="border-l border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
+          </div>
 
-        <div class="nc-content">
-          <div v-for="(week, weekIndex) in $data.days" class="week">
-            <template v-for="(day, dayIndex) in week">
+          <div class="nc-content">
 
-              <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800">
-                <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
+            <!-- for every week in the week data -->
+            <div v-for="(week, weekIndex) in $data.weeks" class="week">
 
-                <template v-for="event in day.events">
+              <!-- a cell per day -->
+              <template v-for="day in week">
+                <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800">
+                  <div class="dayheader text-gray-400 noselect" v-bind:class="{'today': day.isToday == 1 }"><span class="daylabel">{{ day.label }}</span></div>
+                </div>
+              </template>
+              
+              <!-- events per day, overlaid -->
+              <div class="week-events">
+                <template v-for="day in week">
 
-                  <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="this.stylesForEvent(event, weekIndex, dayIndex)" v-bind:class="{'clickable': event.url }">
-                      <div class="badges">
-                        <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
-                      </div>
-                      <span class="name">{{ event.name }}</span>
-                      <template v-if="event.options.displayTime">
-                        <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
-                        <span class="time" v-else>{{ event.start_time }}</span>
-                      </template>
-                      <span class="notes">{{ event.notes }}</span>
+                  <!-- multi day events that start on this day -->
+                  <div v-for="event in day.eventsMultiDay" class="nc-event multi">
+                    {{ event.name }}
                   </div>
-
+                  
+                  <!-- single day events on this day -->
+                  <div class="single-day-events">
+                    <template v-for="event in day.events">
+                      <div :class="['nc-event','nc-col-'+event.weekday_column]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url }">
+                        <div class="badges">
+                          <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                        </div>
+                        <span class="name">{{ event.name }}</span>
+                        <template v-if="event.options.displayTime">
+                          <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
+                          <span class="time" v-else>{{ event.start_time }}</span>
+                        </template>
+                        <span class="notes">{{ event.notes }}</span>
+                      </div>
+                    </template>
+                  </div>
+                    
                 </template>
               </div>
 
-            </template>
+            </div>
           </div>
+
         </div>
 
-      </div>
-
-<!--      <br/><br/>
-
-        <table class="nova-calendar noselect w-full table py-31 px-6">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th v-for="column in $data.columns" class="border-r border-l border-t border-white dark:border-gray-800 dark:text-gray-300 dark:bg-gray-800"><span>{{ column }}</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="week in $data.days" >
-                    <td valign="top" v-for="day in week" class="text-center border-r border-t dark:border-gray-800 dark:bg-gray-900" v-bind:class="{'today':day.isToday, 'withinRange':day.isWithinRange, 'weekend':day.isWeekend}">
-                      <div>
-                          <span v-if="day.isWithinRange" class="daylabel text-gray-400 noselect">{{ day.label }}</span>
-
-                          <template v-for="event in day.events">
-                            <div v-if="day.isWithinRange" @click="open(event.url)" class="nc-event" :style="this.stylesForEvent(event)" v-bind:class="{'clickable':event.url}">
-                                <span class="name">{{ event.name }}</span>
-
-                                <template v-if="event.options.displayTime">
-                                  <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
-                                  <span class="time" v-else>{{ event.start_time }}</span>
-                                </template>
-
-                                <span class="notes">{{ event.notes }}</span>
-                                <div class="badges">
-                                  <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
-                                </div>
-                            </div>
-                          </template>
-                          
-                      </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
--->
-
-    </Card>
+      </Card>
+    </div>
+    
   </div>
 </template>
 
@@ -133,11 +115,12 @@ export default {
       let vue = this;
       Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
         .then(response => {
+            console.log(response.data.weeks);
             vue.year = response.data.year;
             vue.month = response.data.month;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
-            vue.days = response.data.days;
+            vue.weeks = response.data.weeks;
             vue.styles = response.data.styles;
         });
     },
@@ -146,16 +129,12 @@ export default {
       Nova.visit(url);
     },
 
-    styleForGridPosition(weekIndex, dayIndex)
-    { 
-      return {
-        'grid-row-start': weekIndex + 1,
-        'grid-column-start': dayIndex + 1
-      };
-    },
-  
-    stylesForEvent(event, weekIndex, dayIndex) {
-      return (event.options.style) ? [this.styles.default, this.styles[event.options.style], this.styleForGridPosition(weekIndex, dayIndex)] : this.styles.default;
+    stylesForEvent(event) {
+      if(event.options.style) {
+        return [this.styles.default, event.options.style];
+      } else {
+        return this.styles.default;
+      }
     }
   
   },
@@ -166,7 +145,7 @@ export default {
           month: null,
           title: '',
           columns: Array(7).fill('-'),
-          days: Array(6).fill(Array(7).fill({})),
+          weeks: Array(6).fill(Array(7).fill({})),
           styles: {
             default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.7)' }
           }

@@ -20,7 +20,7 @@ class CalendarDataProvider extends MonthCalendar
     public function novaResources() : array
     {
         return [
-            // 'App/Nova/User::class' => 'created_at',
+            'App/Nova/User::class' => 'created_at',
         ];
     }
 }

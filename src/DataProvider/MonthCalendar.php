@@ -17,7 +17,7 @@ use Wdelfuego\NovaCalendar\Event;
 
 abstract class MonthCalendar implements MonthDataProviderInterface
 {
-    const CALENDAR_WEEKS = 6;
+    const N_CALENDAR_WEEKS = 6;
     
     protected $weekStartsOn;
     protected $year;
@@ -67,12 +67,12 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return $out;
     }
 
-    public function calendarDays() : array
+    public function calendarWeeks() : array
     {
         $out = [];
         $dateCursor = $this->firstDayOfCalendar();
 
-        for($i = 0; $i < 6; $i++)
+        for($i = 0; $i < self::N_CALENDAR_WEEKS; $i++)
         {
             $week = [];
             for($j = 0; $j < 7; $j++)
@@ -121,7 +121,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     
     protected function lastDayOfCalendar(): Carbon
     {
-        return $this->firstDayOfCalendar()->addDays(7 * self::CALENDAR_WEEKS);
+        return $this->firstDayOfCalendar()->addDays(7 * self::N_CALENDAR_WEEKS);
     }
 
     private function eventDataForDate(DateTimeInterface $date) : array
@@ -130,7 +130,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             return $e->start()->isSameDay($date);
         });
 
-        return array_map(fn($e): array => $e->toArray(), $events);
+        return array_map(fn($e): array => $e->toArray($this->weekStartsOn), $events);
     }
     
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
