@@ -133,9 +133,9 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return array_map(fn($e): array => $e->toArray(), $events);
     }
     
-    private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
+    public function resourceToEvent(NovaResource $resource, DateTimeInterface $dateAttribute) : Event
     {
-        $out = Event::fromResource($resource, $dateAttribute);
+        $out = (new Event($resource->title(), $dateAttribute))->withResource($resource);
         $out->url($this->urlForResource($resource));
         return $this->customizeEvent($out);
     }
@@ -145,33 +145,61 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         if(is_null($this->allEvents))
         {
             $this->allEvents = [];
-            $firstDayOfCalendar = $this->firstDayOfCalendar();
-            $lastDayOfCalendar = $this->lastDayOfCalendar();
-        
+
             foreach($this->novaResources() as $novaResourceClass => $dateAttribute)
             {
                 if(!is_subclass_of($novaResourceClass, NovaResource::class))
                 {
                     throw new \Exception("Only Nova Resources can be automatically fetched for event generation ($novaResourceClass is not a Nova Resource)");
                 }
-            
-                $notBefore = new NotBeforeDate('', $dateAttribute);
-                $notAfter = new NotAfterDate('', $dateAttribute);
-            
-                $eloquentModelClass = $novaResourceClass::$model;
-                $models = $eloquentModelClass::orderBy($dateAttribute);
-                $models = $notBefore->modulateQuery($models, $firstDayOfCalendar);
-                $models = $notAfter->modulateQuery($models, $lastDayOfCalendar);
 
-                foreach($models->cursor() as $model)
-                {
-                    $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $dateAttribute);
+                if (method_exists($novaResourceClass, 'toEvents')) {
+                    $resourceEvents = $novaResourceClass::toEvents($this);
+                } else {
+                    $resourceEvents = $this->resourceToEvents($novaResourceClass, $dateAttribute);
                 }
+                $this->allEvents = array_merge($this->allEvents, $resourceEvents);
             }
-            
+
             $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
         }
-        
+
         return $this->allEvents;
     }
+
+    public function resourceToEvents(string $novaResourceClass, string $dateAttribute): array
+    {
+        $allEvents = [];
+        $firstDayOfCalendar = $this->firstDayOfCalendar();
+        $lastDayOfCalendar = $this->lastDayOfCalendar();
+
+        $notBefore = new NotBeforeDate('', $dateAttribute);
+        $notAfter = new NotAfterDate('', $dateAttribute);
+
+        $eloquentModelClass = $novaResourceClass::$model;
+        $models = $eloquentModelClass::orderBy($dateAttribute);
+        $models = $notBefore->modulateQuery($models, $firstDayOfCalendar);
+        $models = $notAfter->modulateQuery($models, $lastDayOfCalendar);
+
+        foreach($models->cursor() as $model)
+        {
+            
+            if(!$this->policyAllowsView($model) && !$this->shouldShow($model)) {
+                continue;
+            }
+            $novaResource = new $novaResourceClass($model);
+            $allEvents[] = $this->resourceToEvent($novaResource, $novaResource->resource->$dateAttribute);
+        }
+
+        return $allEvents;
+    }
+
+    private function policyAllowsView($model) {
+        return auth()->user()->can('view',  $model);
+    }
+
+    protected function shouldShow($model) {
+        return true;
+    }
+
 }
