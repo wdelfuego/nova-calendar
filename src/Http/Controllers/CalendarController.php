@@ -6,7 +6,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
+use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
 
 class CalendarController extends BaseController
 {

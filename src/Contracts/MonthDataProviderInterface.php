@@ -1,6 +1,6 @@
 <?php
 
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\Contracts;
 
 interface MonthDataProviderInterface extends CalendarDataProviderInterface
 {
