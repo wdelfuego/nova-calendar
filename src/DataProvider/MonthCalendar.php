@@ -77,7 +77,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             $week = [];
             for($j = 0; $j < 7; $j++)
             {
-                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month);
+                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->weekStartsOn);
                 $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
                 
                 $dateCursor = $dateCursor->addDay();
@@ -130,7 +130,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             return $e->start()->isSameDay($date);
         });
 
-        return array_map(fn($e): array => $e->toArray($this->weekStartsOn), $events);
+        return array_map(fn($e): array => $e->toArray(), $events);
     }
     
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event

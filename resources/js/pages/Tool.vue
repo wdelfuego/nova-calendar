@@ -27,7 +27,7 @@
         <div class="nova-calendar noselect">
 
           <div class="nc-header">
-            <div v-for="column in $data.columns" class="border-l border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
+            <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
           </div>
 
           <div class="nc-content">
@@ -35,26 +35,36 @@
             <!-- for every week in the week data -->
             <div v-for="(week, weekIndex) in $data.weeks" class="week">
 
-              <!-- a cell per day -->
+              <!-- a cell per day, background -->
               <template v-for="day in week">
-                <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800">
-                  <div class="dayheader text-gray-400 noselect" v-bind:class="{'today': day.isToday == 1 }"><span class="daylabel">{{ day.label }}</span></div>
+                <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
+                  <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
               </template>
               
-              <!-- events per day, overlaid -->
+              <!-- events, overlaid -->
               <div class="week-events">
+                
+                <!-- multi day events for all days first -->
                 <template v-for="day in week">
-
-                  <!-- multi day events that start on this day -->
-                  <div v-for="event in day.eventsMultiDay" class="nc-event multi">
-                    {{ event.name }}
+                  <div v-for="event in day.eventsMultiDay" :class="['nc-event','multi','nc-col-'+day.weekdayColumn]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url }">
+                    <div class="badges">
+                      <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                    </div>
+                    <span class="name">{{ event.name }}</span>
+                    <template v-if="event.options.displayTime">
+                      <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
+                      <span class="time" v-else>{{ event.start_time }}</span>
+                    </template>
+                    <span class="notes">{{ event.notes }}</span>
                   </div>
-                  
-                  <!-- single day events on this day -->
-                  <div class="single-day-events">
-                    <template v-for="event in day.events">
-                      <div :class="['nc-event','nc-col-'+event.weekday_column]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url }">
+                </template>
+                
+                <!-- then all single day events -->
+                <template v-for="day in week">
+                  <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
+                    <template v-for="event in day.eventsSingleDay">
+                      <div :class="['nc-event','nc-col-'+event.weekdayColumn]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url }">
                         <div class="badges">
                           <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                         </div>
@@ -67,8 +77,8 @@
                       </div>
                     </template>
                   </div>
-                    
                 </template>
+                
               </div>
 
             </div>
