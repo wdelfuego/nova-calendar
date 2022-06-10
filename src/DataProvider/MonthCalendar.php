@@ -47,7 +47,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 {
     const N_CALENDAR_WEEKS = 6;
     
-    protected $weekStartsOn;
+    protected $firstDayOfWeek;
     protected $year;
     protected $month;
     
@@ -55,7 +55,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     
     public function __construct(int $year = null, int $month = null)
     {
-        $this->weekStartsOn = NovaCalendar::MONDAY;
+        $this->firstDayOfWeek = NovaCalendar::MONDAY;
         $this->year = $year ?? now()->year;
         $this->month = $month ?? now()->month;
     }
@@ -70,7 +70,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 
     public function startWeekOn(int $dayOfWeekIso)
     {
-        $this->weekStartsOn = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
+        $this->firstDayOfWeek = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
     }
 
     public function startWeekOnSunday()
@@ -86,7 +86,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     public function daysOfTheWeek() : array
     {
         $out = [];
-        $currentDay = new Carbon(Carbon::getDays()[$this->weekStartsOn % 7]);
+        $currentDay = new Carbon(Carbon::getDays()[$this->firstDayOfWeek % 7]);
         for($i = 0; $i < 7; $i++)
         {
             $out[] = $currentDay->dayName;
@@ -105,7 +105,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             $week = [];
             for($j = 0; $j < 7; $j++)
             {
-                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->weekStartsOn);
+                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
                 $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
                 
                 $dateCursor = $dateCursor->addDay();
@@ -144,7 +144,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     protected function firstDayOfCalendar(): Carbon
     {
         $firstOfMonth = $this->firstDayOfMonth();
-        return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - $this->weekStartsOn);
+        return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - $this->firstDayOfWeek);
     }
     
     protected function lastDayOfCalendar(): Carbon
@@ -152,13 +152,58 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return $this->firstDayOfCalendar()->addDays(7 * self::N_CALENDAR_WEEKS);
     }
 
-    private function eventDataForDate(DateTimeInterface $date) : array
+    private function eventDataForDate(Carbon $date) : array
     {
+        $date->setTime(0,0,0);
+        
+        // Get events that start today, and if the date is the first day of the week
+        // also get all multiday events that started before today and end on or after it
+        // ('running multiday events')
         $events = array_filter($this->allEvents(), function($e) use ($date) {
-            return $e->start()->isSameDay($date);
+            return $e->start()->isSameDay($date)
+                    ||
+                    (($date->dayOfWeekIso == $this->firstDayOfWeek)
+                        && $e->end() 
+                        && $e->start()->isBefore($date) 
+                        && $e->end()->isAfter($date));
         });
 
-        return array_map(fn($e): array => $e->toArray(), $events);
+        // Sort by event start date as a heuristic (CSS doesn't always match event order perfectly due to 'column dense')
+        usort($events, function($a, $b) use ($date) { 
+
+            $aDays = min(7,$a->spansDaysFrom($date));
+            $bDays = min(7,$b->spansDaysFrom($date));
+
+            // Longer events first
+            if($a != $b)
+            {
+                // return $bDays - $aDays;
+            }
+            
+            // Events span the same amount of days
+            
+            // So both are 7 here
+            if($aDays == 7 && $bDays == 7)
+            {
+                if(!$a->startsEvent($date)) { return -1 ;}
+                if(!$b->startsEvent($date)) { return 1 ;}
+                return 0;
+            }
+
+            // By start time
+            return $b->start()->diffInMinutes($a->start(), false); 
+        });
+
+        // At least, always move events that span the full week to the top
+        // This works because usort re-assigns numeric keys
+        // foreach($events as $index => $event) {
+        //     if($event->spansDaysFrom($date) >= 7) {
+        //         array_unshift($events, array_splice($events, $index, 1)[0]);
+        //     }
+        // }
+
+
+        return array_map(fn($e): array => $e->toArray($date, $this->firstDayOfWeek), $events);
     }
     
     private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event

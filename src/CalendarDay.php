@@ -33,15 +33,16 @@ namespace Wdelfuego\NovaCalendar;
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CalendarDay implements CalendarDayInterface
 {
-    public static function forDateInYearAndMonth(Carbon $date, int $year, int $month, int $weekStartsOn = null) : self
+    public static function forDateInYearAndMonth(Carbon $date, int $year, int $month, int $firstDayOfWeek = null) : self
     {
-        $weekStartsOn = $weekStartsOn ?? NovaCalendar::MONDAY;
+        $firstDayOfWeek = $firstDayOfWeek ?? NovaCalendar::MONDAY;
 
         return new self(
-            self::weekdayColumn($date, $weekStartsOn),
+            self::weekdayColumn($date, $firstDayOfWeek),
             $date->format('j'),
             $date->year == $year && $date->month == $month,
             $date->isToday(),
@@ -49,10 +50,10 @@ class CalendarDay implements CalendarDayInterface
         );
     }
     
-    public static function weekdayColumn(Carbon $date, int $weekStartsOn = 1) : int
+    public static function weekdayColumn(Carbon $date, int $firstDayOfWeek = 1) : int
     {
         $absDay = $date->dayOfWeekIso;
-        return ($absDay - $weekStartsOn) % 7 + 1;
+        return ($absDay - $firstDayOfWeek) % 7 + 1;
     }
     
     protected $weekdayColumn;
@@ -100,12 +101,12 @@ class CalendarDay implements CalendarDayInterface
     
     private function eventsSingleDay() : array
     {
-        // return [];
-        return $this->events;
+        return array_filter($this->events, fn($e): bool => !!$e['single_day']);
     }
     
     private function eventsMultiDay() : array
     {
-        return $this->events;
+        
+        return array_filter($this->events, fn($e): bool => !$e['single_day']);
     }
 }

@@ -1,11 +1,40 @@
+/*
+ * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included 
+ * in all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ * 
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE. 
+ * LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE APPROPRIATENESS OF 
+ * USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING BUT NOT LIMITED TO
+ * THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF DATA OR SOFTWARE 
+ * PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 :root {
   --nc-transparent: rgba(255, 255, 255, 0);
   --nc-highlight-bg: rgba(var(--colors-primary-500), 0.02);
   --nc-highlight-border: rgba(var(--colors-primary-500), 0.4);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
-  --nc-event-height-multi-day: 1.8em;
+  --nc-event-height-multi-day: 1.9em;
   --nc-event-border: rgba(10, 10, 10, 0.3);
+  --nc-event-border-radius: 8px;
 }
 
 .nova-calendar.noselect {
@@ -88,6 +117,14 @@ div.nova-calendar .nc-col-5 { grid-column: 5 / 6; }
 div.nova-calendar .nc-col-6 { grid-column: 6 / 7; }
 div.nova-calendar .nc-col-7 { grid-column: 7 / -1; }
 
+div.nova-calendar .nc-event.multi.span-1 { grid-column-end: span 1; }
+div.nova-calendar .nc-event.multi.span-2 { grid-column-end: span 2; }
+div.nova-calendar .nc-event.multi.span-3 { grid-column-end: span 3; }
+div.nova-calendar .nc-event.multi.span-4 { grid-column-end: span 4; }
+div.nova-calendar .nc-event.multi.span-5 { grid-column-end: span 5; }
+div.nova-calendar .nc-event.multi.span-6 { grid-column-end: span 6; }
+div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
+
 div.nova-calendar .day {
   z-index: 0;
   grid-row: 1/-1;
@@ -111,10 +148,11 @@ div.nova-calendar .dayheader {
 
 div.nova-calendar .day .dayheader .daylabel {
   font-size: 9pt;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 div.nova-calendar .day.today .dayheader .daylabel {
+  font-size: 10pt;
   font-weight: bold;
   opacity: 1.0;
   background-color: rgba(var(--colors-primary-500), 0.2);
@@ -141,13 +179,32 @@ div.nova-calendar .single-day-events {
 
 div.nova-calendar .nc-event {
   padding: 0.3em;
-  border-radius: 5px;
   text-align: left;
   margin: 0.1em 0.1em;
-  font-size: 12pt;
+  font-size: 11pt;
+  line-height: 14pt;
   min-height: var(--nc-event-height-multi-day);
-/*  border-bottom: 12px var(--nc-event-border) solid;*/
   border-bottom: 1px var(--nc-event-border) solid;
+}
+
+
+div.nova-calendar .nc-event:not(.starts) {
+  border-left: 1px rgba(228,228,228,0.75) dashed;
+  opacity: 0.8;
+}
+
+div.nova-calendar .nc-event:not(.ends) {
+  border-right: 1px rgba(228,228,228,0.75) dashed;
+}
+
+div.nova-calendar .nc-event.starts {
+  border-top-left-radius: var(--nc-event-border-radius);
+  border-bottom-left-radius: var(--nc-event-border-radius);
+}
+
+div.nova-calendar .nc-event.ends {
+  border-top-right-radius: var(--nc-event-border-radius);
+  border-bottom-right-radius: var(--nc-event-border-radius);
 }
 
 div.nova-calendar div.nc-event.clickable {
@@ -155,7 +212,6 @@ div.nova-calendar div.nc-event.clickable {
 }
 
 div.nova-calendar .nc-event.multi {
-  grid-column-end: span 2;
   max-height: var(--nc-event-height-multi-day);
   white-space: nowrap;
   overflow: hidden;
@@ -168,15 +224,21 @@ div.nova-calendar div.nc-event > span.name {
   margin-left: 0.2em;
 }
 
+div.nova-calendar div.nc-event:not(.starts) > span.name {
+  font-weight: normal;
+  font-size: 9pt;
+  opacity: 0.8;
+}
+
 div.nova-calendar div.nc-event > span.time {
   display: inline-block;
-  font-size: 10pt;
+  font-size: 9pt;
   opacity: 0.8;
 }
 
 div.nova-calendar div.nc-event > span.notes {
   display: inline-block;
-  font-size: 10pt;
+  font-size: 9pt;
   line-height: 10pt;
   margin-left: 0.2em;
 }
@@ -190,7 +252,7 @@ div.nova-calendar div.nc-event > div.badges {
   max-width: 40%;
   text-align: right;
   border: 0px #0f0 solid;
-  margin-top: -0.1em;
+  margin-top: -0.15em;
   margin-right: -0.15em;
   margin-bottom: 0.3em;
 }
@@ -208,120 +270,3 @@ div.nova-calendar div.nc-event > div.badges > span.badge {
   margin-left: 1px;
   margin-right: 1px;
 }
-
-
-
-table.nova-calendar th, table.nova-calendar td {
-  width: 14.285% !important;
-}
-
-table.nova-calendar th {
-  padding: 0.5em 1em;
-  text-align: left;
-}
-
-table.nova-calendar th span {
-  word-break: break-all;
-}
-
-table.nova-calendar td {
-  padding: 0;
-  border-width: 1px;
-}
-
-table.nova-calendar td:not(.withinRange) {
-  border: 0px;
-/*  opacity: 0.3;*/
-/*  background-color: var(--nc-disabled-bg);*/
-}
-
-table.nova-calendar td.weekend.withinRange {
-/*  background-color: var(--nc-weekend-bg);*/
-}
-
-table.nova-calendar td > div {
-  position: relative;
-  min-height: 9.5em;
-  padding: 0em;
-  padding-top: 2.5em;
-  padding-bottom: 0.5em;
-/*  overflow: scroll;
-  max-height: 9.5em;
-*/
-}
-
-table.nova-calendar span.daylabel {
-  top: 0.5em;
-  left: 0.5em;
-  width: 1em;
-  height: 1em;
-}
-
-table.nova-calendar td.today ,table.nova-calendar td.weekend.today {
-  background-color: var(--nc-highlight-bg);
-  outline: solid 2px var(--nc-highlight-border);
-  outline-offset: -2px;
-}
-
-table.nova-calendar td.today > div > span.daylabel {
-  font-weight: bold;
-  font-size: 14pt;
-  margin-top: -0.2em;
-}
-
-table.nova-calendar td > div div.nc-event {
-  position: relative;
-  border-radius: 5px;
-  padding: 0.2em 0.5em;
-  text-align: left;
-  margin: 0.1em;
-  border-bottom: 2px var(--nc-event-border) solid;
-}
-
-table.nova-calendar td > div div.nc-event.clickable {
-  cursor: pointer;
-}
-
-table.nova-calendar span.name {
-  font-weight: bold;
-}
-
-table.nova-calendar span.time {
-  display: block;
-  font-size: 8pt;
-  margin-left: 0.2em;
-}
-
-table.nova-calendar span.notes {
-  display: block;
-  font-size: 8pt;
-}
-
-table.nova-calendar div.nc-event > div.badges {
-  display: inline-block;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  position: absolute;
-  max-width: 50%;
-  text-align: right;
-  margin: 0;
-  top: 0.1em;
-  right: 0.12em;
-}
-
-table.nova-calendar div.nc-event > div.badges > span.badge {
-  display: inline-block;
-  border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
-  opacity: 0.8;
-  font-size: 9pt;
-  line-height: 12pt;
-  min-width: 22px;
-  text-align: center;
-  border-radius: 5px;
-  padding: 0.25em;
-  margin-left: 2px;
-
-}
-
-

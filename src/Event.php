@@ -31,6 +31,7 @@
 namespace Wdelfuego\NovaCalendar;
 
 use DateTimeInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
 
@@ -48,7 +49,7 @@ class Event
     protected $badges;
     
     protected $novaResource = null;
-    protected $displayTime = true;
+    protected $displayTime = false;
     protected $url = null;
     protected $style = null;
     protected $timeFormat = 'H:i';
@@ -67,14 +68,19 @@ class Event
         $this->badges = $badges;
     }
 
-    public function toArray() : array
+    public function toArray(Carbon $displayDate, int $firstDayOfWeek) : array
     {
         return [
+//            'name' => CalendarDay::weekdayColumn($displayDate, $firstDayOfWeek) .'-' .($this->end() ? $displayDate->diffInDays($this->end) : 0) .$this->name,
             'name' => $this->name,
             'start_date' => $this->start->format("Y-m-d"),
             'start_time' => $this->start->format($this->timeFormat),
             'end_date' => $this->end ? $this->end->format("Y-m-d") : null,
             'end_time' => $this->end ? $this->end->format($this->timeFormat) : null,
+            'single_day' => $this->isSingleDayEvent() ? 1 : 0,
+            'spans_days' => min($this->spansDaysFrom($displayDate), 7),
+            'starts_event' => $this->startsEvent($displayDate) ? 1 : 0,
+            'ends_event' => $this->endsEvent($displayDate, $firstDayOfWeek) ? 1 : 0,
             'notes' => $this->notes,
             'badges' => $this->badges,
             'url' => $this->url,
@@ -85,6 +91,32 @@ class Event
         ];
     }
     
+    public function isSingleDayEvent() : bool
+    {
+        return !$this->end || $this->end->isSameDay($this->start);
+    }
+    
+    public function spansDaysFrom(Carbon $displayDate) : int
+    {
+        $out = 1;
+        if($this->end)
+        {
+            $out += $displayDate->diffInDays($this->end);
+        }
+        return $out;
+    }
+
+    public function startsEvent(Carbon $displayDate)
+    {
+        return $this->start->isSameDay($displayDate);
+    }
+        
+    public function endsEvent(Carbon $displayDate, int $firstDayOfWeek)
+    {
+        $daysLeft = $this->end() ? $displayDate->diffInDays($this->end) : 0;
+        return $daysLeft <= 7 - CalendarDay::weekdayColumn($displayDate, $firstDayOfWeek);
+    }
+        
     public function resource(NovaResource $v = null) : ?NovaResource
     {
         if(!is_null($v))
