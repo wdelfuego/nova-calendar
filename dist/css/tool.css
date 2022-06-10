@@ -52,6 +52,17 @@ cursor: default;
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.noscrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.noscrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 /*
  *  Controls (above calendar)
@@ -199,7 +210,7 @@ div.nova-calendar .single-day-events {
 }
 
 div.nova-calendar .nc-event {
-  overflow: auto;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
@@ -234,6 +245,8 @@ div.nova-calendar div.nc-event.clickable {
 div.nova-calendar div.nc-event div.name {
   grid-row: 1/2;
   grid-column: 1/2;
+  white-space: nowrap; 
+  overflow: scroll;
   border: 0px #fff dashed;
   font-weight: bold;
   margin-right: 0.2em;
@@ -274,6 +287,7 @@ div.nova-calendar div.nc-event div.badges span.badge {
 div.nova-calendar .nc-event div.content {
   grid-row: 2 / 3;
   grid-column: 1 / span 2;
+  overflow: scroll;
   border: 0px #f00 dashed;
   padding-left: 0.2em;
 }
@@ -297,6 +311,8 @@ div.nova-calendar div.nc-event span.notes {
 
 div.nova-calendar .nc-event.multi {
   max-height: var(--nc-event-height-multi-day);
+  align-items: top;
+  overflow: hidden;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto;
 }
@@ -311,17 +327,22 @@ div.nova-calendar .nc-event:not(.ends) {
 }
 
 div.nova-calendar div.nc-event.multi div.name {
+  white-space: nowrap; 
+  overflow: scroll;
   grid-row: 1 / -1;
   grid-column: 1 / 2;
 }
 
 div.nova-calendar div.nc-event.multi div.badges {
+  white-space: nowrap; 
+  overflow: scroll;
   grid-row: 1 / -1;
   grid-column: 3 / -1;
 }
 
 div.nova-calendar div.nc-event.multi div.content {
+  white-space: nowrap; 
+  overflow: scroll;
   grid-row: 1 / -1;
   grid-column: 2 / 3;
 }
-

@@ -76,11 +76,11 @@
                 <!-- multi day events for all days first -->
                 <template v-for="day in week">
                   <div v-for="event in day.eventsMultiDay" :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spans_days]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
-                    <div class="name">{{ event.name }}</div>
-                    <div class="badges">
+                    <div class="name noscrollbar">{{ event.name }}</div>
+                    <div class="badges noscrollbar">
                       <span v-if="event.starts_event" class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                     </div>
-                    <div class="content">
+                    <div class="content noscrollbar">
                       <template v-if="event.starts_event && event.options.displayTime">
                         <span class="time">{{ event.start_time }}</span>
                       </template>
@@ -94,11 +94,11 @@
                   <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
                     <template v-for="event in day.eventsSingleDay">
                       <div :class="['nc-event']" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
-                        <div class="name">{{ event.name }}</div>
+                        <div class="name noscrollbar">{{ event.name }}</div>
                         <div class="badges">
                           <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                         </div>
-                        <div class="content">
+                        <div class="content noscrollbar">
                           <template v-if="event.options.displayTime">
                             <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
                             <span class="time" v-else>{{ event.start_time }}</span>

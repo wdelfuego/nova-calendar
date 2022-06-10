@@ -164,16 +164,16 @@ var _hoisted_14 = {
 };
 var _hoisted_15 = ["onClick"];
 var _hoisted_16 = {
-  "class": "name"
+  "class": "name noscrollbar"
 };
 var _hoisted_17 = {
-  "class": "badges"
+  "class": "badges noscrollbar"
 };
 var _hoisted_18 = {
   "class": "badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white"
 };
 var _hoisted_19 = {
-  "class": "content"
+  "class": "content noscrollbar"
 };
 var _hoisted_20 = {
   key: 0,
@@ -185,7 +185,7 @@ var _hoisted_21 = {
 };
 var _hoisted_22 = ["onClick"];
 var _hoisted_23 = {
-  "class": "name"
+  "class": "name noscrollbar"
 };
 var _hoisted_24 = {
   "class": "badges"
@@ -194,7 +194,7 @@ var _hoisted_25 = {
   "class": "badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white"
 };
 var _hoisted_26 = {
-  "class": "content"
+  "class": "content noscrollbar"
 };
 var _hoisted_27 = {
   key: 0,
