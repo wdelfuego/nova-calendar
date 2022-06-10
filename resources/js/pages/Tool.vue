@@ -48,8 +48,8 @@
     
     <div style="width:100%;overflow:scroll">
       <Card
-        class="flex flex-col items-center justify-center"
-        style="min-height: 300px;min-width:800px"
+        class="flex flex-col items-center justify-center dark:bg-gray-800"
+        style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)"
       >
 
         <div class="nova-calendar noselect">
@@ -76,14 +76,16 @@
                 <!-- multi day events for all days first -->
                 <template v-for="day in week">
                   <div v-for="event in day.eventsMultiDay" :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spans_days]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
-                    <div class="badges" v-if="event.starts_event">
-                      <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                    <div class="name">{{ event.name }}</div>
+                    <div class="badges">
+                      <span v-if="event.starts_event" class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                     </div>
-                    <span class="name">{{ event.name }}</span>
-                    <template v-if="event.options.displayTime">
-                      <span class="time">{{ event.start_time }}</span>
-                    </template>
-                    <span class="notes">{{ event.notes }}</span>
+                    <div class="content">
+                      <template v-if="event.starts_event && event.options.displayTime">
+                        <span class="time">{{ event.start_time }}</span>
+                      </template>
+                      <span v-if="event.starts_event" class="notes">{{ event.notes }}</span>
+                    </div>
                   </div>
                 </template>
                 
@@ -92,15 +94,17 @@
                   <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
                     <template v-for="event in day.eventsSingleDay">
                       <div :class="['nc-event']" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
+                        <div class="name">{{ event.name }}</div>
                         <div class="badges">
                           <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
                         </div>
-                        <span class="name">{{ event.name }}</span>
-                        <template v-if="event.options.displayTime">
-                          <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
-                          <span class="time" v-else>{{ event.start_time }}</span>
-                        </template>
-                        <span class="notes">{{ event.notes }}</span>
+                        <div class="content">
+                          <template v-if="event.options.displayTime">
+                            <span class="time" v-if="event.end_time">{{ event.start_time }} - {{ event.end_time }}</span>
+                            <span class="time" v-else>{{ event.start_time }}</span>
+                          </template>
+                          <span class="notes">{{ event.notes }}</span>
+                        </div>
                       </div>
                     </template>
                   </div>
@@ -152,7 +156,6 @@ export default {
       let vue = this;
       Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
         .then(response => {
-            console.log(response.data.weeks);
             vue.year = response.data.year;
             vue.month = response.data.month;
             vue.title = response.data.title;
@@ -168,7 +171,7 @@ export default {
 
     stylesForEvent(event) {
       if(event.options.style) {
-        return [this.styles.default, event.options.style];
+        return [this.styles.default, this.styles[event.options.style]];
       } else {
         return this.styles.default;
       }
