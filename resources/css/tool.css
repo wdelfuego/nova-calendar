@@ -274,7 +274,7 @@ div.nova-calendar div.nc-event div.badges {
 div.nova-calendar div.nc-event div.badges span.badge {
   display: inline-block;
   border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
-  opacity: 0.8;
+  opacity: 0.9;
   font-size: 9pt;
   line-height: 12pt;
   min-width: 22px;
