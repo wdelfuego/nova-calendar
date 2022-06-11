@@ -32,11 +32,12 @@ namespace Wdelfuego\NovaCalendar\DataProvider;
 
 use DateTimeInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
 
-use Wdelfuego\Nova\DateTime\Filters\NotBeforeDate;
-use Wdelfuego\Nova\DateTime\Filters\NotAfterDate;
+use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
+use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
 use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
 
 use Wdelfuego\NovaCalendar\NovaCalendar;
@@ -155,62 +156,62 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     private function eventDataForDate(Carbon $date) : array
     {
         $date->setTime(0,0,0);
+        $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
         
-        // Get events that start today, and if the date is the first day of the week
+        // Get all events that start today, and if the date is the first day of the week
         // also get all multiday events that started before today and end on or after it
         // ('running multiday events')
-        $events = array_filter($this->allEvents(), function($e) use ($date) {
+        $events = array_filter($this->allEvents(), function($e) use ($date, $isFirstDayColumn) {
             return $e->start()->isSameDay($date)
                     ||
-                    (($date->dayOfWeekIso == $this->firstDayOfWeek)
+                    ($isFirstDayColumn
                         && $e->end() 
                         && $e->start()->isBefore($date) 
                         && $e->end()->isAfter($date));
         });
 
-        // Sort by event start date as a heuristic (CSS doesn't always match event order perfectly due to 'column dense')
-        usort($events, function($a, $b) use ($date) { 
+        // Sort events as a heuristic (CSS doesn't always match event order perfectly due to 'column dense')
+        usort($events, function($a, $b) use ($date, $isFirstDayColumn) { 
 
             $aDays = min(7,$a->spansDaysFrom($date));
             $bDays = min(7,$b->spansDaysFrom($date));
 
             // Longer events first
-            if($a != $b)
+            if($aDays != $bDays)
             {
-                // return $bDays - $aDays;
+                return $bDays - $aDays;
             }
-            
-            // Events span the same amount of days
-            
-            // So both are 7 here
-            if($aDays == 7 && $bDays == 7)
+
+            // If we're in the first day column and both events span 7 days,
+            // let running multi-day events precede events that start today
+            if($isFirstDayColumn && $aDays == 7 && $bDays == 7)
             {
                 if(!$a->startsEvent($date)) { return -1 ;}
                 if(!$b->startsEvent($date)) { return 1 ;}
                 return 0;
             }
 
-            // By start time
+            // Events have the same length and don't span 7 full days
+            // Let the one that starts earlier come first.
             return $b->start()->diffInMinutes($a->start(), false); 
         });
-
-        // At least, always move events that span the full week to the top
-        // This works because usort re-assigns numeric keys
-        // foreach($events as $index => $event) {
-        //     if($event->spansDaysFrom($date) >= 7) {
-        //         array_unshift($events, array_splice($events, $index, 1)[0]);
-        //     }
-        // }
-
-
+        
+        // Finally return the resultant event array, but convert each event to an array
+        // that the front-end can use to render the calendar
         return array_map(fn($e): array => $e->toArray($date, $this->firstDayOfWeek), $events);
     }
     
-    private function resourceToEvent(NovaResource $resource, string $dateAttribute) : Event
+    private function resourceToEvent(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd = null) : Event
     {
-        $out = Event::fromResource($resource, $dateAttribute);
+        $out = Event::fromResource($resource, $dateAttributeStart, $dateAttributeEnd);
         $out->url($this->urlForResource($resource));
         return $this->customizeEvent($out);
+    }
+    
+    protected function eloquentClassHasDateCastableAttribute(string $class, string $attribute)
+    {
+        $testObj = new $class;
+        return $testObj instanceof EloquentModel && $testObj->hasCast($attribute, ['date', 'datetime', 'immutable_date', 'immutable_datetime']);
     }
     
     private function allEvents() : array
@@ -221,24 +222,81 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             $firstDayOfCalendar = $this->firstDayOfCalendar();
             $lastDayOfCalendar = $this->lastDayOfCalendar();
         
-            foreach($this->novaResources() as $novaResourceClass => $dateAttribute)
+            foreach($this->novaResources() as $novaResourceClass => $toEventSpec)
             {
                 if(!is_subclass_of($novaResourceClass, NovaResource::class))
                 {
                     throw new \Exception("Only Nova Resources can be automatically fetched for event generation ($novaResourceClass is not a Nova Resource)");
                 }
             
-                $notBefore = new NotBeforeDate('', $dateAttribute);
-                $notAfter = new NotAfterDate('', $dateAttribute);
-            
-                $eloquentModelClass = $novaResourceClass::$model;
-                $models = $eloquentModelClass::orderBy($dateAttribute);
-                $models = $notBefore->modulateQuery($models, $firstDayOfCalendar);
-                $models = $notAfter->modulateQuery($models, $lastDayOfCalendar);
-
-                foreach($models->cursor() as $model)
+                if(is_string($toEventSpec))
                 {
-                    $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $dateAttribute);
+                    // If a single string is supplied as the toEventSpec, it is assumed to 
+                    // be the name of a datetime attribute on the underlying Eloquent model
+                    // that will be used as the starting date/time for a single-day event
+                    $eloquentModelClass = $novaResourceClass::$model;
+                    if(!is_subclass_of($eloquentModelClass, EloquentModel::class))
+                    {
+                        throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
+                    }
+                    else if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec))
+                    {
+                        throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '$toEventSpec' (trying to extract events for Nova Resource $novaResourceClass)");
+                    }
+                    
+                    // Since these are single-day events by definition, we only query for the models 
+                    // that have the date attribute within the current calendar range
+                    $afterFilter = new AfterOrOnDate('', $toEventSpec);
+                    $beforeFilter = new BeforeOrOnDate('', $toEventSpec);
+                    $models = $eloquentModelClass::orderBy($toEventSpec);
+                    $models = $afterFilter->modulateQuery($models, $firstDayOfCalendar);
+                    $models = $beforeFilter->modulateQuery($models, $lastDayOfCalendar);
+
+                    foreach($models->cursor() as $model)
+                    {
+                        $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $toEventSpec);
+                    }
+                }
+                else if(is_array($toEventSpec) && count($toEventSpec) == 2 && is_string($toEventSpec[0]) && is_string($toEventSpec[1]))
+                {
+                    // If an array containing two strings is supplied as the toEventSpec, they are assumed to 
+                    // be the name of two datetime attributes on the underlying Eloquent model
+                    // that will be used as the start and end datetime for a event
+                    // that can be either single or multi-day (depending on the values of each model instance)
+                    $eloquentModelClass = $novaResourceClass::$model;
+                    if(!is_subclass_of($eloquentModelClass, EloquentModel::class))
+                    {
+                        throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
+                    }
+                    else 
+                    {
+                        if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[0]))
+                        {
+                            throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[0] ."' (trying to extract events for Nova Resource $novaResourceClass)");
+                        }
+                        if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[1]))
+                        {
+                            throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[1] ."' (trying to extract events for Nova Resource $novaResourceClass)");
+                        }
+                    }
+                    
+                    // Since multi-day events could now be included, we have to query for all models 
+                    // that end after or on the first day of the calendar range
+                    // and start before or on the last day of the calendar range
+                    $afterFilter = new AfterOrOnDate('', $toEventSpec[1]);
+                    $beforeFilter = new BeforeOrOnDate('', $toEventSpec[0]);
+                    $models = $eloquentModelClass::orderBy($toEventSpec[0]);
+                    $models = $afterFilter->modulateQuery($models, $firstDayOfCalendar);
+                    $models = $beforeFilter->modulateQuery($models, $lastDayOfCalendar);
+
+                    foreach($models->cursor() as $model)
+                    {
+                        $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $toEventSpec[0], $toEventSpec[1]);
+                    }
+                }
+                else
+                {
+                    throw new \Exception("Invalid toEventSpec supplied for Nova Resource $novaResourceClass");
                 }
             }
             

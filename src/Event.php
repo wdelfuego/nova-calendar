@@ -37,9 +37,11 @@ use Laravel\Nova\Resource as NovaResource;
 
 class Event
 {
-    public static function fromResource(NovaResource $resource, string $dateAttribute) : self
+    public static function fromResource(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd = null) : self
     {
-        return (new self($resource->title(), $resource->resource->$dateAttribute))->withResource($resource);
+        return is_null($dateAttributeEnd)
+            ? (new self($resource->title(), $resource->resource->$dateAttributeStart))->withResource($resource)
+            : (new self($resource->title(), $resource->resource->$dateAttributeStart, $resource->resource->$dateAttributeEnd))->withResource($resource);
     }
             
     protected $name;

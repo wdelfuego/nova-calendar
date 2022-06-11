@@ -78,7 +78,7 @@
                   <div v-for="event in day.eventsMultiDay" :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spans_days]" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
                     <div class="name noscrollbar">{{ event.name }}</div>
                     <div class="badges noscrollbar">
-                      <span v-if="event.starts_event" class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                      <span v-if="event.starts_event" class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                     </div>
                     <div class="content noscrollbar">
                       <template v-if="event.starts_event && event.options.displayTime">
@@ -96,7 +96,7 @@
                       <div :class="['nc-event']" v-if="day.isWithinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.starts_event, 'ends': event.ends_event }">
                         <div class="name noscrollbar">{{ event.name }}</div>
                         <div class="badges">
-                          <span class="badge bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-white" v-for="badge in event.badges">{{ badge }}</span>
+                          <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                         </div>
                         <div class="content noscrollbar">
                           <template v-if="event.options.displayTime">
@@ -187,7 +187,7 @@ export default {
           columns: Array(7).fill('-'),
           weeks: Array(6).fill(Array(7).fill({})),
           styles: {
-            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.7)' }
+            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
           }
       }
   }

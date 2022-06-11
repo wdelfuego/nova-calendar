@@ -39,7 +39,7 @@
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
   --nc-event-height-multi-day: 2.2em;
   --nc-event-border: rgba(10, 10, 10, 0.3);
-  --nc-event-border-radius: 6px;
+  --nc-event-border-radius: 7px;
 }
 
 .nova-calendar.noselect {
@@ -211,6 +211,8 @@ div.nova-calendar .single-day-events {
 }
 
 div.nova-calendar .nc-event {
+  transition: opacity 0.45s;
+  opacity: 0.92;
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
@@ -224,6 +226,9 @@ div.nova-calendar .nc-event {
   border-bottom: 1px var(--nc-event-border) solid;
 }
 
+div.nova-calendar .nc-event:hover {
+  opacity: 1.0;
+}
 div.nova-calendar .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
   border-bottom-left-radius: var(--nc-event-border-radius);
@@ -261,6 +266,11 @@ div.nova-calendar div.nc-event:not(.starts) div.name {
   padding-top: 0.1em;
 }
 
+
+/*
+ *  Badges
+ */
+
 div.nova-calendar div.nc-event div.badges {
   grid-row: 1 / 2;
   grid-column: 2 / -1;
@@ -271,19 +281,28 @@ div.nova-calendar div.nc-event div.badges {
   border: 0px #0f0 solid;
 }
 
-div.nova-calendar div.nc-event div.badges span.badge {
+div.nova-calendar div.nc-event div.badges span.badge-bg {
   display: inline-block;
+  border-radius: 4px;
+  background-color: rgba(50,50,64,0.5);
   border-bottom: 1px rgba(var(--colors-primary-500), 0.5) solid;
-  opacity: 0.9;
+  margin-left: 0.5px;
+  margin-right: 0.5px;
+}
+
+div.nova-calendar div.nc-event div.badges span.badge {
+  opacity: 1.0;
   font-size: 9pt;
   line-height: 12pt;
   min-width: 22px;
   text-align: center;
-  border-radius: 4px;
   padding: 0.25em;
-  margin-left: 1px;
-  margin-right: 1px;
 }
+
+
+/*
+ *  Event content
+ */
 
 div.nova-calendar .nc-event div.content {
   grid-row: 2 / 3;
