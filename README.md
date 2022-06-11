@@ -8,29 +8,37 @@
 
 ![Clear and dark mode next to each other](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot-both.png?raw=true)
 
+# Release 1.1 · june '22
+- Adds support for multi-day events
+- Adds support for older php versions: 7.3+ and 8.0
+- Improved visual design
+- Better support for mobile usage
+- Fixes bug where badges could overlap the event title
+- View now uses css grid instead of table
+- New dual licensing model (see the end of this file)
 
 ## What can it do?
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
 The following features are supported:
 
-- Automatically display single-day events on a monthly calendar view in both clear and dark mode
-- Completely customize both visual style and event content on a per-event basis
-- Add badges to individual events to indicate status or attract attention
+- Automatically display Nova resources on a monthly calendar view
+- Display other events that are not related to Nova resources
+- Support for single and multi-day events
+- Support for clear and dark mode
+- Completely customize visual style and content of each event
+- Add badges to events to indicate status or attract attention
+- Mix multiple types of Nova resources on the same calendar
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
-- Mix multiple types of Nova resources on the same calendar
-- Display events that are not related to Nova resources
 - Month and day names are automatically presented in your app's locale
 
 ## What can it not do (yet)?
-The following features are not yet supported:
+The following features are not (yet) supported:
 
-- Multi-day events (first new feature in the pipeline)
-- Creating new events directly from the calendar view
-- Drag and drop support to change event dates
-- Proper responsiveness for display on small screens
 - Integration with external calendar services
+- Creating new events directly from the calendar view
+- Drag and drop to change event dates
 
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
@@ -54,11 +62,11 @@ The calendar just needs a single data provider class that supplies event data to
 
     If you choose to make the data provider yourself, make it a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
 
-2. In the data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's attributes should be used to determine the date and start time of your event. 
+2. In your data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends.
 
-	The `novaResources()` method must return an array that maps Nova resource classes to attribute names. The attribute must be casted to a `DateTime` object by the underlying Eloquent model. If you return an empty array, the calendar will work but will not contain any events.
+	The `novaResources()` method must return an array that maps Nova resource classes to attribute names or arrays of attribute names. The specified attributes must be cast to a `DateTime` object by the underlying Eloquent model. If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
 
-    For example, to make the calendar show your users as events on the date their accounts were created, implement `novaResources()` as follows:
+    For example, to make the calendar show your users as single-day events on the date their accounts were created, implement `novaResources()` as follows:
 
     ```
     namespace App\Providers;
@@ -77,7 +85,7 @@ The calendar just needs a single data provider class that supplies event data to
     }
     ```
 
-   This is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes to the `novaResources()` method.
+   The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
 
 3. Finally, edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar to its `tools()` method and to register your data provider class as the default calendar data provider:
 
@@ -315,7 +323,7 @@ A future release will offer a more reliable way to generate these type of URL pa
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.
 
-The method should return an array of `Event`s:
+The method should return an array of `Event` objects:
 
 ```
 use Wdelfuego\NovaCalendar\Event;
@@ -323,7 +331,7 @@ use Wdelfuego\NovaCalendar\Event;
 protected function nonNovaEvents() : array
 {
     return [
-        (new Event("This is now", now()))
+        (new Event("Now until tomorrow", now(), now()->addDays(1)))
             ->addBadges('D')
             ->withNotes('This is a dynamically created event')
     ];
@@ -340,3 +348,5 @@ Any events you return here that fall outside that date range are never displayed
 For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues) on GitHub.
 
 For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
+
+
