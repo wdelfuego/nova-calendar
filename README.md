@@ -17,18 +17,24 @@
 - View now uses css grid instead of table
 - New dual licensing model (see the end of this file)
 
+
+# Installation
+```sh
+composer require wdelfuego/nova-calendar
+```
+
 ## What can it do?
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
 The following features are supported:
 
 - Automatically display Nova resources on a monthly calendar view
-- Display other events that are not related to Nova resources
-- Support for single and multi-day events
-- Support for clear and dark mode
+- Display events that are not related to Nova resources but come from other sources
 - Completely customize visual style and content of each event
 - Add badges to events to indicate status or attract attention
 - Mix multiple types of Nova resources on the same calendar
+- Supports single and multi-day events
+- Supports clear and dark mode
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
 - Month and day names are automatically presented in your app's locale
@@ -45,11 +51,6 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 ## What can you do?
 Developers who are interested in working together on this tool are highly welcomed. Take a look at the [open issues](https://github.com/wdelfuego/nova-calendar/issues) (those labelled 'good first issue' are great for new contributors) or at the [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
 
-# Installation
-```sh
-composer require wdelfuego/nova-calendar
-```
-
 # Usage
 
 The calendar just needs a single data provider class that supplies event data to the frontend, and for the data provider and tool to be added to your `NovaServiceProvider`:
@@ -62,34 +63,9 @@ The calendar just needs a single data provider class that supplies event data to
 
     If you choose to make the data provider yourself, make it a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
 
-2. In your data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends.
+2. Edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar to its `tools()` method and to register your data provider class as the default calendar data provider:
 
-	The `novaResources()` method must return an array that maps Nova resource classes to attribute names or arrays of attribute names. The specified attributes must be cast to a `DateTime` object by the underlying Eloquent model. If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
-
-    For example, to make the calendar show your users as single-day events on the date their accounts were created, implement `novaResources()` as follows:
-
-    ```
-    namespace App\Providers;
-
-    use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
-    use App\Nova\User;
-
-    class CalendarDataProvider extends MonthCalendar
-    {
-        public function novaResources() : array
-        {
-            return [
-                User::class => 'created_at'
-            ];
-        }	
-    }
-    ```
-
-   The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
-
-3. Finally, edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar to its `tools()` method and to register your data provider class as the default calendar data provider:
-
-    ```
+    ```php
     use Wdelfuego\NovaCalendar\NovaCalendar;
     use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
     use App\Providers\CalendarDataProvider;
@@ -109,11 +85,48 @@ The calendar just needs a single data provider class that supplies event data to
     }
     ```
 
+3. In your data provider, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends.
+
+    For example, let's say you: 
+	- want to show all Nova users as single-day events on the date their accounts were created, and
+	- want to show a SomeEvent resource that has both `starts_at` and `ends_at` timestamps in its underlying Eloquent model
+
+	You would implement `novaResources()` as follows:
+
+    ```php
+    namespace App\Providers;
+
+    use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
+    use App\Nova\User;
+    use App\Nova\SomeEvent;
+
+    class CalendarDataProvider extends MonthCalendar
+    {
+        public function novaResources() : array
+        {
+            return [
+                User::class => 'created_at',
+                SomeEvent::class => ['starts_at', 'ends_at']
+            ];
+        }	
+    }
+    ```
+
+	- This method must return an array that maps Nova resource classes to attribute names (for events that only have a starting timestamp) or arrays of attribute names (for events that have both a start and an end timestamp).
+	- Nova resources for which you specify a single attribute will be added as single-day events using the specified attribute to determine its date and time.
+	- Nova resources for which you specify an array with two attribute names will be added as single or multi-day events for which the first attribute determines the start date and time, and the second attribute determines the end date and time. 
+	- All specified attributes must be cast to a `DateTime` object by the underlying Eloquent model.
+	- If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
+
+
+   The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
+
+
 4. If you're using Nova's default main menu, you're already done. 
 
     If you've defined your main menu manually in the `boot()` method of your `NovaServiceProvider`, don't forget to add a `MenuSection` that links to the calendar:
 
-    ```
+    ```php
     MenuSection::make('Calendar')
         ->path('/wdelfuego/nova-calendar')
         ->icon('calendar'),
@@ -132,7 +145,7 @@ You can customize the display of your events and add badges and notes to them to
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
 
 By default, your events get the title that the Nova resource's `title()` method returns and the start time is set to the value of the attribute specified in your data provider's `novaResources()` method. Other event fields are left empty by default but can easily be loaded from the event's associated model:
-```
+```php
 protected function customizeEvent(Event $event) : Event
 {
     if($event->model())
@@ -147,7 +160,7 @@ protected function customizeEvent(Event $event) : Event
 
 Your customization can be a lot more complex, too:
 
-```
+```php
 use Wdelfuego\NovaCalendar\Event;
 
 protected function customizeEvent(Event $event) : Event
@@ -183,7 +196,7 @@ protected function customizeEvent(Event $event) : Event
 }
 ```
 
-The following customization methods with regard to the display of the `Event` in the calendar view are available.
+The following customization methods with regard to the display of the `Event` in the calendar view are available:
 
 ### Chainable customization methods
 All of these methods return the `Event` itself so you can chain them in the `customizeEvent` method:
@@ -216,7 +229,7 @@ You can customize the CSS that is applied to the event divs in the calendar view
 In your calendar data provider, implement the `eventStyles()` method to return the CSS that you want to apply to all events by default:
 
 For example, to make the default style white with black text:
-```
+```php
 public function eventStyles() : array
 {
     return [
@@ -228,9 +241,11 @@ public function eventStyles() : array
 }
 ```
 
+A default style is not required; if you don't define it, the default style will use your app's primary color as defined in `config/nova.php` under `brand` => `colors` => `500`. 
+
 ### Adding custom event styles
-To add custom event styles, add them to the array returned by `eventStyles` in your calendar data provider: 
-```
+To add custom event styles, add them to the same array: 
+```php
 public function eventStyles() : array
 {
     return [
@@ -244,9 +259,9 @@ public function eventStyles() : array
 }
 ```
 
-Then call `style` or `withStyle` in your `customizeEvent` method using the name of the style (in this example, 'special' or 'warning') to apply them to individual events, for example:
+After you defined your styles in the `eventStyles` array, call `style` or `withStyle` in your `customizeEvent` method using the name of the style (in this example, 'special' or 'warning') to apply them to individual events, for example:
 
-```
+```php
 use Wdelfuego\NovaCalendar\Event;
 use App\Nova\SomeResourceClass;
 
@@ -283,7 +298,7 @@ protected function customizeEvent(Event $event) : Event
 ## Calendar customization
 ### Changing the default menu icon and label
 In your `NovaServiceProvider`, update the `tools()` method as follows:
-```
+```php
 public function tools()
 {
     return [
@@ -293,24 +308,23 @@ public function tools()
 ```
 
 ### Changing the first day of the week
-In your calendar data provider, implement the constructor to call its parent constructor and make a call to `startWeekOn()` to let the weeks start on the day of your choice. You can use the constants defined in `NovaCalendar` to specify the day.
+In your calendar data provider, implement the `initialize` method and make a call to `startWeekOn()` to let the weeks start on the day of your choice. You can use the constants defined in `NovaCalendar` to specify the day.
 
 For example, to start your weeks on wednesday:
-```
+```php
 use Wdelfuego\NovaCalendar\NovaCalendar;
 
-public function __construct(int $year = null, int $month = null)
+public function initialize(): void
 {
-    parent::__construct($year, $month);
     $this->startWeekOn(NovaCalendar::WEDNESDAY);
-}    
+}
     
 ```
 
 ### Changing what happens when an event is clicked
 Implement the following method in your calendar data provider to change the URL that the user is sent to when they click the event:
 
-```
+```php
 protected function urlForResource(NovaResource $resource)
 {
     return '/resources/' .$resource::uriKey() .'/' .$resource->id;
@@ -318,14 +332,12 @@ protected function urlForResource(NovaResource $resource)
 ```
 This example shows the default behavior. If you append `/edit` to the string, users will be sent directly to the resource's Edit view, instead of to its Detail view.
 
-A future release will offer a more reliable way to generate these type of URL parts based on route names such as `nova.pages.edit` and `nova.pages.detail`.
-
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.
 
 The method should return an array of `Event` objects:
 
-```
+```php
 use Wdelfuego\NovaCalendar\Event;
 
 protected function nonNovaEvents() : array

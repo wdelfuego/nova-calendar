@@ -59,11 +59,17 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         $this->firstDayOfWeek = NovaCalendar::MONDAY;
         $this->year = $year ?? now()->year;
         $this->month = $month ?? now()->month;
+        $this->initialize();
     }
     
     abstract public function novaResources();
 
-    public function setYearAndMonth(int $year, int $month)
+    public function initialize(): void
+    {
+        
+    }
+
+    public function setYearAndMonth(int $year, int $month): void
     {
         $this->year = $year;
         $this->month = $month;
@@ -211,7 +217,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     protected function eloquentClassHasDateCastableAttribute(string $class, string $attribute)
     {
         $testObj = new $class;
-        return $testObj instanceof EloquentModel && $testObj->hasCast($attribute, ['date', 'datetime', 'immutable_date', 'immutable_datetime']);
+        
+        return $testObj instanceof EloquentModel 
+            && (in_array($attribute, $testObj->getDates(), true)
+                || 
+                $testObj->hasCast($attribute, ['date', 'datetime', 'immutable_date', 'immutable_datetime']));
     }
     
     private function allEvents() : array
@@ -229,8 +239,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                     throw new \Exception("Only Nova Resources can be automatically fetched for event generation ($novaResourceClass is not a Nova Resource)");
                 }
             
-                if(is_string($toEventSpec))
+                if(is_string($toEventSpec) || (is_array($toEventSpec) && count($toEventSpec) == 1 && is_string($toEventSpec[0])))
                 {
+                    // Support single attributes supplied in an array, too
+                    $toEventSpec = is_array($toEventSpec) ? $toEventSpec[0] : $toEventSpec;
+                    
                     // If a single string is supplied as the toEventSpec, it is assumed to 
                     // be the name of a datetime attribute on the underlying Eloquent model
                     // that will be used as the starting date/time for a single-day event

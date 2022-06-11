@@ -53,7 +53,9 @@ class CalendarDay implements CalendarDayInterface
     public static function weekdayColumn(Carbon $date, int $firstDayOfWeek = 1) : int
     {
         $absDay = $date->dayOfWeekIso;
-        return ($absDay - $firstDayOfWeek) % 7 + 1;
+        $mod = ($absDay - $firstDayOfWeek) % 7;
+        while($mod < 0) { $mod += 7; }
+        return $mod + 1;
     }
     
     protected $weekdayColumn;
