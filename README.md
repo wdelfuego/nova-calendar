@@ -4,9 +4,7 @@
 
 <p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view.</p>
 
-<p align="center">The calendar view adapts nicely to clear and dark mode:</p>
-
-![Clear and dark mode next to each other](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot-both.png?raw=true)
+<p align="center">The calendar view adapts nicely to clear and dark mode.</p>
 
 # Release 1.1 · june '22
 - Adds support for multi-day events
@@ -361,4 +359,35 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
 
+# License
+Copyright © 2022 · Willem Vervuurt, Studio Delfuego
+
+This entire copyright and license notice must be included with any copy, back-up, fork or otherwise modified version of this package.
+
+You can use this package under one of the follwing two licenses:
+
+- GNU AGPLv3 for GPL-licensed open source projects. Note that this license is not compatible with usage in Nova, so this package can't be used under this license until a version exists that can be included in Laravel/Vue3 projects without depending on Nova.
+
+- A perpetual, non-revocable and 100% free (as in beer) do-what-you-want license that allows both non-commercial and commercial use, under the following conditions:
+
+	- You can use this package to implement and/or use as many calendars in as many applications on as many servers with as many users as you want and charge for that what you want, as long as you (or your organization) are the developers implementing the calendar, the end users of the implemented calendar, or both.
+	- You are free to make any modifications you want and are not required to make your modifications public or announce them.
+	- You are free to make and distribute modified versions of this package as long as you distribute it for free and make your modified version available exclusively as a stand-alone package under the same dual licensing model. 
+	- Sublicensing, relicensing, reselling or charging for the redistribution of this package (or a modified version of it) to other developers for them to implement calendar views with is not allowed under this license. 
+	- Embedding this package (or a modified version of it) in free or paid-for software libraries or frameworks that are available to developers not within your organization is expressly forbidden under this license. If the software library or framework is GPLv3-or-newer compatible, you are free to do so under the AGPLv3 license.
+
+	- The following disclaimers apply:
+		- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+THE SOFTWARE.
+
+		- YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE. 
+LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE APPROPRIATENESS OF 
+USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING BUT NOT LIMITED TO
+THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF DATA OR SOFTWARE 
+PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
 
