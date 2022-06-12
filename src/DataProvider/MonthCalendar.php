@@ -238,10 +238,10 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                     {
                         throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
                     }
-                    else if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec))
-                    {
-                        throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '$toEventSpec' (trying to extract events for Nova Resource $novaResourceClass)");
-                    }
+                    // else if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec))
+                    // {
+                    //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '$toEventSpec' (trying to extract events for Nova Resource $novaResourceClass)");
+                    // }
                     
                     // Since these are single-day events by definition, we only query for the models 
                     // that have the date attribute within the current calendar range
@@ -269,14 +269,14 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                     }
                     else 
                     {
-                        if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[0]))
-                        {
-                            throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[0] ."' (trying to extract events for Nova Resource $novaResourceClass)");
-                        }
-                        if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[1]))
-                        {
-                            throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[1] ."' (trying to extract events for Nova Resource $novaResourceClass)");
-                        }
+                        // if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[0]))
+                        // {
+                        //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[0] ."' (trying to extract events for Nova Resource $novaResourceClass)");
+                        // }
+                        // if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[1]))
+                        // {
+                        //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[1] ."' (trying to extract events for Nova Resource $novaResourceClass)");
+                        // }
                     }
                     
                     // Since multi-day events could now be included, we have to query for all models 
