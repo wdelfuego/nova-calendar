@@ -2,9 +2,7 @@
 
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view.</p>
-
-<p align="center">The calendar view adapts nicely to clear and dark mode.</p>
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
 
 # Release 1.1 • june '22
 - Adds support for multi-day events
