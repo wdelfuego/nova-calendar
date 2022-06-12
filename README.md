@@ -376,8 +376,10 @@ You can use this package under one of the follwing two licenses:
    
   - You can use this package to implement and/or use as many calendars in as many 
     applications on as many servers with as many users as you want and charge for 
-    that what you want, as long as you and/or your organization are responsible for
-    implementing the calendar, the end users of the implemented calendar, or both.
+    that what you want, as long as you and/or your organization are either
+      a) the developer(s) responsible for implementing the calendar(s), or
+      b) the end user(s) of the implemented calendar(s), or
+      c) both.
     
   - Sublicensing, relicensing, reselling or charging for the redistribution of this 
     package (or a modified version of it) to other developers for them to implement 
