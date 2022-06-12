@@ -69,7 +69,7 @@ The calendar just needs a single data provider class that supplies event data to
 
     ```php
     use Wdelfuego\NovaCalendar\NovaCalendar;
-    use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
+    use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
     use App\Providers\CalendarDataProvider;
 
     public function tools()
@@ -119,7 +119,6 @@ The calendar just needs a single data provider class that supplies event data to
 	- Nova resources for which you specify an array with two attribute names will be added as single or multi-day events for which the first attribute determines the start date and time, and the second attribute determines the end date and time. 
 	- All specified attributes must be cast to a `DateTime` object by the underlying Eloquent model.
 	- If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
-
 
    The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
 

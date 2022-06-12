@@ -24,7 +24,7 @@ use Laravel\Nova\Resource as NovaResource;
 
 use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
 use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
-use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
+use Wdelfuego\NovaCalendar\Contracts\MonthDataProviderInterface;
 
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\CalendarDay;
