@@ -5,8 +5,8 @@ fork or otherwise modified version of this package.
 
 You can use this package under one of the follwing two licenses:
 
-1. GNU AGPLv3 for GPL-licensed open source projects. Note that this license is not 
-   compatible with usage in Nova, so this package can't be used under this license
+1. GNU AGPLv3 for GPLv3-or-newer compatible open source projects. Note that this license 
+   is not compatible with usage in Nova, so this package can't be used under this license
    until a version exists that can be included in Laravel/Vue3 projects without 
    depending on Nova. You can find the full terms of this license in LICENSE-agpl-3.0.txt 
    in this repository and can also find a copy on https://www.gnu.org/licenses/.
@@ -16,7 +16,7 @@ You can use this package under one of the follwing two licenses:
    
   - You can use this package to implement and/or use as many calendars in as many 
     applications on as many servers with as many users as you want and charge for 
-    that what you want, as long as you (or your organization) are responsible for
+    that what you want, as long as you and/or your organization are responsible for
     implementing the calendar, the end users of the implemented calendar, or both.
     
   - Sublicensing, relicensing, reselling or charging for the redistribution of this 
@@ -34,7 +34,7 @@ You can use this package under one of the follwing two licenses:
     libraries or frameworks that are available to developers not within your 
     organization is expressly not allowed under this license. If the software library
     or framework is GPLv3-or-newer compatible, you are free to do so under the 
-    AGPLv3 license.
+    GNU AGPLv3 license.
     
   - The following 2 disclaimers apply:
 

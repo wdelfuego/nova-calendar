@@ -6,7 +6,7 @@
 
 <p align="center">The calendar view adapts nicely to clear and dark mode.</p>
 
-# Release 1.1 · june '22
+# Release 1.1 • june '22
 - Adds support for multi-day events
 - Adds support for older php versions: 7.3+ and 8.0
 - Improved visual design
@@ -48,6 +48,13 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 ## What can you do?
 Developers who are interested in working together on this tool are highly welcomed. Take a look at the [open issues](https://github.com/wdelfuego/nova-calendar/issues) (those labelled 'good first issue' are great for new contributors) or at the [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
+
+## What can we do?
+
+For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues) on GitHub.
+
+For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
+
 
 # Usage
 
@@ -353,41 +360,58 @@ If you are going to return a long list of events here, or do a request to an ext
 
 Any events you return here that fall outside that date range are never displayed, so it's a waste of your and your users' resources if you still generate them.
 
-# Support
-
-For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues) on GitHub.
-
-For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
-
 # License
-Copyright © 2022 · Willem Vervuurt, Studio Delfuego
+Copyright © 2022 • Willem Vervuurt, Studio Delfuego
 
-This entire copyright and license notice must be included with any copy, back-up, fork or otherwise modified version of this package.
+This entire copyright and license notice must be included with any copy, back-up, 
+fork or otherwise modified version of this package.
 
 You can use this package under one of the follwing two licenses:
 
-- GNU AGPLv3 for GPL-licensed open source projects. Note that this license is not compatible with usage in Nova, so this package can't be used under this license until a version exists that can be included in Laravel/Vue3 projects without depending on Nova.
+1. GNU AGPLv3 for GPLv3-or-newer compatible open source projects. Note that this license 
+   is not compatible with usage in Nova, so this package can't be used under this license
+   until a version exists that can be included in Laravel/Vue3 projects without 
+   depending on Nova. You can find the full terms of this license in LICENSE-agpl-3.0.txt 
+   in this repository and can also find a copy on https://www.gnu.org/licenses/.
+    
+2. A perpetual, non-revocable and 100% free (as in beer) do-what-you-want license 
+   that allows both non-commercial and commercial use, under the following 6 conditions:
+   
+  - You can use this package to implement and/or use as many calendars in as many 
+    applications on as many servers with as many users as you want and charge for 
+    that what you want, as long as you and/or your organization are responsible for
+    implementing the calendar, the end users of the implemented calendar, or both.
+    
+  - Sublicensing, relicensing, reselling or charging for the redistribution of this 
+    package (or a modified version of it) to other developers for them to implement 
+    calendar views with is not allowed under this license.
+    
+  - You are free to make any modifications you want and are not required to make 
+    your modifications public or announce them.
+    
+  - You are free to make and distribute modified versions of this package publicly 
+    as long as you distribute it for free, as a stand-alone package and under the 
+    same dual licensing model. 
+    
+  - Embedding this package (or a modified version of it) in free or paid-for software
+    libraries or frameworks that are available to developers not within your 
+    organization is expressly not allowed under this license. If the software library
+    or framework is GPLv3-or-newer compatible, you are free to do so under the 
+    GNU AGPLv3 license.
+    
+  - The following 2 disclaimers apply:
 
-- A perpetual, non-revocable and 100% free (as in beer) do-what-you-want license that allows both non-commercial and commercial use, under the following conditions:
-
-	- You can use this package to implement and/or use as many calendars in as many applications on as many servers with as many users as you want and charge for that what you want, as long as you (or your organization) are the developers implementing the calendar, the end users of the implemented calendar, or both.
-	- You are free to make any modifications you want and are not required to make your modifications public or announce them.
-	- You are free to make and distribute modified versions of this package as long as you distribute it for free and make your modified version available exclusively as a stand-alone package under the same dual licensing model. 
-	- Sublicensing, relicensing, reselling or charging for the redistribution of this package (or a modified version of it) to other developers for them to implement calendar views with is not allowed under this license. 
-	- Embedding this package (or a modified version of it) in free or paid-for software libraries or frameworks that are available to developers not within your organization is expressly forbidden under this license. If the software library or framework is GPLv3-or-newer compatible, you are free to do so under the AGPLv3 license.
-
-	- The following disclaimers apply:
-		- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
-THE SOFTWARE.
-
-		- YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE. 
-LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE APPROPRIATENESS OF 
-USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING BUT NOT LIMITED TO
-THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF DATA OR SOFTWARE 
-PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+	  - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+      THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+      THE SOFTWARE.
+      
+    - YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE. 
+      LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE APPROPRIATENESS OF 
+      USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING BUT NOT LIMITED TO
+      THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF DATA OR SOFTWARE 
+      PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
 
