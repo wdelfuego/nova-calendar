@@ -69,7 +69,7 @@ The calendar just needs a single data provider class that supplies event data to
 
     ```php
     use Wdelfuego\NovaCalendar\NovaCalendar;
-    use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
+    use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
     use App\Providers\CalendarDataProvider;
 
     public function tools()
@@ -119,7 +119,6 @@ The calendar just needs a single data provider class that supplies event data to
 	- Nova resources for which you specify an array with two attribute names will be added as single or multi-day events for which the first attribute determines the start date and time, and the second attribute determines the end date and time. 
 	- All specified attributes must be cast to a `DateTime` object by the underlying Eloquent model.
 	- If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
-
 
    The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
 
@@ -206,8 +205,8 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 - `displayTime()` enables the display of start and (if available) end times.
 - `withTimeFormat(string $v)` sets the format in which times are displayed, using PHP's [DateTime format](https://www.php.net/manual/en/datetime.format.php).
 - `withName(string $v)` updates the name of the event.
-- `withStart(DateTimeInterface $v)` updates the date and start time of the event (it will be displayed on the calendar accordingly).
-- `withEnd(DateTimeInterface $v)` updates the end time of the event. **Note**: if you supply an `end` timestamp, its date value is completely ignored by this package for now. All events are assumed to be single day events. Its time value will be used as the event's end time.
+- `withStart(DateTimeInterface $v)` updates the date and start time of the event.
+- `withEnd(DateTimeInterface $v)` updates the end date and time of the event.
 - `withNotes(string $v)` updates the notes displayed below the name and, if enabled, the time info of the event.
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
