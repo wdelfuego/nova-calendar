@@ -8,7 +8,6 @@
 
 # Release 1.1 • june '22
 - Adds support for multi-day events
-- Adds support for older php versions: 7.3+ and 8.0
 - Improved visual design
 - Better support for mobile usage
 - Fixes bug where badges could overlap the event title
