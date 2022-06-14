@@ -60,7 +60,7 @@ The calendar just needs a single data provider class that supplies event data to
 1. Create a data provider class with a name of your choice anywhere you like in your project, or run the following artisan command to create the default data provider:
 
     ```sh
-    php artisan create:default-calendar-data-provider
+    php artisan nova-calendar:create-default-calendar-data-provider
     ```
 
     If you choose to make the data provider yourself, make it a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
