@@ -29,7 +29,7 @@ class CreateDefaultCalendarDataProvider extends Command
      *
      * @var string
      */
-    protected $signature = 'create:default-calendar-data-provider';
+    protected $signature = 'nova-calendar:create-default-calendar-data-provider';
 
     /**
      * The console command description.
