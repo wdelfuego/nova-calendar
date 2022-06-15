@@ -58,7 +58,7 @@ class CalendarController extends BaseController
         return [
             'default' => [
                 'color' => '#fff',
-                'background-color' => 'rgba(var(--colors-primary-500), 0.7)',
+                'background-color' => 'rgba(var(--colors-primary-500), 0.9)',
             ]
         ];
     }
