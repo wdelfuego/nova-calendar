@@ -60,7 +60,7 @@ The calendar just needs a single data provider class that supplies event data to
 1. Create a data provider class with a name of your choice anywhere you like in your project, or run the following artisan command to create the default data provider:
 
     ```sh
-    php artisan create:default-calendar-data-provider
+    php artisan nova-calendar:create-default-calendar-data-provider
     ```
 
     If you choose to make the data provider yourself, make it a subclass of `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar`.
@@ -205,8 +205,8 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 - `displayTime()` enables the display of start and (if available) end times.
 - `withTimeFormat(string $v)` sets the format in which times are displayed, using PHP's [DateTime format](https://www.php.net/manual/en/datetime.format.php).
 - `withName(string $v)` updates the name of the event.
-- `withStart(DateTimeInterface $v)` updates the date and start time of the event (it will be displayed on the calendar accordingly).
-- `withEnd(DateTimeInterface $v)` updates the end time of the event. **Note**: if you supply an `end` timestamp, its date value is completely ignored by this package for now. All events are assumed to be single day events. Its time value will be used as the event's end time.
+- `withStart(DateTimeInterface $v)` updates the date and start time of the event.
+- `withEnd(DateTimeInterface $v)` updates the end date and time of the event.
 - `withNotes(string $v)` updates the notes displayed below the name and, if enabled, the time info of the event.
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
