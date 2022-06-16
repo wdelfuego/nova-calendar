@@ -39,7 +39,7 @@ class Event
     protected $novaResource = null;
     protected $displayTime = false;
     protected $url = null;
-    protected $style = null;
+    protected $styles = [];
     protected $timeFormat = 'H:i';
     
     public function __construct(
@@ -73,7 +73,7 @@ class Event
             'badges' => $this->badges,
             'url' => $this->url,
             'options' => [
-                'style' => $this->style,
+                'styles' => $this->styles,
                 'displayTime' => $this->displayTime ? 1 : 0,
             ],
         ];
@@ -131,22 +131,33 @@ class Event
         return ($this->novaResource instanceof $class);
     }
     
+    // Deprecated; here for backwards compatibility with pre-1.2 releases,
+    // when only a single style per event was supported
     public function style(string $v = null)
     {
-        if(!is_null($v))
+        if(!is_null($v) && count($this->styles) == 0)
         {
-            $this->style = $v;
+            $this->addStyle($v);
         }
         
-        return $this->style;
+        if(count($this->styles) > 1)
+        {
+            throw new \Exception("The deprecated 'Event::style' method is only backwards compatible with events that have zero or one assigned styles. Use the new `Event::addStyle` method instead.");
+        }
+        else if(count($this->styles) == 0)
+        {
+            return null;
+        }
+        
+        return $this->styles[0];
     }
     
+    // Deprecated; here for backwards compatibility with pre-1.2 releases,
+    // when only a single style per event was supported
     public function withStyle(string $v)
     {
-        $this->style($v);
-        return $this;
+        return $this->addStyle($v);
     }
-    
     
     public function timeFormat(string $v = null)
     {
@@ -255,6 +266,47 @@ class Event
     public function withNotes(string $v) : self
     {
         $this->notes($v);
+        return $this;
+    }
+    
+    public function styles(array $v = null) : array
+    {
+        if(!is_null($v)) 
+        {
+            $this->styles = $v;
+        }
+        
+        return $this->styles;
+    }
+    
+    public function addStyle(string $v) : self
+    {
+        return $this->addStyles($v);
+    }
+    
+    public function addStyles(string ...$v) : self
+    {
+        foreach($v as $style)
+        {
+            $this->styles[] = $style;            
+        }
+        
+        return $this;
+    }
+    
+    public function removeStyle(string $v) : self
+    {
+        return $this->removeStyles($v);
+    }
+    
+    public function removeStyles(string ...$v) : self
+    {
+        foreach($v as $style)
+        {
+            $this->styles = array_filter($this->styles, function($s) use ($style) {
+                return $s != $style;
+            });
+        }
         return $this;
     }
     

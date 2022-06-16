@@ -47,6 +47,7 @@ class CalendarDataProvider extends MonthCalendar
     {
         return [
             (new Event("Today until tomorrow", now(), now()->addDays(1)))
+                ->displayTime()
                 ->addBadges('👍')
                 ->withNotes('these are the event notes')
         ];

@@ -156,8 +156,19 @@ export default {
     },
 
     stylesForEvent(event) {
-      if(event.options.style) {
-        return [this.styles.default, this.styles[event.options.style]];
+      if(event.options.styles) {
+        let out = [this.styles.default];
+        event.options.styles.forEach(style => {
+          if(this.styles[style] === undefined)
+          {
+            console.log("[nova-calendar] Unknown custom style name '" + style + "'; does the eventStyles method of your CalendarDataProvider define it properly?");
+          }
+          else
+          {
+            out.push(this.styles[style]);
+          }
+        })
+        return out;
       } else {
         return this.styles.default;
       }

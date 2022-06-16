@@ -211,17 +211,21 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
 - `removeBadge(string $v)` and `removeBadges(string ...$v)` do the same but they remove rather than add badges.
-- `withStyle(string $v)` to set the CSS style applied to the div of this specific event (see 'Adding custom event styles' below).
+- `addStyle(string $v)` adds a CSS style to be applied to the event. The style needs to be defined in your `eventStyles` method (see 'Adding custom event styles' below).
+- `addStyles(string ...$v)` adds 1 or more styles with one call. This method doesn't expect an array but an argument for each CSS style you want to add.
+- `removeStyle(string $v)` and `removeStyles(string ...$v)` do the same but they remove rather than add styles.
+- `withStyle(string $v)` - deprecated. Used to set the CSS style applied to the div of this specific event. Starting from release 1.2, multiple styles per event are supported; you should now use the `addStyle`, `addStyles`, `removeStyle` and `removeStyles` methods to manage event styles.
 
 ### Non-chainable customization methods
 Corresponding methods are available in non-chainable form, if you prefer to work with those. 
 
-These function as `set`ters when you supply an argument, and as `get`ters when you don't.
+These function as simple setters when you supply an argument, and as getters when you don't.
 - `name(string $v = null) : string`
 - `start(DateTimeInterface $v = null) : DateTimeInterface`
 - `end(DateTimeInterface $v = null) : ?DateTimeInterface`
 - `notes(string $v = null) : string`
 - `badges(array $v = null) : array`
+- `styles(array $v = null) : array`
 
 ## Customizing the CSS
 You can customize the CSS that is applied to the event divs in the calendar view on a per-event basis, or on a global basis by customizing the default event style.
@@ -242,7 +246,7 @@ public function eventStyles() : array
 }
 ```
 
-A default style is not required; if you don't define it, the default style will use your app's primary color as defined in `config/nova.php` under `brand` => `colors` => `500`. 
+Defining a default style is not required; if you don't define it, the default default style will use white text on a background in your app's primary color as defined in `config/nova.php` under `brand` => `colors` => `500`. 
 
 ### Adding custom event styles
 To add custom event styles, add them to the same array: 
@@ -250,6 +254,10 @@ To add custom event styles, add them to the same array:
 public function eventStyles() : array
 {
     return [
+        'default' => [
+            'color' => '#000',
+            'background-color' => '#fff'
+        ],
         'special' => [
             'color' => '#f00',
         ],
@@ -260,7 +268,11 @@ public function eventStyles() : array
 }
 ```
 
-After you defined your styles in the `eventStyles` array, call `style` or `withStyle` in your `customizeEvent` method using the name of the style (in this example, 'special' or 'warning') to apply them to individual events, for example:
+After you defined your styles in the `eventStyles` array, call `addStyle` or `addStyles` in your `customizeEvent` method using the names of the styles (in this example, 'special' or 'warning') to apply them to individual events.
+
+The original `withStyle` and `style` methods are deprecated; `withStyle` is now an alias for `addStyle` and `style` is only supported on events that have at most one custom style assigned to it.
+
+For example:
 
 ```php
 use Wdelfuego\NovaCalendar\Event;
@@ -273,7 +285,7 @@ protected function customizeEvent(Event $event) : Event
     {
         if($event->model()->isInACertainState())
         {
-            $event->style('warning');
+            $event->addStyle('warning');
         }
     }
 
@@ -281,20 +293,23 @@ protected function customizeEvent(Event $event) : Event
     // resource with a specific style:
     if($event->hasNovaResource(SomeResourceClass::class))
     {
-        $event->style('special');
+        $event->addStyle('special');
     }
 
     // Or conversely, display all events that don't have a 
     // Nova resource with a specific style:
     if(!$event->hasNovaResource())
     {
-        $event->style('special');
+        $event->addStyle('special');
     }
 
     return $event;
 }
 ```
+### Adding multiple custom event styles to a single event
+You are free to assign multiple styles to a single event.
 
+Their CSS specifications will be merged in the order that they were added to the event, with styles added later overruling the ones added before it. Other, non-conflicting CSS properties defined by styles added before it will still be applied to the event as expected.
 
 ## Calendar customization
 ### Changing the default menu icon and label
