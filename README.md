@@ -4,15 +4,6 @@
 
 <p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
 
-# Release 1.1 • june '22
-- Adds support for multi-day events
-- Improved visual design
-- Better support for mobile usage
-- Fixes bug where badges could overlap the event title
-- View now uses css grid instead of table
-- New dual licensing model (see the end of this file)
-
-
 # Installation
 ```sh
 composer require wdelfuego/nova-calendar
@@ -52,6 +43,21 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
 
+# Release log
+## v1.2 • june '22
+- Adds support for customizing non-nova events
+- Adds support for applying multiple custom styles to events
+
+### v1.1 • june '22
+- Adds support for multi-day events
+- Improved visual design
+- Better support for mobile usage
+- Fixes bug where badges could overlap the event title
+- View now uses css grid instead of table
+- New dual licensing model (see the end of this file)
+
+### v1.0 • april '22
+- Initial release
 
 # Usage
 

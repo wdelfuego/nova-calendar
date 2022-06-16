@@ -197,7 +197,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     {
         $out = Event::fromResource($resource, $dateAttributeStart, $dateAttributeEnd);
         $out->url($this->urlForResource($resource));
-        return $this->customizeEvent($out);
+        return $out;
     }
     
     protected function eloquentClassHasDateCastableAttribute(string $class, string $attribute)
@@ -300,6 +300,8 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             }
             
             $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
+            
+            return array_map(fn($e) : Event => $this->customizeEvent($e), $this->allEvents);
         }
         
         return $this->allEvents;
