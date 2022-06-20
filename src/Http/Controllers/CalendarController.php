@@ -41,7 +41,7 @@ class CalendarController extends BaseController
         while($month > 12) { $year += 1; $month -= 12; }
         while($month < 1)  { $year -= 1; $month += 12; }
         
-        $this->dataProvider->setYearAndMonth($year, $month);
+        $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
             
         return [
             'year' => $year,

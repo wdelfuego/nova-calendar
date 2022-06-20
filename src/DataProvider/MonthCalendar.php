@@ -18,6 +18,8 @@ namespace Wdelfuego\NovaCalendar\DataProvider;
 
 use DateTimeInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\Request;
+
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
@@ -35,6 +37,8 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     const N_CALENDAR_WEEKS = 6;
     
     protected $firstDayOfWeek;
+
+    protected $request = null;
     protected $year;
     protected $month;
     
@@ -55,12 +59,19 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         
     }
 
-    public function setYearAndMonth(int $year, int $month): void
+    public function setYearAndMonth(int $year, int $month): self
     {
         $this->year = $year;
         $this->month = $month;
+        return $this;
     }
 
+    public function setRequest(Request $request): self
+    {
+        $this->request = $request;
+        return $this;
+    }
+    
     public function startWeekOn(int $dayOfWeekIso)
     {
         $this->firstDayOfWeek = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
@@ -202,14 +213,9 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return $out;
     }
     
-    protected function eloquentClassHasDateCastableAttribute(string $class, string $attribute)
+    protected function exclude(NovaResource $resource) : bool
     {
-        $testObj = new $class;
-        
-        return $testObj instanceof EloquentModel 
-            && (in_array($attribute, $testObj->getDates(), true)
-                || 
-                $testObj->hasCast($attribute, ['date', 'datetime', 'immutable_date', 'immutable_datetime']));
+        return false;
     }
     
     private function allEvents() : array
@@ -252,7 +258,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 
                     foreach($models->cursor() as $model)
                     {
-                        $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $toEventSpec);
+                        $novaResource = new $novaResourceClass($model);
+                        if($novaResource->authorizedToView($this->request) && !$this->exclude($novaResource))
+                        {
+                            $this->allEvents[] = $this->resourceToEvent($novaResource, $toEventSpec);
+                        }
                     }
                 }
                 else if(is_array($toEventSpec) && count($toEventSpec) == 2 && is_string($toEventSpec[0]) && is_string($toEventSpec[1]))
@@ -273,7 +283,12 @@ abstract class MonthCalendar implements MonthDataProviderInterface
 
                     foreach($models->cursor() as $model)
                     {
-                        $this->allEvents[] = $this->resourceToEvent(new $novaResourceClass($model), $toEventSpec[0], $toEventSpec[1]);
+                        $novaResource = new $novaResourceClass($model);
+                        if($novaResource->authorizedToView($this->request) && !$this->exclude($novaResource))
+                        {
+                            $this->allEvents[] = $this->resourceToEvent($novaResource, $toEventSpec[0], $toEventSpec[1]);
+                        }
+
                     }
                 }
                 else
