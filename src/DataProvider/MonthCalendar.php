@@ -134,13 +134,15 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return Carbon::createFromFormat('Y-m-d', $this->year.'-'.$this->month.'-1');
     }
 
-    protected function firstDayOfCalendar(): Carbon
+    public function firstDayOfCalendar(): Carbon
     {
         $firstOfMonth = $this->firstDayOfMonth();
-        return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7));
+        $nDaysToSub = ($firstOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7));
+        while($nDaysToSub < 0) { $nDaysToSub += 7; }
+        return $firstOfMonth->subDays($nDaysToSub);
     }
     
-    protected function lastDayOfCalendar(): Carbon
+    public function lastDayOfCalendar(): Carbon
     {
         return $this->firstDayOfCalendar()->addDays(7 * self::N_CALENDAR_WEEKS);
     }
