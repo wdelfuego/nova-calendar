@@ -137,7 +137,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     protected function firstDayOfCalendar(): Carbon
     {
         $firstOfMonth = $this->firstDayOfMonth();
-        return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - $this->firstDayOfWeek);
+        return $firstOfMonth->subDays($firstOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7));
     }
     
     protected function lastDayOfCalendar(): Carbon
@@ -224,24 +224,21 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                 {
                     throw new \Exception("Only Nova Resources can be automatically fetched for event generation ($novaResourceClass is not a Nova Resource)");
                 }
+                
+                $eloquentModelClass = $novaResourceClass::$model;
+                if(!is_subclass_of($eloquentModelClass, EloquentModel::class))
+                {
+                    throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
+                }
             
                 if(is_string($toEventSpec) || (is_array($toEventSpec) && count($toEventSpec) == 1 && is_string($toEventSpec[0])))
                 {
-                    // Support single attributes supplied in an array, too
-                    $toEventSpec = is_array($toEventSpec) ? $toEventSpec[0] : $toEventSpec;
-                    
                     // If a single string is supplied as the toEventSpec, it is assumed to 
                     // be the name of a datetime attribute on the underlying Eloquent model
                     // that will be used as the starting date/time for a single-day event
-                    $eloquentModelClass = $novaResourceClass::$model;
-                    if(!is_subclass_of($eloquentModelClass, EloquentModel::class))
-                    {
-                        throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
-                    }
-                    // else if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec))
-                    // {
-                    //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '$toEventSpec' (trying to extract events for Nova Resource $novaResourceClass)");
-                    // }
+                    
+                    // Support single attributes supplied in an array, too, since it's bound to happen
+                    $toEventSpec = is_array($toEventSpec) ? $toEventSpec[0] : $toEventSpec;
                     
                     // Since these are single-day events by definition, we only query for the models 
                     // that have the date attribute within the current calendar range
@@ -262,23 +259,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                     // be the name of two datetime attributes on the underlying Eloquent model
                     // that will be used as the start and end datetime for a event
                     // that can be either single or multi-day (depending on the values of each model instance)
-                    $eloquentModelClass = $novaResourceClass::$model;
-                    if(!is_subclass_of($eloquentModelClass, EloquentModel::class))
-                    {
-                        throw new \Exception("'$eloquentModelClass' is not an Eloquent model");
-                    }
-                    else 
-                    {
-                        // if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[0]))
-                        // {
-                        //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[0] ."' (trying to extract events for Nova Resource $novaResourceClass)");
-                        // }
-                        // if(!$this->eloquentClassHasDateCastableAttribute($eloquentModelClass, $toEventSpec[1]))
-                        // {
-                        //     throw new \Exception("Model '$eloquentModelClass' does not have a valid date attribute by the name of '" .$toEventSpec[1] ."' (trying to extract events for Nova Resource $novaResourceClass)");
-                        // }
-                    }
-                    
+
                     // Since multi-day events could now be included, we have to query for all models 
                     // that end after or on the first day of the calendar range
                     // and start before or on the last day of the calendar range
