@@ -146,9 +146,9 @@ div.nova-calendar .day {
   border-width: 0.5px;
 }
 
+/* TODO add striped background or something */
 div.nova-calendar .day:not(.withinRange) {
-  display: none;
-  visibility: hidden;
+  opacity: 0.5;
 }
 
 div.nova-calendar .day.today {
@@ -212,9 +212,14 @@ div.nova-calendar .nc-event {
   border-bottom: 1px var(--nc-event-border) solid;
 }
 
+div.nova-calendar .nc-event:not(.withinRange) {
+  opacity: 0.4;
+}
+
 div.nova-calendar .nc-event:hover {
   opacity: 1.0;
 }
+
 div.nova-calendar .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
   border-bottom-left-radius: var(--nc-event-border-radius);

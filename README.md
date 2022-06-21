@@ -143,12 +143,12 @@ You can navigate through the months using the hotkeys `Alt + arrow right` or `Al
 # What events are shown on the calendar? 
 Nova resource instances the currently logged in user is not authorized to see according to Laravel policies will be excluded from the calendar automatically.
 
-If no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, all instances of a Nova resource will be shown, unless you exclude some manually by implementing the `exclude` method on your CalendarDataProvider.
+If no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, all instances of a Nova resource will be shown, unless you hide them manually by implementing the `exclude` method on your CalendarDataProvider.
 
 ## Hiding events from the calendar manually
 You can exclude individual events from the calendar even though the user has access to it by implementing the `exclude` method on your CalendarDataProvider.
 
-For example, if you want to hide events for resources that have an `is_finished` property that is `true`, you could write:
+For example, if you want to hide events for resources with an Eloquent model that have an `is_finished` property that is `true`, you could write:
 
 ```php
 use Laravel\Nova\Resource as NovaResource;
@@ -156,8 +156,7 @@ use Laravel\Nova\Resource as NovaResource;
 ```php
 protected function exclude(NovaResource $resource) : bool
 {
-    // $resource->resource is the Nova resource's underlying Eloquent model
-    return $resource->resource->is_finished;
+    return $resource->model()->is_finished;
 }
 
 ```
@@ -390,7 +389,7 @@ protected function nonNovaEvents() : array
     
 ```
 
-If you are going to return a long list of events here, or do a request to an external service, you can use the `firstDayOfCalendar()` and `lastDayOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
+If you are going to return a long list of events here, or do a request to an external service, you can use the `startOfCalendar()` and `endOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
 
 Any events you return here that fall outside that date range are never displayed, so it's a waste of your and your users' resources if you still generate them.
 

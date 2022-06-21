@@ -89,12 +89,12 @@ class CalendarDay implements CalendarDayInterface
     
     private function eventsSingleDay() : array
     {
-        return array_filter($this->events, fn($e): bool => !!$e['single_day']);
+        return array_filter($this->events, fn($e): bool => !!$e['isSingleDayEvent']);
     }
     
     private function eventsMultiDay() : array
     {
         
-        return array_filter($this->events, fn($e): bool => !$e['single_day']);
+        return array_filter($this->events, fn($e): bool => !$e['isSingleDayEvent']);
     }
 }

@@ -56,19 +56,19 @@ class Event
         $this->badges = $badges;
     }
 
-    public function toArray(Carbon $displayDate, int $firstDayOfWeek) : array
+    public function toArray(Carbon $displayDate, Carbon $startOfRange, Carbon $endOfRange, int $firstDayOfWeek) : array
     {
         return [
-//            'name' => CalendarDay::weekdayColumn($displayDate, $firstDayOfWeek) .'-' .($this->end() ? $displayDate->diffInDays($this->end) : 0) .$this->name,
             'name' => $this->name,
-            'start_date' => $this->start->format("Y-m-d"),
-            'start_time' => $this->start->format($this->timeFormat),
-            'end_date' => $this->end ? $this->end->format("Y-m-d") : null,
-            'end_time' => $this->end ? $this->end->format($this->timeFormat) : null,
-            'single_day' => $this->isSingleDayEvent() ? 1 : 0,
-            'spans_days' => min($this->spansDaysFrom($displayDate), 7),
-            'starts_event' => $this->startsEvent($displayDate) ? 1 : 0,
-            'ends_event' => $this->endsEvent($displayDate, $firstDayOfWeek) ? 1 : 0,
+            'startDate' => $this->start->format("Y-m-d"),
+            'startTime' => $this->start->format($this->timeFormat),
+            'endDate' => $this->end ? $this->end->format("Y-m-d") : null,
+            'endTime' => $this->end ? $this->end->format($this->timeFormat) : null,
+            'isWithinRange' => $this->touchesRange($startOfRange, $endOfRange),
+            'isSingleDayEvent' => $this->isSingleDayEvent() ? 1 : 0,
+            'spansDaysN' => min($this->spansDaysFrom($displayDate), 7),
+            'startsEvent' => $this->startsEvent($displayDate) ? 1 : 0,
+            'endsEvent' => $this->endsEvent($displayDate, $firstDayOfWeek) ? 1 : 0,
             'notes' => $this->notes,
             'badges' => $this->badges,
             'url' => $this->url,
@@ -82,6 +82,13 @@ class Event
     public function isSingleDayEvent() : bool
     {
         return !$this->end || $this->end->isSameDay($this->start);
+    }
+    
+    public function touchesRange(Carbon $startOfRange, Carbon $endOfRange)
+    {
+        // TODO 1 change to actually be isBeforeOrOn and isAfterOrOn
+        // TODO 2 write a test for that!
+        return $this->start->isBefore($endOfRange) && (!$this->end || $this->end->isAfter($startOfRange));
     }
     
     public function spansDaysFrom(Carbon $displayDate) : int
