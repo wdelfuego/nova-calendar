@@ -1,8 +1,13 @@
 <h1 align="center">Event calendar for Laravel Nova 4</h1>
 
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
+
+For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
+
 
 # Installation
 ```sh
@@ -10,20 +15,16 @@ composer require wdelfuego/nova-calendar
 ```
 
 ## What can it do?
-This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
-
 The following features are supported:
 
 - Automatically display Nova resources on a monthly calendar view
-- Display events that are not related to Nova resources but come from other sources
-- Completely customize visual style and content of each event
-- Add badges to events to indicate status or attract attention
+- Laravel policies are respected to exclude events from the calendar automatically
 - Mix multiple types of Nova resources on the same calendar
-- Supports single and multi-day events
-- Supports clear and dark mode
+- Display events that are not related to Nova resources
+- Add badges to events to indicate status or attract attention
+- Customize visual style and content of each individual event
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
-- Month and day names are automatically presented in your app's locale
 
 ## What can it not do (yet)?
 The following features are not (yet) supported:
@@ -34,21 +35,16 @@ The following features are not (yet) supported:
 
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
-## What can you do?
-Developers who are interested in working together on this tool are highly welcomed. Take a look at the [open issues](https://github.com/wdelfuego/nova-calendar/issues) (those labelled 'good first issue' are great for new contributors) or at the [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
-
-## What can we do?
-
-For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues) on GitHub.
-
-For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
-
 # Release log
-## v1.2 • june '22
-- Adds support for customizing non-nova events
+## v1.3
+- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar (#12)
+- Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`.
+
+### v1.2
+- Adds support for customizing non-Nova events
 - Adds support for applying multiple custom styles to events
 
-### v1.1 • june '22
+### v1.1
 - Adds support for multi-day events
 - Improved visual design
 - Better support for mobile usage
@@ -56,8 +52,8 @@ For feature requests, please upvote or open a [feature request discussion](https
 - View now uses css grid instead of table
 - New dual licensing model (see the end of this file)
 
-### v1.0 • april '22
-- Initial release
+### v1.0
+- Initial release with support for single-day events only
 
 # Usage
 
@@ -144,9 +140,30 @@ That's it! Your calendar should now be up and running.
 ## Hotkeys
 You can navigate through the months using the hotkeys `Alt + arrow right` or `Alt + arrow left` and jump back to the current month using `Alt + H` (or by clicking the month name that's displayed above the calendar).
 
+# What events are shown on the calendar? 
+Nova resource instances the currently logged in user is not authorized to see according to Laravel policies will be excluded from the calendar automatically.
+
+If no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, all instances of a Nova resource will be shown, unless you exclude some manually by implementing the `exclude` method on your CalendarDataProvider.
+
+## Hiding events from the calendar manually
+You can exclude individual events from the calendar even though the user has access to it by implementing the `exclude` method on your CalendarDataProvider.
+
+For example, if you want to hide events for resources that have an `is_finished` property that is `true`, you could write:
+
+```php
+use Laravel\Nova\Resource as NovaResource;
+```
+```php
+protected function exclude(NovaResource $resource) : bool
+{
+    // $resource->resource is the Nova resource's underlying Eloquent model
+    return $resource->resource->is_finished;
+}
+
+```
 
 # Customization
-You can customize the display of your events and add badges and notes to them to make the calendar even more usable for your end users.
+You can customize the display of your events and add badges and notes to them to make the calendar more usable for your end users.
 
 ## Event customization
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
