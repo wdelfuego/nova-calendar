@@ -26,8 +26,8 @@ class Event
     public static function fromResource(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd = null) : self
     {
         return is_null($dateAttributeEnd)
-            ? (new self($resource->title(), $resource->resource->$dateAttributeStart))->withResource($resource)
-            : (new self($resource->title(), $resource->resource->$dateAttributeStart, $resource->resource->$dateAttributeEnd))->withResource($resource);
+            ? (new self($resource->title(), $resource->model()->$dateAttributeStart))->withResource($resource)
+            : (new self($resource->title(), $resource->model()->$dateAttributeStart, $resource->model()->$dateAttributeEnd))->withResource($resource);
     }
             
     protected $name;
@@ -86,9 +86,9 @@ class Event
     
     public function touchesRange(Carbon $startOfRange, Carbon $endOfRange)
     {
-        // TODO 1 change to actually be isBeforeOrOn and isAfterOrOn
-        // TODO 2 write a test for that!
-        return $this->start->isBefore($endOfRange) && (!$this->end || $this->end->isAfter($startOfRange));
+        return !$this->end 
+            ? $this->start->gte($startOfRange) && $this->start->lte($endOfRange)
+            : $this->start->lte($endOfRange) && $this->end->gte($startOfRange);
     }
     
     public function spansDaysFrom(Carbon $displayDate) : int
@@ -211,7 +211,7 @@ class Event
     
     public function model() : ?EloquentModel
     {
-        return $this->novaResource ? $this->novaResource->resource : null;
+        return $this->novaResource ? $this->novaResource->model() : null;
     }
 
     public function name(string $v = null) : string

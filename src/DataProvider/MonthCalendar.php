@@ -316,7 +316,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         $this->endOfMonth = Carbon::createFromFormat('Y-m-d H:i:s', $this->year.'-'.(int)($this->month+1).'-1 00:00:00')->subSeconds(1);
 
         // Calculate calendar range
-        $nDaysToSub = ($this->startOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7));
+        $nDaysToSub = ($this->startOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7)) % 7;
         while($nDaysToSub < 0) { $nDaysToSub += 7; }
         $this->startOfCalendar = $this->startOfMonth->copy()->subDays($nDaysToSub);
         $this->endOfCalendar = $this->startOfCalendar->copy()->addDays(7 * self::N_CALENDAR_WEEKS);

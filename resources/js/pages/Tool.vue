@@ -51,7 +51,7 @@
 
               <!-- a cell per day, background -->
               <template v-for="day in week">
-                <div class="day dark:bg-gray-900 border-t border-l dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
+                <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
               </template>
