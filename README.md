@@ -1,16 +1,12 @@
 <h1 align="center">Event calendar for Laravel Nova 4</h1>
 
-![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
-
 <p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
 
-# Release 1.1 • june '22
-- Adds support for multi-day events
-- Improved visual design
-- Better support for mobile usage
-- Fixes bug where badges could overlap the event title
-- View now uses css grid instead of table
-- New dual licensing model (see the end of this file)
+![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
+
+This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
+
+For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
 
 # Installation
@@ -19,20 +15,16 @@ composer require wdelfuego/nova-calendar
 ```
 
 ## What can it do?
-This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
-
 The following features are supported:
 
 - Automatically display Nova resources on a monthly calendar view
-- Display events that are not related to Nova resources but come from other sources
-- Completely customize visual style and content of each event
-- Add badges to events to indicate status or attract attention
 - Mix multiple types of Nova resources on the same calendar
-- Supports single and multi-day events
-- Supports clear and dark mode
+- Display events that are not related to Nova resources
+- Add badges to events to indicate status or attract attention
+- Customize visual style and content of each individual event
+- Laravel policies are respected to exclude events from the calendar automatically
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
-- Month and day names are automatically presented in your app's locale
 
 ## What can it not do (yet)?
 The following features are not (yet) supported:
@@ -43,15 +35,25 @@ The following features are not (yet) supported:
 
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
-## What can you do?
-Developers who are interested in working together on this tool are highly welcomed. Take a look at the [open issues](https://github.com/wdelfuego/nova-calendar/issues) (those labelled 'good first issue' are great for new contributors) or at the [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) and we'll get you going quickly.
+# Release log
+## v1.3
+- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
+- Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`
 
-## What can we do?
+### v1.2
+- Adds support for customizing non-Nova events
+- Adds support for applying multiple custom styles to events
 
-For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues) on GitHub.
+### v1.1
+- Adds support for multi-day events
+- Improved visual design
+- Better support for mobile usage
+- Fixes bug where badges could overlap the event title
+- View now uses css grid instead of table
+- New dual licensing model (see the end of this file)
 
-For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) on GitHub.
-
+### v1.0
+- Initial release with support for single-day events only
 
 # Usage
 
@@ -69,7 +71,7 @@ The calendar just needs a single data provider class that supplies event data to
 
     ```php
     use Wdelfuego\NovaCalendar\NovaCalendar;
-    use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
+    use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
     use App\Providers\CalendarDataProvider;
 
     public function tools()
@@ -138,9 +140,29 @@ That's it! Your calendar should now be up and running.
 ## Hotkeys
 You can navigate through the months using the hotkeys `Alt + arrow right` or `Alt + arrow left` and jump back to the current month using `Alt + H` (or by clicking the month name that's displayed above the calendar).
 
+# What events are shown on the calendar? 
+Events for Nova resources the current user is not authorized to see due to Laravel policies are excluded from the calendar automatically.
+
+All instances of a Nova resource will be shown if no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, unless you hide them manually by implementing the `exclude` method on your CalendarDataProvider.
+
+## Hiding events from the calendar manually
+You can exclude Nova resources from the calendar by implementing the `exclude` method on your CalendarDataProvider.
+
+For example, if you want to hide events for resources with an Eloquent model that have an `is_finished` property that is `true`, you could write:
+
+```php
+use Laravel\Nova\Resource as NovaResource;
+```
+```php
+protected function exclude(NovaResource $resource) : bool
+{
+    return $resource->model()->is_finished;
+}
+
+```
 
 # Customization
-You can customize the display of your events and add badges and notes to them to make the calendar even more usable for your end users.
+You can customize the display of your events and add badges and notes to them to make the calendar more usable for your end users.
 
 ## Event customization
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
@@ -211,17 +233,21 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
 - `removeBadge(string $v)` and `removeBadges(string ...$v)` do the same but they remove rather than add badges.
-- `withStyle(string $v)` to set the CSS style applied to the div of this specific event (see 'Adding custom event styles' below).
+- `addStyle(string $v)` adds a CSS style to be applied to the event. The style needs to be defined in your `eventStyles` method (see 'Adding custom event styles' below).
+- `addStyles(string ...$v)` adds 1 or more styles with one call. This method doesn't expect an array but an argument for each CSS style you want to add.
+- `removeStyle(string $v)` and `removeStyles(string ...$v)` do the same but they remove rather than add styles.
+- `withStyle(string $v)` - deprecated. Used to set the CSS style applied to the div of this specific event. Starting from release 1.2, multiple styles per event are supported; you should now use the `addStyle`, `addStyles`, `removeStyle` and `removeStyles` methods to manage event styles.
 
 ### Non-chainable customization methods
 Corresponding methods are available in non-chainable form, if you prefer to work with those. 
 
-These function as `set`ters when you supply an argument, and as `get`ters when you don't.
+These function as simple setters when you supply an argument, and as getters when you don't.
 - `name(string $v = null) : string`
 - `start(DateTimeInterface $v = null) : DateTimeInterface`
 - `end(DateTimeInterface $v = null) : ?DateTimeInterface`
 - `notes(string $v = null) : string`
 - `badges(array $v = null) : array`
+- `styles(array $v = null) : array`
 
 ## Customizing the CSS
 You can customize the CSS that is applied to the event divs in the calendar view on a per-event basis, or on a global basis by customizing the default event style.
@@ -242,7 +268,7 @@ public function eventStyles() : array
 }
 ```
 
-A default style is not required; if you don't define it, the default style will use your app's primary color as defined in `config/nova.php` under `brand` => `colors` => `500`. 
+Defining a default style is not required; if you don't define it, the default default style will use white text on a background in your app's primary color as defined in `config/nova.php` under `brand` => `colors` => `500`. 
 
 ### Adding custom event styles
 To add custom event styles, add them to the same array: 
@@ -250,6 +276,10 @@ To add custom event styles, add them to the same array:
 public function eventStyles() : array
 {
     return [
+        'default' => [
+            'color' => '#000',
+            'background-color' => '#fff'
+        ],
         'special' => [
             'color' => '#f00',
         ],
@@ -260,7 +290,11 @@ public function eventStyles() : array
 }
 ```
 
-After you defined your styles in the `eventStyles` array, call `style` or `withStyle` in your `customizeEvent` method using the name of the style (in this example, 'special' or 'warning') to apply them to individual events, for example:
+After you defined your styles in the `eventStyles` array, call `addStyle` or `addStyles` in your `customizeEvent` method using the names of the styles (in this example, 'special' or 'warning') to apply them to individual events.
+
+The original `withStyle` and `style` methods are deprecated; `withStyle` is now an alias for `addStyle` and `style` is only supported on events that have at most one custom style assigned to it.
+
+For example:
 
 ```php
 use Wdelfuego\NovaCalendar\Event;
@@ -273,7 +307,7 @@ protected function customizeEvent(Event $event) : Event
     {
         if($event->model()->isInACertainState())
         {
-            $event->style('warning');
+            $event->addStyle('warning');
         }
     }
 
@@ -281,20 +315,40 @@ protected function customizeEvent(Event $event) : Event
     // resource with a specific style:
     if($event->hasNovaResource(SomeResourceClass::class))
     {
-        $event->style('special');
+        $event->addStyle('special');
     }
 
     // Or conversely, display all events that don't have a 
     // Nova resource with a specific style:
     if(!$event->hasNovaResource())
     {
-        $event->style('special');
+        $event->addStyle('special');
     }
 
     return $event;
 }
 ```
+### Adding multiple custom event styles to a single event
+You are free to assign multiple styles to a single event using the `addStyles` method.
 
+Their CSS specifications will be merged in the order that they were added to the event, with styles added later overruling the ones added before it. Other, non-conflicting CSS properties defined by styles added before it will still be applied to the event as expected.
+
+For example:
+
+```php
+protected function customizeEvent(Event $event) : Event
+{
+    if($event->model())
+    {
+        if($event->model() && $event->model()->isInACertainState())
+        {
+            $event->addStyles('special', 'warning');
+        }
+    }
+
+    return $event;
+}
+```
 
 ## Calendar customization
 ### Changing the default menu icon and label
@@ -352,7 +406,7 @@ protected function nonNovaEvents() : array
     
 ```
 
-If you are going to return a long list of events here, or do a request to an external service, you can use the `firstDayOfCalendar()` and `lastDayOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
+If you are going to return a long list of events here, or do a request to an external service, you can use the `startOfCalendar()` and `endOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
 
 Any events you return here that fall outside that date range are never displayed, so it's a waste of your and your users' resources if you still generate them.
 

@@ -26,8 +26,8 @@ class Event
     public static function fromResource(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd = null) : self
     {
         return is_null($dateAttributeEnd)
-            ? (new self($resource->title(), $resource->resource->$dateAttributeStart))->withResource($resource)
-            : (new self($resource->title(), $resource->resource->$dateAttributeStart, $resource->resource->$dateAttributeEnd))->withResource($resource);
+            ? (new self($resource->title(), $resource->model()->$dateAttributeStart))->withResource($resource)
+            : (new self($resource->title(), $resource->model()->$dateAttributeStart, $resource->model()->$dateAttributeEnd))->withResource($resource);
     }
             
     protected $name;
@@ -39,7 +39,7 @@ class Event
     protected $novaResource = null;
     protected $displayTime = false;
     protected $url = null;
-    protected $style = null;
+    protected $styles = [];
     protected $timeFormat = 'H:i';
     
     public function __construct(
@@ -56,24 +56,24 @@ class Event
         $this->badges = $badges;
     }
 
-    public function toArray(Carbon $displayDate, int $firstDayOfWeek) : array
+    public function toArray(Carbon $displayDate, Carbon $startOfRange, Carbon $endOfRange, int $firstDayOfWeek) : array
     {
         return [
-//            'name' => CalendarDay::weekdayColumn($displayDate, $firstDayOfWeek) .'-' .($this->end() ? $displayDate->diffInDays($this->end) : 0) .$this->name,
             'name' => $this->name,
-            'start_date' => $this->start->format("Y-m-d"),
-            'start_time' => $this->start->format($this->timeFormat),
-            'end_date' => $this->end ? $this->end->format("Y-m-d") : null,
-            'end_time' => $this->end ? $this->end->format($this->timeFormat) : null,
-            'single_day' => $this->isSingleDayEvent() ? 1 : 0,
-            'spans_days' => min($this->spansDaysFrom($displayDate), 7),
-            'starts_event' => $this->startsEvent($displayDate) ? 1 : 0,
-            'ends_event' => $this->endsEvent($displayDate, $firstDayOfWeek) ? 1 : 0,
+            'startDate' => $this->start->format("Y-m-d"),
+            'startTime' => $this->start->format($this->timeFormat),
+            'endDate' => $this->end ? $this->end->format("Y-m-d") : null,
+            'endTime' => $this->end ? $this->end->format($this->timeFormat) : null,
+            'isWithinRange' => $this->touchesRange($startOfRange, $endOfRange),
+            'isSingleDayEvent' => $this->isSingleDayEvent() ? 1 : 0,
+            'spansDaysN' => min($this->spansDaysFrom($displayDate), 7),
+            'startsEvent' => $this->startsEvent($displayDate) ? 1 : 0,
+            'endsEvent' => $this->endsEvent($displayDate, $firstDayOfWeek) ? 1 : 0,
             'notes' => $this->notes,
             'badges' => $this->badges,
             'url' => $this->url,
             'options' => [
-                'style' => $this->style,
+                'styles' => $this->styles,
                 'displayTime' => $this->displayTime ? 1 : 0,
             ],
         ];
@@ -82,6 +82,13 @@ class Event
     public function isSingleDayEvent() : bool
     {
         return !$this->end || $this->end->isSameDay($this->start);
+    }
+    
+    public function touchesRange(Carbon $startOfRange, Carbon $endOfRange)
+    {
+        return !$this->end 
+            ? $this->start->gte($startOfRange) && $this->start->lte($endOfRange)
+            : $this->start->lte($endOfRange) && $this->end->gte($startOfRange);
     }
     
     public function spansDaysFrom(Carbon $displayDate) : int
@@ -131,22 +138,33 @@ class Event
         return ($this->novaResource instanceof $class);
     }
     
+    // Deprecated; here for backwards compatibility with pre-1.2 releases,
+    // when only a single style per event was supported
     public function style(string $v = null)
     {
-        if(!is_null($v))
+        if(!is_null($v) && count($this->styles) == 0)
         {
-            $this->style = $v;
+            $this->addStyle($v);
         }
         
-        return $this->style;
+        if(count($this->styles) > 1)
+        {
+            throw new \Exception("The deprecated 'Event::style' method is only backwards compatible with events that have zero or one assigned styles. Use the new `Event::addStyle` method instead.");
+        }
+        else if(count($this->styles) == 0)
+        {
+            return null;
+        }
+        
+        return $this->styles[0];
     }
     
+    // Deprecated; here for backwards compatibility with pre-1.2 releases,
+    // when only a single style per event was supported
     public function withStyle(string $v)
     {
-        $this->style($v);
-        return $this;
+        return $this->addStyle($v);
     }
-    
     
     public function timeFormat(string $v = null)
     {
@@ -193,7 +211,7 @@ class Event
     
     public function model() : ?EloquentModel
     {
-        return $this->novaResource ? $this->novaResource->resource : null;
+        return $this->novaResource ? $this->novaResource->model() : null;
     }
 
     public function name(string $v = null) : string
@@ -255,6 +273,47 @@ class Event
     public function withNotes(string $v) : self
     {
         $this->notes($v);
+        return $this;
+    }
+    
+    public function styles(array $v = null) : array
+    {
+        if(!is_null($v)) 
+        {
+            $this->styles = $v;
+        }
+        
+        return $this->styles;
+    }
+    
+    public function addStyle(string $v) : self
+    {
+        return $this->addStyles($v);
+    }
+    
+    public function addStyles(string ...$v) : self
+    {
+        foreach($v as $style)
+        {
+            $this->styles[] = $style;            
+        }
+        
+        return $this;
+    }
+    
+    public function removeStyle(string $v) : self
+    {
+        return $this->removeStyles($v);
+    }
+    
+    public function removeStyles(string ...$v) : self
+    {
+        foreach($v as $style)
+        {
+            $this->styles = array_filter($this->styles, function($s) use ($style) {
+                return $s != $style;
+            });
+        }
         return $this;
     }
     
