@@ -18,11 +18,11 @@ composer require wdelfuego/nova-calendar
 The following features are supported:
 
 - Automatically display Nova resources on a monthly calendar view
-- Laravel policies are respected to exclude events from the calendar automatically
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
 - Add badges to events to indicate status or attract attention
 - Customize visual style and content of each individual event
+- Laravel policies are respected to exclude events from the calendar automatically
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
 
@@ -37,8 +37,8 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 # Release log
 ## v1.3
-- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar (#12)
-- Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`.
+- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
+- Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`
 
 ### v1.2
 - Adds support for customizing non-Nova events
@@ -141,12 +141,12 @@ That's it! Your calendar should now be up and running.
 You can navigate through the months using the hotkeys `Alt + arrow right` or `Alt + arrow left` and jump back to the current month using `Alt + H` (or by clicking the month name that's displayed above the calendar).
 
 # What events are shown on the calendar? 
-Nova resource instances the currently logged in user is not authorized to see according to Laravel policies will be excluded from the calendar automatically.
+Events for Nova resources the current user is not authorized to see due to Laravel policies are excluded from the calendar automatically.
 
-If no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, all instances of a Nova resource will be shown, unless you hide them manually by implementing the `exclude` method on your CalendarDataProvider.
+All instances of a Nova resource will be shown if no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, unless you hide them manually by implementing the `exclude` method on your CalendarDataProvider.
 
 ## Hiding events from the calendar manually
-You can exclude individual events from the calendar even though the user has access to it by implementing the `exclude` method on your CalendarDataProvider.
+You can exclude Nova resources from the calendar by implementing the `exclude` method on your CalendarDataProvider.
 
 For example, if you want to hide events for resources with an Eloquent model that have an `is_finished` property that is `true`, you could write:
 
@@ -329,9 +329,26 @@ protected function customizeEvent(Event $event) : Event
 }
 ```
 ### Adding multiple custom event styles to a single event
-You are free to assign multiple styles to a single event.
+You are free to assign multiple styles to a single event using the `addStyles` method.
 
 Their CSS specifications will be merged in the order that they were added to the event, with styles added later overruling the ones added before it. Other, non-conflicting CSS properties defined by styles added before it will still be applied to the event as expected.
+
+For example:
+
+```php
+protected function customizeEvent(Event $event) : Event
+{
+    if($event->model())
+    {
+        if($event->model() && $event->model()->isInACertainState())
+        {
+            $event->addStyles('special', 'warning');
+        }
+    }
+
+    return $event;
+}
+```
 
 ## Calendar customization
 ### Changing the default menu icon and label
