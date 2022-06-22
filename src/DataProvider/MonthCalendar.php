@@ -84,7 +84,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     // Deprecated as of 1.3.1, here for backwards compatibility
     public function lastDayOfCalendar() : Carbon
     {
-        return $this->startOfCalendar();
+        return $this->endOfCalendar();
     }
 
     public function setYearAndMonth(int $year, int $month) : self
