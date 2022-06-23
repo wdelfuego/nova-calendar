@@ -1,3 +1,11 @@
+## Table of Contents
+- [Customizing events](#customizing-events)
+- [Customizing the CSS](#customizing-the-css)
+  - [Customizing the default event style](#customizing-the-default-event-style)
+  - [Adding custom event styles](#adding-custom-event-styles)
+  - [Adding multiple custom event styles to a single event](#adding-multiple-custom-event-styles-to-a-single-event)
+
+  
 # Customizing Events
 
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
