@@ -1,4 +1,5 @@
-[⬅️ Back to Documentation overview](/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+---
 
 #  Installation
 
@@ -87,3 +88,6 @@ The calendar just needs a single data provider class that supplies event data to
     ````
 
 That's it! Your calendar should now be up and running.
+
+---
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
