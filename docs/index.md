@@ -6,7 +6,7 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 - [Installation](/nova-calendar/installation.html)
 - [Usage](/nova-calendar/usage.html)
-- [Customization](/nova-calendar/customization.html)
+- Customization
   - [Customizing events](/nova-calendar/customizing-events.html)
   - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
   - [Hiding events from the calendar](/nova-calendar/hiding-events.html)
