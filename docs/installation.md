@@ -1,4 +1,4 @@
-[⬅️ Back to Documentation overview](/index.html#documentation)
+[⬅️ Back to Documentation overview](/#documentation)
 
 #  Installation
 
