@@ -1,3 +1,5 @@
+[⬅️ Back to Documentation overview](/index.html#documentation)
+
 #  Installation
 
 Start by requiring the package:
