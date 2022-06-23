@@ -15,7 +15,7 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 ## Documentation
 
-- Installation
+- [Installation](/nova-calendar/installation.html)
 - Usage
 - Customization
   - Customizing events
