@@ -318,8 +318,8 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         // Calculate calendar range
         $nDaysToSub = ($this->startOfMonth->dayOfWeekIso - ($this->firstDayOfWeek % 7)) % 7;
         while($nDaysToSub < 0) { $nDaysToSub += 7; }
-        $this->startOfCalendar = $this->startOfMonth->copy()->subDays($nDaysToSub);
-        $this->endOfCalendar = $this->startOfCalendar->copy()->addDays(7 * self::N_CALENDAR_WEEKS);
+        $this->startOfCalendar = $this->startOfMonth->copy()->subDays($nDaysToSub)->setTime(0,0);
+        $this->endOfCalendar = $this->startOfCalendar->copy()->addDays(7 * self::N_CALENDAR_WEEKS + 1)->subSeconds(1);
     }
     
 }
