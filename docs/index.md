@@ -4,11 +4,6 @@
 
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
-###  Installation
-```sh
-composer require wdelfuego/nova-calendar
-```
-
 # Support
 For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
@@ -16,11 +11,14 @@ For any problems you might run into, please [open an issue](https://github.com/w
 ## Documentation
 
 - [Installation](/nova-calendar/installation.html)
-- Usage
-- Customization
-  - Customizing events
-  - Customizing the calendar
-  - Hiding events from the calendar
+- [Usage](/nova-calendar/usage.html)
+- [Customization](/nova-calendar/customization.html)
+  - [Customizing events](/nova-calendar/customizing-events.html)
+  - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
+  - [Hiding events from the calendar](/nova-calendar/hiding-events.html)
+- [Release log](#release-log)
+- [License](#license)
+
 
 # Release log
 ## v1.3
