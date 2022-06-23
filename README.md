@@ -134,6 +134,25 @@ The calendar just needs a single data provider class that supplies event data to
         ->path('/wdelfuego/nova-calendar')
         ->icon('calendar'),
     ````
+5. You can define which views should be visible in Tool. Available views are: `month` and `week`, and can be defined in:
+
+    ```php
+    namespace App\Providers;
+
+    use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
+    use App\Nova\User;
+    use App\Nova\SomeEvent;
+
+    class CalendarDataProvider extends MonthCalendar
+    {
+        public function calendarViews(): array
+        {
+            return ['month', 'week'];
+        }
+    }
+    ```
+
+    By default all views are visible, however if you decide to use only one view, the navigation buttons won't be shown.
 
 That's it! Your calendar should now be up and running.
 

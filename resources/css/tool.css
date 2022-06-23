@@ -50,6 +50,11 @@ cursor: default;
   scrollbar-width: none;  /* Firefox */
 }
 
+/* Background colors that are not compiled in Nova stack */
+.bg-nc-primary-400 {
+  background-color: rgb(var(--colors-primary-400));
+}
+
 
 /*
  *  Controls (above calendar)

@@ -35,6 +35,9 @@ use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 abstract class Calendar implements CalendarDataProviderInterface
 {
     const N_CALENDAR_WEEKS = 6;
+    const A_AVAILABLE_VIEWS = [
+        'month', 'week'
+    ];
 
     protected $firstDayOfWeek;
     protected $year;
@@ -49,6 +52,8 @@ abstract class Calendar implements CalendarDataProviderInterface
     private $periodDuration = null;
 
     private $allEvents = null;
+
+    protected array $views = [];
     
     public function __construct()
     {
@@ -331,4 +336,8 @@ abstract class Calendar implements CalendarDataProviderInterface
         }
     }
 
+    public function calendarViews() : array
+    {
+        return self::A_AVAILABLE_VIEWS;
+    }
 }

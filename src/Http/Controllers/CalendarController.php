@@ -17,9 +17,8 @@
 namespace Wdelfuego\NovaCalendar\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
-
+use Wdelfuego\NovaCalendar\DataProvider\Calendar;
 use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 
 class CalendarController extends BaseController
@@ -31,6 +30,13 @@ class CalendarController extends BaseController
     {
         $this->request = $request;
         $this->dataProvider = $dataProvider;
+    }
+
+    public function getCalendarViews() : array
+    {
+        return [
+            'calendar_views' => $this->sanitizeCalendarViews($this->dataProvider->calendarViews())
+        ];
     }
     
     public function getMonthCalendarData($year = null, $month = null)
@@ -61,5 +67,21 @@ class CalendarController extends BaseController
                 'background-color' => 'rgba(var(--colors-primary-500), 0.9)',
             ]
         ];
+    }
+
+    private function sanitizeCalendarViews(array $cv): array
+    {
+        $out = [];
+        if ($cv == Calendar::A_AVAILABLE_VIEWS) {
+            $out = $cv;
+        } else {
+            foreach ($cv as $view) {
+                if (in_array($view, Calendar::A_AVAILABLE_VIEWS) && !in_array($view, $out)) {
+                    $out[] = $view;
+                }
+            }
+        }
+
+        return $out;
     }
 }

@@ -16,21 +16,8 @@
  
 namespace Wdelfuego\NovaCalendar\DataProvider;
 
-use DateTimeInterface;
-use Illuminate\Support\Carbon;
-use Illuminate\Http\Request;
-
-use Illuminate\Database\Eloquent\Model as EloquentModel;
-use Laravel\Nova\Nova;
-use Laravel\Nova\Resource as NovaResource;
-
-use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
-use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
 use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
-
 use Wdelfuego\NovaCalendar\NovaCalendar;
-use Wdelfuego\NovaCalendar\CalendarDay;
-use Wdelfuego\NovaCalendar\Event;
 
 abstract class MonthCalendar extends Calendar implements MonthDataProviderInterface
 {   
