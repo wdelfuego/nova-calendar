@@ -4,6 +4,7 @@
 
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
+###  Installation
 ```sh
 composer require wdelfuego/nova-calendar
 ```
