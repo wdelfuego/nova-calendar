@@ -1,3 +1,7 @@
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+
+---
+
 # Customizing the calendar
 
 ### Changing the default menu icon and label
@@ -58,3 +62,7 @@ protected function nonNovaEvents() : array
 If you are going to return a long list of events here, or do a request to an external service, you can use the `startOfCalendar()` and `endOfCalendar()` methods inherited from `Wdelfuego\NovaCalendar\DataProvider\MonthCalendar` to limit the scope of your event generation to the date range that is currently being requested by the frontend. 
 
 Any events you return here that fall outside that date range are never displayed, so it's a waste of your and your users' resources if you still generate them.
+
+---
+
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)

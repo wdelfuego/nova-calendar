@@ -1,3 +1,7 @@
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+
+---
+
 # Customization
 
 - [Customizing events](/nova-calendar/customizing-events.html)

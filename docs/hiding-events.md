@@ -1,3 +1,7 @@
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+
+---
+
 # Hiding events
 
 ## What events are shown on the calendar? 

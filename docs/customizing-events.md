@@ -1,3 +1,7 @@
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+
+---
+
 ## Table of Contents
 - [Customizing events](#customizing-events)
 - [Customizing the CSS](#customizing-the-css)
@@ -72,6 +76,7 @@ All of these methods return the `Event` itself so you can chain them in the `cus
 - `withName(string $v)` updates the name of the event.
 - `withStart(DateTimeInterface $v)` updates the date and start time of the event.
 - `withEnd(DateTimeInterface $v)` updates the end date and time of the event.
+- `withUrl(string $v)` updates the url opened when the end user clicks the event.
 - `withNotes(string $v)` updates the notes displayed below the name and, if enabled, the time info of the event.
 - `addBadge(string $v)` adds a badge to the event's upper right corner. You can simply set letters, short strings or emoji. The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 - `addBadges(string ...$v)` adds 1 or more badges with one call. This method doesn't expect an array but an argument for each badge you want to add.
@@ -88,6 +93,7 @@ These function as simple setters when you supply an argument, and as getters whe
 - `name(string $v = null) : string`
 - `start(DateTimeInterface $v = null) : DateTimeInterface`
 - `end(DateTimeInterface $v = null) : ?DateTimeInterface`
+- `url(string $v = null)`
 - `notes(string $v = null) : string`
 - `badges(array $v = null) : array`
 - `styles(array $v = null) : array`
@@ -192,3 +198,7 @@ protected function customizeEvent(Event $event) : Event
     return $event;
 }
 ```
+
+---
+
+[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
