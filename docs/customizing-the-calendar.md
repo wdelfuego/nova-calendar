@@ -1,4 +1,4 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#support)
 
 ---
 
@@ -65,4 +65,4 @@ Any events you return here that fall outside that date range are never displayed
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#support)

@@ -1,4 +1,4 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#support)
 
 ---
 
@@ -92,4 +92,4 @@ That's it! Your calendar should now be up and running.
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#support)

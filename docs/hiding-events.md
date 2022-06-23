@@ -1,4 +1,4 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#documentation)
+[⬅️ Back to Documentation overview](/nova-calendar/#support)
 
 ---
 
