@@ -52,7 +52,12 @@
               <!-- a cell per day, background -->
               <template v-for="day in week">
                 <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
-                  <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
+                  <div class="dayheader text-gray-400 noselect">
+                    <span class="daylabel">{{ day.label }}</span>
+                    <div class="badges noscrollbar">
+                      <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge">{{ badge }}</span></span>
+                    </div>
+                  </div>
                 </div>
               </template>
               

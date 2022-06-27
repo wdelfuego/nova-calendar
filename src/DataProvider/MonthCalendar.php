@@ -136,6 +136,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             for($j = 0; $j < 7; $j++)
             {
                 $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
+                $calendarDay = $this->customizeCalendarDay($calendarDay);
                 $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
                 
                 $dateCursor = $dateCursor->addDay();
@@ -154,6 +155,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
     protected function customizeEvent(Event $event) : Event
     {
         return $event;
+    }
+    
+    protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
+    {
+        return $day;
     }
     
     protected function nonNovaEvents() : array

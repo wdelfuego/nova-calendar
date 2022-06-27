@@ -16,6 +16,7 @@
  
 namespace Wdelfuego\NovaCalendar;
 
+use DateTimeInterface;
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
 use Illuminate\Support\Carbon;
@@ -28,6 +29,7 @@ class CalendarDay implements CalendarDayInterface
         $firstDayOfWeek = $firstDayOfWeek ?? NovaCalendar::MONDAY;
 
         return new self(
+            $date->copy()->setTime(0,0),
             self::weekdayColumn($date, $firstDayOfWeek),
             $date->format('j'),
             $date->year == $year && $date->month == $month,
@@ -44,14 +46,17 @@ class CalendarDay implements CalendarDayInterface
         return $mod + 1;
     }
     
+    public $start;
     protected $weekdayColumn;
     protected $label;
+    protected $badges;
     protected $isWithinRange;
     protected $isToday;
     protected $isWeekend;
     protected $events;
     
     public function __construct(
+        DateTimeInterface $start,
         int $weekdayColumn,
         string $label = '',
         bool $isWithinRange = true,
@@ -60,8 +65,10 @@ class CalendarDay implements CalendarDayInterface
         array $events = [], 
     )
     {
+        $this->start = $start;
         $this->weekdayColumn = $weekdayColumn;
         $this->label = $label;
+        $this->badges = [];
         $this->isWithinRange = $isWithinRange;
         $this->isToday = $isToday;
         $this->isWeekend = $isWeekend;
@@ -79,6 +86,7 @@ class CalendarDay implements CalendarDayInterface
         return [
             'weekdayColumn' => $this->weekdayColumn,
             'label' => $this->label,
+            'badges' => $this->badges,
             'isWithinRange' => $this->isWithinRange ? 1 : 0,
             'isToday' => $this->isToday ? 1 : 0,
             'isWeekend' => $this->isWeekend ? 1 : 0,
@@ -96,5 +104,46 @@ class CalendarDay implements CalendarDayInterface
     {
         
         return array_filter($this->events, fn($e): bool => !$e['isSingleDayEvent']);
+    }
+    
+    public function badges(array $v = null) : array
+    {
+        if(!is_null($v)) 
+        {
+            $this->badges = $v;
+        }
+        
+        return $this->badges;
+    }
+    
+    public function addBadge(string $v) : self
+    {
+        return $this->addBadges($v);
+    }
+    
+    public function addBadges(string ...$v) : self
+    {
+        foreach($v as $badge)
+        {
+            $this->badges[] = $badge;            
+        }
+        
+        return $this;
+    }
+    
+    public function removeBadge(string $v) : self
+    {
+        return $this->removeBadges($v);
+    }
+    
+    public function removeBadges(string ...$v) : self
+    {
+        foreach($v as $badge)
+        {
+            $this->badges = array_filter($this->badges, function($b) use ($badge) {
+                return $b != $badge;
+            });
+        }
+        return $this;
     }
 }
