@@ -21,4 +21,6 @@ use Illuminate\Support\Facades\Route;
 use Wdelfuego\NovaCalendar\Http\Controllers\CalendarController;
 
 Route::get('/calendar-views', [CalendarController::class, 'getCalendarViews']);
-Route::get('/calendar-data/{year?}/{month?}', [CalendarController::class, 'getMonthCalendarData']);
+
+Route::get('/calendar-data/month/{year?}/{month?}', [CalendarController::class, 'getMonthCalendarData']);
+Route::get('/calendar-data/week/{year?}/{week?}', [CalendarController::class, 'getWeekCalendarData']);

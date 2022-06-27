@@ -15,7 +15,6 @@
 <template>
   <div>
     <Head title="Calendar" />
-
     <div v-if="calendarViews.length > 1" class="flex w-full items-center justify-end mb-4">
         <div class="flex ml-auto items-center">
             <DefaultButton v-for="view in calendarViews" 
@@ -26,7 +25,6 @@
             </DefaultButton>
         </div>
     </div>
-    
     <component :is="activeView"></component>
   </div>
 </template>
@@ -34,10 +32,12 @@
 <script>
 
 import Month from '../components/Month'
+import Week from '../components/Week'
+import Day from '../components/Day'
 
 export default {
   components: {
-    Month
+    Month, Week, Day
   },
 
   props: [
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       calendarViews: Array(),
-      activeView: 'month',
+      activeView: null,
     }
   },
 
@@ -61,6 +61,7 @@ export default {
         Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-views')
             .then(response => {
                 vue.calendarViews = response.data.calendar_views;
+                this.setActiveView(vue.calendarViews[0]);
         });
     },
     

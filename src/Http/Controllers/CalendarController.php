@@ -16,9 +16,10 @@
 
 namespace Wdelfuego\NovaCalendar\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wdelfuego\NovaCalendar\DataProvider\Calendar;
+use Illuminate\Routing\Controller as BaseController;
 use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 
 class CalendarController extends BaseController
@@ -35,7 +36,7 @@ class CalendarController extends BaseController
     public function getCalendarViews() : array
     {
         return [
-            'calendar_views' => $this->sanitizeCalendarViews($this->dataProvider->calendarViews())
+            'calendar_views' => $this->sanitizeCalendarViews($this->dataProvider->calendarViews()),
         ];
     }
     
@@ -58,6 +59,33 @@ class CalendarController extends BaseController
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
+
+    public function getWeekCalendarData($year = null, $week = null)
+    {
+        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
+        $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
+
+        while ($week > 52) {
+            $year += 1;
+            $week -= 52;
+        }
+        while ($week < 1) {
+            $year -= 1;
+            $week += 52;
+        }
+        
+        $this->dataProvider->setRequest($this->request)->setYearAndWeek($year, $week);
+
+        return [
+            'year' => $year,
+            'week' => $week,
+            'title' => $this->dataProvider->title(),
+            'columns' => $this->dataProvider->daysOfTheWeek(),
+            'week_data' => $this->dataProvider->calendarWeek(),
+            'timeslots' => $this->dailyTimeslots(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
     
     public function defaultStyles() : array
     {
@@ -72,7 +100,7 @@ class CalendarController extends BaseController
     private function sanitizeCalendarViews(array $cv): array
     {
         $out = [];
-        if ($cv == Calendar::A_AVAILABLE_VIEWS) {
+        if (($cv == Calendar::A_AVAILABLE_VIEWS) || empty($cv)) {
             $out = $cv;
         } else {
             foreach ($cv as $view) {

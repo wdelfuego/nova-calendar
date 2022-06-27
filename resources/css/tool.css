@@ -107,7 +107,7 @@ div.nova-calendar {
 div.nova-calendar div.nc-header {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 1fr repeat(7, 4fr);
 }
 
 div.nova-calendar div.nc-header div {
@@ -117,19 +117,21 @@ div.nova-calendar div.nc-header div {
   word-break: break-all;
 }
 
+
 div.nova-calendar .week {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 1fr repeat(7, 4fr);
 }
 
-div.nova-calendar .nc-col-1 { grid-column: 1 / 2; }
-div.nova-calendar .nc-col-2 { grid-column: 2 / 3; }
-div.nova-calendar .nc-col-3 { grid-column: 3 / 4; }
-div.nova-calendar .nc-col-4 { grid-column: 4 / 5; }
-div.nova-calendar .nc-col-5 { grid-column: 5 / 6; }
-div.nova-calendar .nc-col-6 { grid-column: 6 / 7; }
-div.nova-calendar .nc-col-7 { grid-column: 7 / -1; }
+div.nova-calendar .nc-col-0 { grid-column: 1 / 2; }
+div.nova-calendar .nc-col-1 { grid-column: 2 / 3; }
+div.nova-calendar .nc-col-2 { grid-column: 3 / 4; }
+div.nova-calendar .nc-col-3 { grid-column: 4 / 5; }
+div.nova-calendar .nc-col-4 { grid-column: 5 / 6; }
+div.nova-calendar .nc-col-5 { grid-column: 6 / 7; }
+div.nova-calendar .nc-col-6 { grid-column: 7 / 8; }
+div.nova-calendar .nc-col-7 { grid-column: 8 / -1; }
 
 div.nova-calendar .nc-event.multi.span-1 { grid-column-end: span 1; }
 div.nova-calendar .nc-event.multi.span-2 { grid-column-end: span 2; }
@@ -138,7 +140,7 @@ div.nova-calendar .nc-event.multi.span-4 { grid-column-end: span 4; }
 div.nova-calendar .nc-event.multi.span-5 { grid-column-end: span 5; }
 div.nova-calendar .nc-event.multi.span-6 { grid-column-end: span 6; }
 div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
-
+div.nova-calendar .nc-event.multi.span-8 { grid-column-end: span 8; }
 
 /*
  *  Day cells
@@ -147,8 +149,26 @@ div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
 div.nova-calendar .day {
   z-index: 0;
   grid-row: 1/-1;
-  min-height: 9em;
+  min-height: 2em;
   border-width: 0.5px;
+}
+
+div.nova-calendar .day.multi {
+  border-bottom: none;
+}
+
+div.nova-calendar .day.single-day {
+  border-top: none;
+}
+
+div.nova-calendar .day.hour-label {
+  font-size: 8pt;
+  opacity: 0.84;
+  text-align: right;
+  margin-top: -1em;
+  padding-bottom: 0.25em;
+  padding-right: 0.5em;
+  border: none;
 }
 
 /* TODO add striped background or something */
@@ -193,12 +213,15 @@ div.nova-calendar .day.today .dayheader .daylabel {
 
 div.nova-calendar .week-events {
   z-index: 2;
-  padding-top: 2em;
   grid-column: 1 / -1;
   grid-row: 1;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 1fr repeat(7, 4fr);
   grid-auto-flow: column dense;
+}
+
+div.nova-calendar .week-events.multi {
+  padding-top: 2em;
 }
 
 div.nova-calendar .single-day-events {

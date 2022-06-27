@@ -20,11 +20,11 @@
         <span>{{ $data.title }}</span>
       </h1>
       
-      <a @click="prevMonth" class="left" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
+      <a @click="prevWeek" class="left" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
       </a>
   
-      <a @click="nextMonth" class="right" href="#">
+      <a @click="nextWeek" class="right" href="#">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
       </a>
             
@@ -33,32 +33,37 @@
     <div style="width:100%;overflow:scroll">
       <Card
         class="flex flex-col items-center justify-center dark:bg-gray-800"
-        style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)"
+        style="min-height: 100px;min-width:800px;background-color:var(--bg-gray-800)"
       >
 
         <div class="nova-calendar noselect">
 
           <div class="nc-header">
+            <div class="hour border-gray-200 dark:border-gray-900 dark:text-gray-300"></div>
             <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
           </div>
 
           <div class="nc-content">
 
             <!-- week wrapper -->
-            <div v-for="(week, weekIndex) in $data.weeks" class="week">
-
+            <div class="week">
+            
               <!-- a cell per day, background -->
-              <template v-for="day in week">
-                <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
+
+              <template v-for="day in $data.weekData">
+                <div class="day multi dark:bg-gray-800 dark:border-gray-800 withinRange" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
               </template>
               
               <!-- events, overlaid -->
-              <div class="week-events">
+              <div class="week-events multi">
                 
                 <!-- multi day events for all days first -->
-                <template v-for="day in week">
+                <div class="day single-day hour-label dark:bg-gray-900 dark:border-gray-800 withinRange nc-col-0">
+                  {{ __('multi-day') }}
+                </div>
+                <template v-for="day in $data.weekData">
                   <template v-for="event in day.eventsMultiDay">
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
@@ -75,8 +80,31 @@
                   </template>
                 </template>
                 
+              </div>
+
+            </div>
+
+            <div class="week" v-for="slot in $data.timeslots">
+            
+              <!-- a cell per day, background -->
+              <div class="day single-day hour-label dark:bg-gray-900 dark:border-gray-800 withinRange nc-col-0">
+                {{ slot.hour_minute }}
+              </div>
+              <template v-for="day in $data.weekData">
+                <div class="day single-day dark:bg-gray-900 dark:border-gray-800" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange' : slot.is_open, 'today': day.isToday }"></div>
+              </template>
+
+              
+
+            </div>
+
+            <div class="week">
+            
+              <!-- events, overlaid -->
+              <div class="week-events">
+                
                 <!-- then all single day events -->
-                <template v-for="day in week">
+                <template v-for="day in $data.weekData">
                   <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
                     <template v-for="event in day.eventsSingleDay">
                       <div :class="['nc-event']" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
@@ -99,6 +127,8 @@
               </div>
 
             </div>
+            
+           
           </div>
 
         </div>
@@ -115,39 +145,40 @@ export default {
   mounted() {
     this.reset();
     
-    Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
-    Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
+    Nova.addShortcut('alt+right', event => {  this.nextWeek(); });
+    Nova.addShortcut('alt+left', event => {   this.prevWeek(); });
     Nova.addShortcut('alt+h', event =>    {   this.reset(); });
   },
 
   methods: {
 
     reset() {
-      this.month = null;
+      this.week = null;
       this.year = null;
       this.reload();
     },
 
-    prevMonth() {
-      this.month -= 1;
+    prevWeek() {
+      this.week -= 1;
       this.reload();
     },
   
-    nextMonth() {
-      this.month += 1;
+    nextWeek() {
+      this.week += 1;
       this.reload();
     },
 
     reload() {
       let vue = this;
-      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/month/'+vue.year+'/'+vue.month)
+      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/week/'+vue.year+'/'+vue.week)
         .then(response => {
             vue.year = response.data.year;
-            vue.month = response.data.month;
+            vue.week = response.data.week;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
-            vue.weeks = response.data.weeks;
+            vue.weekData = response.data.week_data;
             vue.styles = response.data.styles;
+            vue.timeslots = response.data.timeslots;
         });
     },
     
@@ -179,13 +210,14 @@ export default {
   data () {
       return {
           year: null,
-          month: null,
+          week: null,
           title: '',
           columns: Array(7).fill('-'),
-          weeks: Array(6).fill(Array(7).fill({})),
+          weekData: (Array(7).fill({})),
+          timeslots: Array(),
           styles: {
             default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
-          }
+          },
       }
   }
 
