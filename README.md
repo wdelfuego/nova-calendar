@@ -39,7 +39,10 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.3
+## v1.4
+- Badges can now be added to calendar day cells
+
+### v1.3
 - Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
 - Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`
 

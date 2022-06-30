@@ -15,7 +15,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 
 # Release log
-## v1.3
+## v1.4
+- Badges can now be added to calendar day cells
+
+### v1.3
 - Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
 - Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`
 

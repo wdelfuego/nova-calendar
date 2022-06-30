@@ -4,6 +4,28 @@
 
 # Customizing the calendar
 
+### Adding badges to calendar day cells
+In your `CalendarDataProvider`, implement the `customizeCalendarDay()` method as follows:
+
+```php
+protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
+{
+    if($day->start->format('d') % 2 == 0)
+    {
+        $day->addBadge('even');
+    }
+    else
+    {
+        $day->addBadge('odd');
+    }
+    
+    return $day;
+}
+```
+
+As badges, you could use any combination of short words or single letters, symbols or 
+even emoji 🤯 to make certain calendar days stand out visually.
+
 ### Changing the default menu icon and label
 In your `NovaServiceProvider`, update the `tools()` method as follows:
 ```php
