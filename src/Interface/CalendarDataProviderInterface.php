@@ -32,12 +32,15 @@ interface CalendarDataProviderInterface
     // A multi-dimensional array with all display data for 1 week in the calendar
     public function calendarWeek(): array;
 
+    // A multi-dimensional array with all display data for 1 day in the calendar
+    public function calendarDayData(): array;
+    
     // A 1D array with available calendar views, possible elements are: ['month']. 
     public function calendarViews(): array;
     
     // A multi-dimensional array of event styles, see documentation
     public function eventStyles() : array;
 
-    // A 1D array with the business hours range: frist element, see documentation.
-    public function weekCalendarLayout(): array;
+    // A 1D array with the business hours range: see documentation.
+    public function calendarDayLayout(): array;
 }

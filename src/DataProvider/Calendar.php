@@ -35,14 +35,18 @@ use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 abstract class Calendar implements CalendarDataProviderInterface
 {
     const N_CALENDAR_WEEKS = 6;
-    const A_AVAILABLE_VIEWS = ['month', 'week'];
-    const A_BUSINESS_HOURS = [9,17];
-    const N_TIMESLOT_DURATION = 30;
+    const A_AVAILABLE_VIEWS = ['day', 'month', 'week'];
+    const A_CALENDAR_LAYOUT = [
+        'openingHour' => 9,
+        'closingHour' => 17,
+        'timeslotInterval' => 30
+    ];
 
     protected $firstDayOfWeek;
     protected $year;
     protected $month;
     protected $week;
+    protected $day;
     
     protected $request = null;
 
@@ -61,6 +65,7 @@ abstract class Calendar implements CalendarDataProviderInterface
         $this->firstDayOfWeek = NovaCalendar::MONDAY;
         $this->year = now()->year;
         $this->month = now()->month;
+        $this->day = now()->day;
         $this->updateViewRanges();
         $this->initialize();
     }
@@ -114,6 +119,17 @@ abstract class Calendar implements CalendarDataProviderInterface
         return $this;
     }
 
+    public function setYearAndMonthAndDay(int $year, int $month, int $day): self
+    {
+        $this->year = $year;
+        $this->month = $month;
+        $this->day = $day;
+        $this->week = Carbon::create($year, $month, $day)->weekOfYear;
+        $this->periodDuration = 1;
+        $this->updateViewRanges();
+        return $this;
+    }
+
     public function startWeekOn(int $dayOfWeekIso) : self
     {
         $this->firstDayOfWeek = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
@@ -129,14 +145,16 @@ abstract class Calendar implements CalendarDataProviderInterface
     
     public function title() : string
     {
-        $title = ucfirst($this->startOfPeriod->translatedFormat('F \'y'));
+        if ($this->periodDuration = 1) {
+            return $this->startOfPeriod->translatedFormat('d F Y');
+        }
 
         if ($this->periodDuration <= 7) 
         {
-            $title .= ' - ' . __('Week :weekNo', ['weekNo' => $this->week]);
+            return $this->startOfPeriod->translatedFormat('w F \'y');
         }
-        
-        return $title;
+
+        return $this->startOfPeriod->translatedFormat('F \'y');;
     }
 
     public function daysOfTheWeek() : array
@@ -151,19 +169,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         return $out;
     }
 
-    public function calendarDay(): array
+    public function calendarDayData(): array
     {
         $dateCursor = $this->startOfCalendar();
 
-        $week = [];
-        for ($j = 0; $j < 7; $j++) {
-            $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
-            $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
-
-            $dateCursor = $dateCursor->addDay();
-        }
-
-        return $week;
+        $day = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
+        return $day->withEventsAndLayout($this->eventDataForDate($dateCursor), $this->calendarDayLayout())->toArray();
     }
 
     public function calendarWeek(): array
@@ -183,7 +194,7 @@ abstract class Calendar implements CalendarDataProviderInterface
 
     public function calendarWeeks(): array
     {
-        $out = [];
+        $month = [];
         $dateCursor = $this->startOfCalendar();
 
         for ($i = 0; $i < self::N_CALENDAR_WEEKS; $i++) {
@@ -191,13 +202,12 @@ abstract class Calendar implements CalendarDataProviderInterface
             for ($j = 0; $j < 7; $j++) {
                 $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
                 $week[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
-
                 $dateCursor = $dateCursor->addDay();
             }
-            $out[] = $week;
+            $month[] = $week;
         }
 
-        return $out;
+        return $month;
     }
 
     public function eventStyles() : array
@@ -229,19 +239,7 @@ abstract class Calendar implements CalendarDataProviderInterface
     {
         $date->setTime(0,0,0);
         $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
-
-        $weekCalendarLayout = $this->weekCalendarLayout();
-
-        $nOpeningHr = $weekCalendarLayout['openingHour'];
-        $nClosingHr = $weekCalendarLayout['closingHour'];
-        $timeslotInterval = $weekCalendarLayout['timeslotInterval'];
-
-        $openingHour = Carbon::createFromTime($nOpeningHr, 0, 0);
-        $closingHour = Carbon::createFromTime($nClosingHr, 0, 0);
-
-        $timeCursor = $date->copy();
-        $end = $timeCursor->copy()->addDay()->subSecond();
-        
+       
         // Get all events that start today, and if the date is the first day of the week
         // also get all multiday events that started before today and end on or after it
         // ('running multiday events')
@@ -277,28 +275,61 @@ abstract class Calendar implements CalendarDataProviderInterface
             // Let the one that starts earlier come first.
             return $b->start()->diffInMinutes($a->start(), false); 
         });
-
-        $out = [];
-        while ($timeCursor->lessThanOrEqualTo($end)) {
-            $h = $timeCursor->hour;
-            $m = $timeCursor->minute;
-            $hm = $timeCursor->format('G:i');
-            $isOpen = ($timeCursor->isBetween($openingHour, $closingHour, true));
-            $timeCursor->addMinutes($timeslotInterval);
-
-            $out[] = [
-                'hour' => $h,
-                'minute' => $m,
-                'hour_minute' => $hm,
-                'is_open' => $isOpen
-            ];
-        }
-
-        
+       
         // Finally return the resultant event array, but convert each event to an array
         // that the front-end can use to render the calendar
         return array_map(fn($e): array => $e->toArray($date, $this->startOfPeriod, $this->endOfPeriod, $this->firstDayOfWeek), $events);
     }
+
+    // private function eventDataForDateTime(Carbon $date, int $h, int $m, int $timeslotInterval): array
+    // {
+    //     $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
+
+    //     // Get all events that start today, and if the date is the first day of the week
+    //     // also get all multiday events that started before today and end on or after it
+    //     // ('running multiday events')
+    //     $events = array_filter($this->allEvents(), function ($e) use ($date, $isFirstDayColumn) {
+    //         return $e->start()->isSameDay($date)
+    //             ||
+    //             ($isFirstDayColumn
+    //                 && $e->end()
+    //                 && $e->start()->isBefore($date)
+    //                 && $e->end()->isAfter($date));
+    //     });
+
+    //     // Sort events (as a heuristic, since CSS won't always match event order 
+    //     // between different week rows perfectly due to 'column dense')
+    //     usort($events, function ($a, $b) use ($date, $isFirstDayColumn) {
+
+    //         $aDays = min(7, $a->spansDaysFrom($date));
+    //         $bDays = min(7, $b->spansDaysFrom($date));
+
+    //         // Longer events first
+    //         if ($aDays != $bDays) {
+    //             return $bDays - $aDays;
+    //         }
+
+    //         // If we're in the first day column and both events span 7 days,
+    //         // let running multi-day events precede events that start today
+    //         if ($isFirstDayColumn && $aDays == 7 && $bDays == 7) {
+    //             if (!$a->startsEvent($date)) {
+    //                 return -1;
+    //             }
+    //             if (!$b->startsEvent($date)) {
+    //                 return 1;
+    //             }
+    //             return 0;
+    //         }
+
+    //         // Events have the same length and don't span 7 full days
+    //         // Let the one that starts earlier come first.
+    //         return $b->start()->diffInMinutes($a->start(), false);
+    //     });
+
+    //     // Finally return the resultant event array, but convert each event to an array
+    //     // that the front-end can use to render the calendar
+    //     return array_map(fn ($e): array => $e->toArray($date, $this->startOfPeriod, $this->endOfPeriod, $this->firstDayOfWeek), $events);
+    // }
     
     private function resourceToEvent(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd = null) : Event
     {
@@ -395,8 +426,17 @@ abstract class Calendar implements CalendarDataProviderInterface
     protected function updateViewRanges() : void
     {
         // Calculate calendar range for ...
-        if ($this->periodDuration > 7) {   // ... month view
-            // Calculate period range
+
+        if ($this->periodDuration == 1) {
+
+            $this->startOfPeriod = Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $this->month . '-' . $this->day . ' 00:00:00');
+            $this->endOfPeriod = $this->startOfPeriod->copy()->addDays($this->periodDuration)->subSeconds(1);
+
+            $this->startOfCalendar = $this->startOfPeriod->copy();
+            $this->endOfCalendar = $this->endOfPeriod->copy();
+
+        } else if ($this->periodDuration > 7) {
+
             $this->startOfPeriod = Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $this->month . '-1 00:00:00');
             $this->endOfPeriod = $this->startOfPeriod->copy()->addDays($this->periodDuration)->subSeconds(1);
 
@@ -406,8 +446,9 @@ abstract class Calendar implements CalendarDataProviderInterface
             }
             $this->startOfCalendar = $this->startOfPeriod->copy()->subDays($nDaysToSub);
             $this->endOfCalendar = $this->startOfCalendar->copy()->addDays(7 * self::N_CALENDAR_WEEKS);
-        } else {                           // ... remaining views
-            // Calculate period range
+
+        } else {
+
             $day = Carbon::now()->setISODate($this->year, $this->week)->day;
             $this->startOfPeriod = Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $this->month . '-' . $day . ' 00:00:00');
             $this->endOfPeriod = $this->startOfPeriod->copy()->addDays($this->periodDuration)->subSeconds(1);
@@ -422,9 +463,9 @@ abstract class Calendar implements CalendarDataProviderInterface
         return self::A_AVAILABLE_VIEWS;
     }
 
-    public function businessHours(): array
+    public function calendarDayLayout(): array
     {
-        return self::A_BUSINESS_HOURS;
+        return self::A_CALENDAR_LAYOUT;
     }
 
     public function timeslot(): int
@@ -432,11 +473,35 @@ abstract class Calendar implements CalendarDataProviderInterface
         return self::N_TIMESLOT_DURATION;
     }
 
-    private function dailyTimeslots(): array
+    private function calendarDayTimeslots(Carbon $dateCursor) : array
     {
-        
+        $calendarDayLayout = $this->calendarDayLayout();
+        $nOpeningHr = $calendarDayLayout['openingHour'];
+        $nClosingHr = $calendarDayLayout['closingHour'];
+        $timeslotInterval = $calendarDayLayout['timeslotInterval'];
 
-        
-        return [];
+        $openingHour = Carbon::createFromTime($nOpeningHr, 0, 0);
+        $closingHour = Carbon::createFromTime($nClosingHr, 0, 0);
+
+        $end = $dateCursor->copy()->addDay()->subSecond();
+
+        $out = [];
+        while ($dateCursor->lessThanOrEqualTo($end)) {
+            $h = $dateCursor->hour;
+            $m = $dateCursor->minute;
+            $hm = $dateCursor->format('G:i');
+            $isOpen = ($dateCursor->isBetween($openingHour, $closingHour, true));
+            
+            $out[] = [
+                'hour' => $h,
+                'minute' => $m,
+                'hour_minute' => $hm,
+                'is_open' => $isOpen,
+            ];
+
+            $dateCursor->addMinutes($timeslotInterval);
+        }
+
+        return $out;
     }
 }

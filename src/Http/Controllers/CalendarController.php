@@ -49,7 +49,6 @@ class CalendarController extends BaseController
         while($month < 1)  { $year -= 1; $month += 12; }
         
         $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
-            
         return [
             'year' => $year,
             'month' => $month,
@@ -82,7 +81,47 @@ class CalendarController extends BaseController
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),
             'week_data' => $this->dataProvider->calendarWeek(),
-            'timeslots' => $this->dailyTimeslots(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
+
+    public function getDayCalendarData($year = null, $month = null, $day = null)
+    {
+        $year = is_null($year) || !is_numeric($year) ? now()->year : intval($year);
+        $month = is_null($month) || !is_numeric($month) || intval($month) > 13 || intval($month) < 0 ? now()->month : intval($month);
+        $day = is_null($day) || !is_numeric($day) || intval($month) > 32 || intval($month) < 0 ? now()->day : intval($day);
+
+        $monthDate = Carbon::createFromDate($year, $month, 1);
+        $daysInMonth = $monthDate->daysInMonth;
+
+        if ($day > $daysInMonth) {
+            $month += 1;
+            if ($month > 12) {
+                $year += 1;
+                $month -= 12;
+            }
+            $day = $day - $daysInMonth;
+        }
+
+        if ($day < 1) {
+            $month -= 1;
+            if ($month < 1) {
+                $year -= 1;
+                $month += 12;
+            }
+            $daysInPreviousMonth = $monthDate->subMonth()->daysInMonth;
+            $day = $daysInPreviousMonth - $day;
+        }
+
+        $this->dataProvider->setRequest($this->request)->setYearAndMonthAndDay($year, $month, $day);
+
+        return [
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'day_name' => Carbon::createFromDate($year, $month, $day)->translatedFormat('l'),
+            'title' => $this->dataProvider->title(),
+            'day_data' => $this->dataProvider->calendarDayData(),
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
@@ -110,6 +149,38 @@ class CalendarController extends BaseController
             }
         }
 
+        return $out;
+    }
+
+    private function dailyTimeslots(): array
+    {
+        $weekCalendarLayout = $this->dataProvider->dayCalendarLayout();
+
+        $nOpeningHr = $weekCalendarLayout['openingHour'];
+        $nClosingHr = $weekCalendarLayout['closingHour'];
+        $timeslotInterval = $weekCalendarLayout['timeslotInterval'];
+
+        $openingHour = Carbon::createFromTime($nOpeningHr, 0, 0);
+        $closingHour = Carbon::createFromTime($nClosingHr, 0, 0);
+
+        $timeCursor = Carbon::createFromTime(0, 0, 0);
+        $end = $timeCursor->copy()->addDay()->subSecond();
+
+        $out = [];
+        while ($timeCursor->lessThanOrEqualTo($end)) {
+            $h = $timeCursor->hour;
+            $m = $timeCursor->minute;
+            $hm = $timeCursor->format('G:i');
+            $isOpen = ($timeCursor->isBetween($openingHour, $closingHour, true));
+            $timeCursor->addMinutes($timeslotInterval);
+
+            $out[] = [
+                'hour' => $h,
+                'minute' => $m,
+                'hour_minute' => $hm,
+                'is_open' => $isOpen
+            ];
+        }
         return $out;
     }
 }
