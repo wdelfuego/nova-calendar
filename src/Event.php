@@ -170,7 +170,7 @@ class Event
         return $this->addStyle($v);
     }
     
-    public function timeFormat(string $v = null)
+    public function timeFormat(string $v = null) : string
     {
         if(!is_null($v))
         {
@@ -186,7 +186,7 @@ class Event
         return $this;
     }
     
-    public function url(string $v = null)
+    public function url(string $v = null) : ?string
     {
         if(!is_null($v))
         {
@@ -196,7 +196,7 @@ class Event
         return $this->url;
     }
     
-    public function withUrl(string $v)
+    public function withUrl(string $v) : self
     {
         $this->url($v);
         return $this;

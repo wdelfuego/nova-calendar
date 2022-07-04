@@ -16,6 +16,7 @@
  
 namespace Wdelfuego\NovaCalendar;
 
+use DateTimeInterface;
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
 use Illuminate\Support\Carbon;
@@ -28,7 +29,7 @@ class CalendarDay implements CalendarDayInterface
         $firstDayOfWeek = $firstDayOfWeek ?? NovaCalendar::MONDAY;
 
         return new self(
-            $date,
+            $date->copy()->setTime(0,0),
             self::weekdayColumn($date, $firstDayOfWeek),
             $date->format('j'),
             $date->year == $year && $date->month == $month,
@@ -45,9 +46,10 @@ class CalendarDay implements CalendarDayInterface
         return $mod + 1;
     }
     
-    protected $date;
+    public $date;
     protected $weekdayColumn;
     protected $label;
+    protected $badges;
     protected $isWithinRange;
     protected $isToday;
     protected $isWeekend;
@@ -62,6 +64,7 @@ class CalendarDay implements CalendarDayInterface
         $this->date = $date;
         $this->weekdayColumn = $weekdayColumn;
         $this->label = $label;
+        $this->badges = [];
         $this->isWithinRange = $isWithinRange;
         $this->isToday = $isToday;
         $this->isWeekend = $isWeekend;
@@ -83,6 +86,7 @@ class CalendarDay implements CalendarDayInterface
         return [
             'weekdayColumn' => $this->weekdayColumn,
             'label' => $this->label,
+            'badges' => $this->badges,
             'isWithinRange' => $this->isWithinRange ? 1 : 0,
             'isToday' => $this->isToday ? 1 : 0,
             'isWeekend' => $this->isWeekend ? 1 : 0,
@@ -118,6 +122,47 @@ class CalendarDay implements CalendarDayInterface
     {
         $events = array_filter($this->eventsSingleDay(), fn($e): bool => !is_null($e['endTime']));
         $lastEvent = end($events);
-        return $lastEvent ?  (intval($lastEvent['startHour']) * 60 + intval($lastEvent['durationInMinutes'])) : $this->closingHour * 60;
+        return $lastEvent ? (intval($lastEvent['startHour']) * 60 + intval($lastEvent['durationInMinutes'])) : $this->closingHour * 60;
+    }
+    
+    public function badges(array $v = null) : array
+    {
+        if(!is_null($v)) 
+        {
+            $this->badges = $v;
+        }
+        
+        return $this->badges;
+    }
+    
+    public function addBadge(string $v) : self
+    {
+        return $this->addBadges($v);
+    }
+    
+    public function addBadges(string ...$v) : self
+    {
+        foreach($v as $badge)
+        {
+            $this->badges[] = $badge;            
+        }
+        
+        return $this;
+    }
+    
+    public function removeBadge(string $v) : self
+    {
+        return $this->removeBadges($v);
+    }
+    
+    public function removeBadges(string ...$v) : self
+    {
+        foreach($v as $badge)
+        {
+            $this->badges = array_filter($this->badges, function($b) use ($badge) {
+                return $b != $badge;
+            });
+        }
+        return $this;
     }
 }

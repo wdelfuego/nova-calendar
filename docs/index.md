@@ -1,42 +1,18 @@
-<h1 align="center">Event calendar for Laravel Nova 4</h1>
-
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
-
-![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
-
-# Installation
-```sh
-composer require wdelfuego/nova-calendar
-```
-
-# Support & Documentation
-
-You can find the documentation, including lots of examples, [here](https://wdelfuego.github.io/nova-calendar).
-
+# Support
 For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
-# What can it do?
-This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
-The following features are supported:
+## Documentation
 
-- Automatically display Nova resources on a monthly calendar view
-- Mix multiple types of Nova resources on the same calendar
-- Display events that are not related to Nova resources
-- Add badges to events to indicate status or attract attention
-- Customize visual style and content of each individual event
-- Laravel policies are respected to exclude events from the calendar automatically
-- Allows end users to navigate through the calendar with hotkeys
-- Allows end users to navigate to the resources' Detail or Edit views by clicking events
+- [Installation](/nova-calendar/installation.html)
+- [Usage](/nova-calendar/usage.html)
+- Customization
+  - [Customizing events](/nova-calendar/customizing-events.html)
+  - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
+  - [Hiding events from the calendar](/nova-calendar/hiding-events.html)
+- [Release log](#release-log)
+- [License](#license)
 
-# What can it not do (yet)?
-The following features are not (yet) supported:
-
-- Integration with external calendar services
-- Creating new events directly from the calendar view
-- Drag and drop to change event dates
-
-Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
 ## v1.4
