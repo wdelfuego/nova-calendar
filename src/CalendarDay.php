@@ -52,20 +52,12 @@ class CalendarDay implements CalendarDayInterface
     protected $isToday;
     protected $isWeekend;
     protected $events;
-    private $openingHour = 0;
-    private $closingHour = 0;
-    private $timeslotInterval = 0;
-    protected $layout;
+    private $openingHour;
+    private $closingHour;
+    private $timelineInterval;
+    private $timeline;
     
-    public function __construct(
-        Carbon $date,
-        int $weekdayColumn,
-        string $label = '',
-        bool $isWithinRange = true,
-        bool $isToday = false,
-        bool $isWeekend = false,
-        array $events = [],
-    )
+    public function __construct(Carbon $date, int $weekdayColumn, string $label = '', bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
     {
         $this->date = $date;
         $this->weekdayColumn = $weekdayColumn;
@@ -76,25 +68,19 @@ class CalendarDay implements CalendarDayInterface
         $this->events = $events;
     }
     
-    public function withEvents(array $events) : self
+    public function withEvents(array $events, int $openingHour = 8, int $closingHour = 20, int $timelineInterval = 30, array $timeline = []) : self
     {
         $this->events = $events;
-        return $this;
-    }
-
-    public function withEventsAndLayout(array $events, array $layout): self
-    {
-        $this->events = $events;
-        $this->layout = $layout;
-        $this->openingHour = $layout['openingHour'];
-        $this->closingHour = $layout['closingHour'];
-        $this->timeslotInterval = $layout['timeslotInterval'];
+        $this->openingHour = $openingHour;
+        $this->closingHour = $closingHour;
+        $this->timelineInterval = $timelineInterval;
+        $this->timeline = $timeline;
         return $this;
     }
 
     public function toArray() : array
     {
-        $out = [
+        return [
             'weekdayColumn' => $this->weekdayColumn,
             'label' => $this->label,
             'isWithinRange' => $this->isWithinRange ? 1 : 0,
@@ -102,18 +88,13 @@ class CalendarDay implements CalendarDayInterface
             'isWeekend' => $this->isWeekend ? 1 : 0,
             'openingHour' => $this->openingHour,
             'closingHour' => $this->closingHour,
-            'interval' => $this->timeslotInterval,
+            'timelineInterval' => $this->timelineInterval,
+            'timeline' => $this->timeline,
+            'earliestEvent' => $this->earliestEventStart(),
+            'latestEvent' => $this->latestEventEnd(),
             'eventsSingleDay' => $this->eventsSingleDay(),
             'eventsMultiDay' => $this->eventsMultiDay(),
         ];
-
-        $layout = $this->layout 
-            ? ['earliestEvent' => $this->earliestEventStart(),
-                'latestEvent' => $this->latestEventEnd(),
-                'timeslots' => $this->timeslots()] 
-            : [];
-        
-        return array_merge($out, $layout);
     }
     
     private function eventsSingleDay() : array
@@ -135,35 +116,8 @@ class CalendarDay implements CalendarDayInterface
 
     private function latestEventEnd(): int
     {
-        $events = $this->eventsSingleDay();
+        $events = array_filter($this->eventsSingleDay(), fn($e): bool => !is_null($e['endTime']));
         $lastEvent = end($events);
-        return $lastEvent ?  (intval($lastEvent['startHour']) + intval($lastEvent['durationInMinutes'])) * 60 : $this->closingHour * 60;
-    }
-
-    private function timeslots(): array
-    {
-        $openingMinute = $this->openingHour * 60;
-        $closingMinute = $this->closingHour * 60;
-
-        $timeCursor = $this->date->copy();
-        $end = $timeCursor->copy()->addDay()->subSecond();
-
-        $out = [];
-        while ($timeCursor->lessThanOrEqualTo($end)) {
-            $h = $timeCursor->hour;
-            $m = $timeCursor->minute;
-            $mm = $h * 60 + $m;
-            $hm = $timeCursor->format('G:i');
-            $out[] = [
-                'hour' => $h,
-                'minute' => $m,
-                'hour_minute' => $hm,
-                'is_open' => (($openingMinute <= $mm) && ($mm <= $closingMinute)),
-            ];
-
-            $timeCursor->addMinutes($this->timeslotInterval);
-        }
-
-        return $out;
+        return $lastEvent ?  (intval($lastEvent['startHour']) * 60 + intval($lastEvent['durationInMinutes'])) : $this->closingHour * 60;
     }
 }

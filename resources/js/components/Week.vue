@@ -38,32 +38,26 @@
 
         <div class="nova-calendar noselect">
 
-          <div class="nc-header">
-            <div class="hour border-gray-200 dark:border-gray-900 dark:text-gray-300"></div>
-            <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
-          </div>
-
-          <div class="nc-content">
-
-            <!-- week wrapper -->
             <div class="week">
-            
-              <!-- a cell per day, background -->
 
+              <template v-for="(column, index) in $data.columns">
+                <div class="nc-header border-gray-200 dark:border-gray-900 dark:text-gray-300" :class="['nc-col-'+(index+1)]">
+                    <span>{{ column }}</span>
+                </div>
+              </template>     
+            
+              <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800 nc-col-0" style="grid-row: 2 / 3;">{{ __('multi-day') }}</div>
+
+              <!-- col with events -->
               <template v-for="day in $data.weekData">
-                <div class="day multi dark:bg-gray-800 dark:border-gray-800 withinRange" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
+
+                <!-- multi-day background -->
+                <div class="day multi dark:border-gray-800 withinRange" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
-              </template>
-              
-              <!-- events, overlaid -->
-              <div class="week-events multi">
-                
-                <!-- multi day events for all days first -->
-                <div class="day single-day hour-label dark:bg-gray-900 dark:border-gray-800 withinRange nc-col-0">
-                  {{ __('multi-day') }}
-                </div>
-                <template v-for="day in $data.weekData">
+
+                <!-- multi-day events -->
+                <div class="week-events multi">
                   <template v-for="event in day.eventsMultiDay">
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
@@ -78,61 +72,58 @@
                       </div>
                     </div>
                   </template>
-                </template>
-                
-              </div>
-
+                </div>
+              
+              </template>
             </div>
 
-            <div class="week" v-for="slot in $data.timeslots">
-            
-              <!-- a cell per day, background -->
-              <div class="day single-day hour-label dark:bg-gray-900 dark:border-gray-800 withinRange nc-col-0">
-                {{ slot.hour_minute }}
-              </div>
-              <template v-for="day in $data.weekData">
-                <div class="day single-day dark:bg-gray-900 dark:border-gray-800" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange' : slot.is_open, 'today': day.isToday }"></div>
+            <!-- row with single-day events -->  
+            <div class="week" :style="['grid-template-rows: repeat('+this.gridRows+', 10px);']">
+
+              <!-- col with timeline labels -->
+              <template v-for="slot in $data.timeline">
+                <template v-if="slotIsShown(slot.hour, slot.minute)">
+                  <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" 
+                    :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.layout.timelineInterval))+';']">{{ slot.hour_minute }}</div>
+                </template>
               </template>
 
-              
+              <!-- col with single-day events -->
+              <template v-for="day in $data.weekData">
 
-            </div>
-
-            <div class="week">
-            
-              <!-- events, overlaid -->
-              <div class="week-events">
-                
-                <!-- then all single day events -->
-                <template v-for="day in $data.weekData">
-                  <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
-                    <template v-for="event in day.eventsSingleDay">
-                      <div :class="['nc-event']" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
-                        <div class="name noscrollbar">{{ event.name }}</div>
-                        <div class="badges">
-                          <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
-                        </div>
-                        <div class="content noscrollbar">
-                          <template v-if="event.options.displayTime">
-                            <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
-                            <span class="time" v-else>{{ event.startTime }}</span>
-                          </template>
-                          <span class="notes">{{ event.notes }}</span>
-                        </div>
-                      </div>
-                    </template>
-                  </div>
+                <template v-for="slot in day.timeline">
+                  <template v-if="slotIsShown(slot.hour, slot.minute)">
+                    <div class="slot border dark:border-gray-800 dark:bg-gray-900" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': slot.is_open}" :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.layout.timelineInterval))+';']"></div>
+                  </template>
                 </template>
-                
-              </div>
 
+                <div id="hour-events-container" :class="['nc-col-'+day.weekdayColumn]" :style="['grid-row: 1 / span '+this.gridRows+';', 'display: grid;', 'grid-template-rows: repeat('+this.gridRows+', 10px);']">
+                  <template v-for="event in day.eventsSingleDay">
+                    <div :class="['nc-event']" 
+                      @click="open(event.url)" 
+                      :style="[
+                        this.stylesForEvent(event), 
+                        'grid-row-start: '+rowForTime(event.startHour, event.startMinute)+';', 
+                        'grid-row-end: '+rowForTime(event.startHour, (event.startMinute + event.durationInMinutes))+';'
+                        ]" 
+                      v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
+                      <div class="name noscrollbar">{{ event.name }}</div>
+                      <div class="badges">
+                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                      </div>
+                      <div class="content noscrollbar">
+                        <template v-if="event.options.displayTime">
+                          <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
+                          <span class="time" v-else>{{ event.startTime }}</span>
+                        </template>
+                        <span class="notes">{{ event.notes }}</span>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </template>
             </div>
-            
-           
-          </div>
-
         </div>
-
       </Card>
     </div>
     
@@ -176,9 +167,10 @@ export default {
             vue.week = response.data.week;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
+            vue.layout = response.data.layout;
             vue.weekData = response.data.week_data;
             vue.styles = response.data.styles;
-            vue.timeslots = response.data.timeslots;
+            vue.timeline = response.data.timeline;
         });
     },
     
@@ -203,6 +195,15 @@ export default {
       } else {
         return this.styles.default;
       }
+    },
+
+    rowForTime(hour, minute) {
+      return Math.round(((hour * 60) + minute) / 10) - this.morningOffsetRows + 1;
+    },
+
+    slotIsShown(hour, minute) {
+      let slotStart = ((hour * 60) + minute);
+      return ((slotStart >= this.morningOffset) && (slotStart < this.eveningOffset));
     }
   
   },
@@ -213,12 +214,31 @@ export default {
           week: null,
           title: '',
           columns: Array(7).fill('-'),
+          layout: Array(4),
           weekData: (Array(7).fill({})),
-          timeslots: Array(),
+          timeline: Array(),
           styles: {
             default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
           },
       }
+  },
+
+    computed: {
+    morningOffset() {
+      return this.layout.openingHour * 60 - 60;
+    },
+
+    eveningOffset() {
+      return this.layout.closingHour * 60 + 60;
+    },
+
+    gridRows() {
+      return 144 - ((this.morningOffset + (1440 - this.eveningOffset)) / 10);
+    },
+
+    morningOffsetRows() {
+      return this.morningOffset / 10;
+    }
   }
 
 }

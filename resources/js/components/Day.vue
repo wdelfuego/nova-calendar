@@ -33,71 +33,75 @@
         class="flex flex-col items-center justify-center dark:bg-gray-800"
         style="min-height: 100px;min-width:800px;background-color:var(--bg-gray-800)"
       >
-
         <div class="nova-calendar">
 
           <!-- row with multi-day events -->  
-        
-            <div class="day-view">
+          <div class="day-view">
 
-              <!-- col with timeslots -->  
-              <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800">multi-day</div>
-              <div class="day-events-container">
+            <!-- col with multi-day label -->  
+            <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800">{{ __('multi-day') }}</div>
 
-                <template v-for="event in dayData.eventsMultiDay">
-                  <div class="nc-event multi withinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent }">
-                    <div class="name noscrollbar">{{ event.name }}</div>
-                    <div class="badges noscrollbar">
-                      <span v-if="event.startsEvent" class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
-                    </div>
-                    <div class="content noscrollbar">
-                      <template v-if="event.startsEvent && event.options.displayTime">
-                        <span class="time">{{ event.startTime }}</span>
-                      </template>
-                      <span v-if="event.startsEvent" class="notes">{{ event.notes }}</span>
-                    </div>
+            <!-- col with multi-day events -->  
+            <div class="day-events-container">
+
+              <template v-for="event in dayData.eventsMultiDay">
+                <div class="nc-event multi withinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent }">
+                  <div class="name noscrollbar">{{ event.name }}</div>
+                  <div class="badges noscrollbar">
+                    <span v-if="event.startsEvent" class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                   </div>
-                </template>
-              </div>
-            </div>   
-
-            <div id="hour-view" style="display: grid; grid-template-columns: 5em 1fr;" :style="['grid-template-rows: repeat('+this.gridRows+', 10px);']">
-              <template v-for="slot in dayData.timeslots">
-                <template v-if="slotIsShown(slot.hour, slot.minute)">
-                  <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" 
-                    :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.interval))+';']">{{ slot.hour_minute }}</div>
-                  <div class="slot dark:bg-gray-900" :class="{'withinRange border-b dark:border-gray-800': slot.is_open}" :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.interval))+';']"></div>
-                </template>
+                  <div class="content noscrollbar">
+                    <template v-if="event.startsEvent && event.options.displayTime">
+                      <span class="time">{{ event.startTime }}</span>
+                    </template>
+                    <span v-if="event.startsEvent" class="notes">{{ event.notes }}</span>
+                  </div>
+                </div>
               </template>
-              
-              <div id="hour-events-container" :style="['grid-column: 2;', 'grid-row: 1 / span '+this.gridRows+';', 'display: grid;', 'grid-template-rows: repeat('+this.gridRows+', 10px);']">
-                <template v-for="event in dayData.eventsSingleDay">
-                  <div :class="['nc-event']" 
-                    @click="open(event.url)" 
-                    :style="[
-                      this.stylesForEvent(event), 
-                      'grid-row-start: '+rowForTime(event.startHour, event.startMinute)+';', 
-                      'grid-row-end: '+rowForTime(event.startHour, (event.startMinute + event.durationInMinutes))+';'
-                      ]" 
-                    v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
-                    <div class="name noscrollbar">{{ event.name }}</div>
-                    <div class="badges">
-                      <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
-                    </div>
-                    <div class="content noscrollbar">
-                      <template v-if="event.options.displayTime">
-                        <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
-                        <span class="time" v-else>{{ event.startTime }}</span>
-                      </template>
-                      <span class="notes">{{ event.notes }}</span>
-                    </div>
+            </div>
+          </div>   
+
+          <!-- row with single-day events -->  
+          <div class="hour-view" style="display: grid; grid-template-columns: 4em 1fr;" :style="['grid-template-rows: repeat('+this.gridRows+', 10px);']">
+
+            <!-- col with timeline labels -->
+            <template v-for="slot in dayData.timeline">
+              <template v-if="slotIsShown(slot.hour, slot.minute)">
+                <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" 
+                  :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']">{{ slot.hour_minute }}</div>
+                <div class="slot dark:bg-gray-900 nc-col-1" :class="{'withinRange border-b dark:border-gray-800': slot.is_open}" :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']"></div>
+              </template>
+            </template>
+
+            <!-- col with single-day events -->
+            <div id="hour-events-container" :style="['grid-column: 2;', 'grid-row: 1 / span '+this.gridRows+';', 'display: grid;', 'grid-template-rows: repeat('+this.gridRows+', 10px);']">
+              <template v-for="event in dayData.eventsSingleDay">
+                <div :class="['nc-event']" 
+                  @click="open(event.url)" 
+                  :style="[
+                    this.stylesForEvent(event), 
+                    'grid-row-start: '+rowForTime(event.startHour, event.startMinute)+';', 
+                    'grid-row-end: '+rowForTime(event.startHour, (event.startMinute + event.durationInMinutes))+';'
+                    ]" 
+                  v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
+                  <div class="name noscrollbar">{{ event.name }}</div>
+                  <div class="badges">
+                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                   </div>
-                </template>
-              </div>
+                  <div class="content noscrollbar">
+                    <template v-if="event.options.displayTime">
+                      <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
+                      <span class="time" v-else>{{ event.startTime }}</span>
+                    </template>
+                    <span class="notes">{{ event.notes }}</span>
+                  </div>
+                </div>
+              </template>
             </div>
 
+          </div>
+
         </div>         
-        
       </Card>
     </div>
   </div>
@@ -175,7 +179,7 @@ export default {
 
     slotIsShown(hour, minute) {
       let slotStart = ((hour * 60) + minute);
-      return ((slotStart >= this.morningOffset) && (slotStart <= this.eveningOffset));
+      return ((slotStart >= this.morningOffset) && (slotStart < this.eveningOffset));
     }
 
   },
@@ -200,7 +204,7 @@ export default {
     },
 
     eveningOffset() {
-      return Math.min((this.dayData.closingHour * 60), this.dayData.latestEvent) + 60;
+      return Math.max((this.dayData.closingHour * 60), this.dayData.latestEvent) + 60;
     },
 
     gridRows() {

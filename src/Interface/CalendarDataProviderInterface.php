@@ -41,6 +41,10 @@ interface CalendarDataProviderInterface
     // A multi-dimensional array of event styles, see documentation
     public function eventStyles() : array;
 
-    // A 1D array with the business hours range: see documentation.
+    // A 1D array with the calendar configuration: see documentation.
     public function calendarDayLayout(): array;
+
+    // A 1D array with the business hours range: see documentation.
+    public function timeline(): array;
+
 }

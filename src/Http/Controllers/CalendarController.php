@@ -40,51 +40,6 @@ class CalendarController extends BaseController
         ];
     }
     
-    public function getMonthCalendarData($year = null, $month = null)
-    {
-        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
-        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
-        
-        while($month > 12) { $year += 1; $month -= 12; }
-        while($month < 1)  { $year -= 1; $month += 12; }
-        
-        $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
-        return [
-            'year' => $year,
-            'month' => $month,
-            'title' => $this->dataProvider->title(),
-            'columns' => $this->dataProvider->daysOfTheWeek(),
-            'weeks' => $this->dataProvider->calendarWeeks(),
-            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
-        ];
-    }
-
-    public function getWeekCalendarData($year = null, $week = null)
-    {
-        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
-        $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
-
-        while ($week > 52) {
-            $year += 1;
-            $week -= 52;
-        }
-        while ($week < 1) {
-            $year -= 1;
-            $week += 52;
-        }
-        
-        $this->dataProvider->setRequest($this->request)->setYearAndWeek($year, $week);
-
-        return [
-            'year' => $year,
-            'week' => $week,
-            'title' => $this->dataProvider->title(),
-            'columns' => $this->dataProvider->daysOfTheWeek(),
-            'week_data' => $this->dataProvider->calendarWeek(),
-            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
-        ];
-    }
-
     public function getDayCalendarData($year = null, $month = null, $day = null)
     {
         $year = is_null($year) || !is_numeric($year) ? now()->year : intval($year);
@@ -125,7 +80,61 @@ class CalendarController extends BaseController
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
-    
+
+    public function getWeekCalendarData($year = null, $week = null)
+    {
+        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
+        $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
+
+        while ($week > 52) {
+            $year += 1;
+            $week -= 52;
+        }
+        while ($week < 1) {
+            $year -= 1;
+            $week += 52;
+        }
+        
+        $this->dataProvider->setRequest($this->request)->setYearAndWeek($year, $week);
+
+        return [
+            'year' => $year,
+            'week' => $week,
+            'title' => $this->dataProvider->title(),
+            'columns' => $this->dataProvider->daysOfTheWeek(),
+            'layout' => $this->dataProvider->calendarDayLayout(),
+            'timeline' => $this->dataProvider->timeline(),
+            'week_data' => $this->dataProvider->calendarWeek(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
+
+    public function getMonthCalendarData($year = null, $month = null)
+    {
+        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
+        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+
+        while ($month > 12) {
+            $year += 1;
+            $month -= 12;
+        }
+        while ($month < 1) {
+            $year -= 1;
+            $month += 12;
+        }
+
+        $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
+        return [
+            'year' => $year,
+            'month' => $month,
+            'weekNumbers' => [],
+            'title' => $this->dataProvider->title(),
+            'columns' => $this->dataProvider->daysOfTheWeek(),
+            'weeks' => $this->dataProvider->calendarWeeks(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
+  
     public function defaultStyles() : array
     {
         return [
@@ -149,38 +158,6 @@ class CalendarController extends BaseController
             }
         }
 
-        return $out;
-    }
-
-    private function dailyTimeslots(): array
-    {
-        $weekCalendarLayout = $this->dataProvider->dayCalendarLayout();
-
-        $nOpeningHr = $weekCalendarLayout['openingHour'];
-        $nClosingHr = $weekCalendarLayout['closingHour'];
-        $timeslotInterval = $weekCalendarLayout['timeslotInterval'];
-
-        $openingHour = Carbon::createFromTime($nOpeningHr, 0, 0);
-        $closingHour = Carbon::createFromTime($nClosingHr, 0, 0);
-
-        $timeCursor = Carbon::createFromTime(0, 0, 0);
-        $end = $timeCursor->copy()->addDay()->subSecond();
-
-        $out = [];
-        while ($timeCursor->lessThanOrEqualTo($end)) {
-            $h = $timeCursor->hour;
-            $m = $timeCursor->minute;
-            $hm = $timeCursor->format('G:i');
-            $isOpen = ($timeCursor->isBetween($openingHour, $closingHour, true));
-            $timeCursor->addMinutes($timeslotInterval);
-
-            $out[] = [
-                'hour' => $h,
-                'minute' => $m,
-                'hour_minute' => $hm,
-                'is_open' => $isOpen
-            ];
-        }
         return $out;
     }
 }

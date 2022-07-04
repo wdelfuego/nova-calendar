@@ -38,17 +38,21 @@
 
         <div class="nova-calendar noselect">
 
-          <div class="nc-header">
-            <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
-          </div>
-
           <div class="nc-content">
+            <div class="week">
+              <template v-for="(column, index) in $data.columns">
+                <div class="nc-header border-gray-200 dark:border-gray-900 dark:text-gray-300" :class="['nc-col-'+(index+1)]">
+                    <span>{{ column }}</span>
+                </div>
+              </template>     
+            </div>
 
             <!-- week wrapper -->
             <div v-for="(week, weekIndex) in $data.weeks" class="week">
 
+              <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" style="grid-row: 2 / 3;">{{ __('week') }} {{ week.number }}</div>
               <!-- a cell per day, background -->
-              <template v-for="day in week">
+              <template v-for="day in week.data">
                 <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
@@ -58,7 +62,7 @@
               <div class="week-events">
                 
                 <!-- multi day events for all days first -->
-                <template v-for="day in week">
+                <template v-for="day in week.data">
                   <template v-for="event in day.eventsMultiDay">
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
@@ -76,7 +80,7 @@
                 </template>
                 
                 <!-- then all single day events -->
-                <template v-for="day in week">
+                <template v-for="day in week.data">
                   <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
                     <template v-for="event in day.eventsSingleDay">
                       <div :class="['nc-event']" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
