@@ -55,7 +55,7 @@
                   <div class="dayheader text-gray-400 noselect">
                     <span class="daylabel">{{ day.label }}</span>
                     <div class="badges noscrollbar">
-                      <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge">{{ badge }}</span></span>
+                      <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge" v-html="badge"></span></span>
                     </div>
                   </div>
                 </div>
