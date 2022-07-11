@@ -46,7 +46,7 @@
                 </div>
               </template>     
             
-              <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800 nc-col-0" style="grid-row: 2 / 3;">{{ __('multi-day') }}</div>
+
 
               <!-- col with events -->
               <template v-for="day in $data.weekData">
@@ -62,13 +62,13 @@
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
                       <div class="badges noscrollbar">
-                        <span v-if="event.startsEvent" class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                       </div>
                       <div class="content noscrollbar">
-                        <template v-if="event.startsEvent && event.options.displayTime">
-                          <span class="time">{{ event.startTime }}</span>
+                        <template v-if="event.options.displayTime">
+                          <span class="time">{{ event.startDate }} {{ event.startTime }}</span>
                         </template>
-                        <span v-if="event.startsEvent" class="notes">{{ event.notes }}</span>
+                        <span class="notes">{{ event.notes }}</span>
                       </div>
                     </div>
                   </template>
@@ -161,6 +161,7 @@ export default {
 
     reload() {
       let vue = this;
+
       Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/week/'+vue.year+'/'+vue.week)
         .then(response => {
             vue.year = response.data.year;
@@ -180,7 +181,9 @@ export default {
 
     stylesForEvent(event) {
       if(event.options.styles) {
+
         let out = [this.styles.default];
+
         event.options.styles.forEach(style => {
           if(this.styles[style] === undefined)
           {
@@ -192,8 +195,11 @@ export default {
           }
         })
         return out;
+
       } else {
+        
         return this.styles.default;
+
       }
     },
 
@@ -203,6 +209,7 @@ export default {
 
     slotIsShown(hour, minute) {
       let slotStart = ((hour * 60) + minute);
+
       return ((slotStart >= this.morningOffset) && (slotStart < this.eveningOffset));
     }
   

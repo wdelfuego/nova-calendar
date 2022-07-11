@@ -155,15 +155,13 @@ abstract class Calendar implements CalendarDataProviderInterface
     
     public function title() : string
     {
-        info($this->periodDuration);
-
         if ($this->periodDuration == 1) {
             return $this->startOfPeriod->translatedFormat('l, d F Y');
         }
 
         if ($this->periodDuration <= 7) 
         {
-            return __(':from until :until', ['from' => $this->startOfPeriod->translatedFormat('d F Y'), 'until' => $this->endOfPeriod->translatedFormat('d F Y')]);
+            return __(':from - :until', ['from' => $this->startOfPeriod->translatedFormat('d F Y'), 'until' => $this->endOfPeriod->translatedFormat('d F Y')]);
         }
 
         return $this->startOfPeriod->translatedFormat('F Y');
@@ -264,14 +262,15 @@ abstract class Calendar implements CalendarDataProviderInterface
     {
         $date->setTime(0,0,0);
         $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
-       
+        $isDayOnlyView = $this->periodDuration == 1;
+     
         // Get all events that start today, and if the date is the first day of the week
         // also get all multiday events that started before today and end on or after it
         // ('running multiday events')
-        $events = array_filter($this->allEvents(), function($e) use ($date, $isFirstDayColumn) {
+        $events = array_filter($this->allEvents(), function($e) use ($date, $isFirstDayColumn, $isDayOnlyView) {
             return $e->start()->isSameDay($date)
                     ||
-                    ($isFirstDayColumn
+                    (($isFirstDayColumn || $isDayOnlyView)
                         && $e->end() 
                         && $e->start()->isBefore($date) 
                         && $e->end()->isAfter($date));
