@@ -1023,7 +1023,7 @@ var _hoisted_10 = {
   "class": "daylabel"
 };
 var _hoisted_11 = {
-  "class": "week-events multi"
+  "class": "week-events"
 };
 var _hoisted_12 = ["onClick"];
 var _hoisted_13 = {
@@ -1124,8 +1124,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             );
           }), 256
           /* UNKEYED_FRAGMENT */
-          )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" col with events "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.$data.weekData, function (day) {
-            return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" multi-day background "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" multi-day background "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.$data.weekData, function (day) {
+            return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
               "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["day multi dark:border-gray-800 withinRange", ['nc-col-' + day.weekdayColumn], {
                 'today': day.isToday
               }])
@@ -1133,7 +1133,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             /* TEXT */
             )])], 2
             /* CLASS */
-            ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" multi-day events "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(day.eventsMultiDay, function (event) {
+            );
+          }), 256
+          /* UNKEYED_FRAGMENT */
+          )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" events, overlaid "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" col with events "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.$data.weekData, function (day) {
+            return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" multi-day events "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(day.eventsMultiDay, function (event) {
               return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
                 "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([['nc-event', 'multi', 'nc-col-' + day.weekdayColumn, 'span-' + event.spansDaysN], {
                   'clickable': event.url,
@@ -1162,12 +1166,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               , _hoisted_12);
             }), 256
             /* UNKEYED_FRAGMENT */
-            ))])], 64
+            ))], 64
             /* STABLE_FRAGMENT */
             );
           }), 256
           /* UNKEYED_FRAGMENT */
-          ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" row with single-day events "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+          ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" row with single-day events "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
             "class": "week",
             style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)(['grid-template-rows: repeat(' + _this.gridRows + ', 10px);'])
           }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" col with timeline labels "), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.$data.timeline, function (slot) {

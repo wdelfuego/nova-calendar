@@ -362,10 +362,6 @@ div.nova-calendar .week-events {
   grid-auto-flow: column dense;
 }
 
-div.nova-calendar .week-events.multi {
-  padding-top: 2.5em;
-}
-
 /*
  *  Events, single day
  */

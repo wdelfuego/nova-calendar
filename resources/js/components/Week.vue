@@ -39,25 +39,26 @@
         <div class="nova-calendar noselect">
 
             <div class="week">
-
               <template v-for="(column, index) in $data.columns">
                 <div class="nc-header border-gray-200 dark:border-gray-900 dark:text-gray-300" :class="['nc-col-'+(index+1)]">
                     <span>{{ column }}</span>
                 </div>
               </template>     
-            
 
-
-              <!-- col with events -->
+              <!-- multi-day background -->
               <template v-for="day in $data.weekData">
-
-                <!-- multi-day background -->
                 <div class="day multi dark:border-gray-800 withinRange" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
+              </template>
 
-                <!-- multi-day events -->
-                <div class="week-events multi">
+              <!-- events, overlaid -->
+              <div class="week-events">
+        
+                <!-- col with events -->
+                <template v-for="day in $data.weekData">
+
+                  <!-- multi-day events -->
                   <template v-for="event in day.eventsMultiDay">
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
@@ -72,9 +73,9 @@
                       </div>
                     </div>
                   </template>
-                </div>
-              
-              </template>
+                
+                </template>
+              </div>
             </div>
 
             <!-- row with single-day events -->  
