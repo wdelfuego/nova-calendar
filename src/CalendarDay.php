@@ -31,7 +31,7 @@ class CalendarDay implements CalendarDayInterface
         return new self(
             $date->copy()->setTime(0,0),
             self::weekdayColumn($date, $firstDayOfWeek),
-            $date->format('j'),
+            $date->day,
             $date->year == $year && $date->month == $month,
             $date->isToday(),
             $date->isWeekend(),
@@ -59,7 +59,7 @@ class CalendarDay implements CalendarDayInterface
     private $timelineInterval;
     private $timeline;
     
-    public function __construct(Carbon $date, int $weekdayColumn, string $label = '', bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
+    public function __construct(Carbon $date, int $weekdayColumn, int $label, bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
     {
         $this->date = $date;
         $this->weekdayColumn = $weekdayColumn;

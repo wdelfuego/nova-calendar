@@ -14,6 +14,7 @@
  
 <template>
   <LoadingView :loading="loading">
+
     <div id="nc-control">
     
       <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
@@ -31,14 +32,12 @@
     </div>
     
     <div style="width:100%;overflow:scroll">
-      <Card
-        class="flex flex-col items-center justify-center dark:bg-gray-800"
-        style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)"
-      >
+      <Card class="flex flex-col items-center justify-center dark:bg-gray-800" style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)">
 
         <div class="nova-calendar noselect">
 
           <div class="nc-content">
+
             <div class="week">
               <template v-for="(column, index) in $data.columns">
                 <div class="nc-header border-gray-200 dark:border-gray-900 dark:text-gray-300" :class="['nc-col-'+(index+1)]">
@@ -49,20 +48,27 @@
 
             <!-- week wrapper -->
             <div v-for="(week, weekIndex) in $data.weeks" class="week">
+              <div class="week-label dark:bg-gray-900 border-b dark:border-gray-800" style="grid-row: 2 / 3;">
+                <button @click="$emit('set-active-view', 'week', week.year, week.month, week.number, null)"><span class="text-xs">{{ __('W') }}{{ week.number }}</span></button>
+              </div>
 
-              <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" style="grid-row: 2 / 3;">{{ __('week') }} {{ week.number }}</div>
               <!-- a cell per day, background -->
               <template v-for="day in week.data">
                 <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
-                  <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
                 </div>
               </template>
               
               <!-- events, overlaid -->
               <div class="week-events">
-                
+
                 <!-- multi day events for all days first -->
                 <template v-for="day in week.data">
+
+                <!-- a cell per day, background -->
+                <div :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
+                  <div class="dayheader text-gray-400 noselect"><button @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button></div>
+                </div>
+                
                   <template v-for="event in day.eventsMultiDay">
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
@@ -109,15 +115,25 @@
 
       </Card>
     </div>
-    
+
   </LoadingView>
 </template>
 
 <script>
 export default {
-        
+  props: [
+    'proxyYear',
+    'proxyMonth',
+    'proxyWeek',
+    'proxyDay'
+  ],
+
   mounted() {
-    this.reset();
+    this.year = this.proxyYear,
+    this.month = this.proxyMonth,
+    this.week = this.proxyWeek,
+    this.day = this.proxyDay,
+    this.reload();
     
     Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
     Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
@@ -151,11 +167,13 @@ export default {
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;
+            vue.week = response.data.week;
+            vue.day = response.data.day;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
             vue.styles = response.data.styles;
-
+            
             vue.loading = false;
         });
     },
@@ -189,6 +207,8 @@ export default {
       return {
           year: null,
           month: null,
+          week: null,
+          day: null,
           title: '',
           loading: null,
           columns: Array(7).fill('-'),

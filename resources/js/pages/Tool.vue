@@ -25,7 +25,13 @@
             </DefaultButton>
         </div>
     </div>
-    <component :is="activeView"></component>
+    <component 
+      :is="activeView"
+      :proxyYear="this.year"
+      :proxyMonth="this.month"
+      :proxyWeek="this.week"
+      :proxyDay="this.day"
+      @set-active-view="setActiveView"></component>
   </div>
 </template>
 
@@ -40,14 +46,14 @@ export default {
     Month, Week, Day
   },
 
-  props: [
-    'tool'
-  ],
-
   data() {
     return {
       calendarViews: Array(),
       activeView: null,
+      year: null,
+      month: null,
+      week: null,
+      day: null
     }
   },
 
@@ -65,9 +71,13 @@ export default {
         });
     },
     
-    setActiveView(view) {
+    setActiveView(view, year = null, month = null, week = null, day = null) {
+      this.year = year;
+      this.month = month;
+      this.week = week;
+      this.day = day;
       this.activeView = view;
-    }
+    },
   }
 }
 </script>

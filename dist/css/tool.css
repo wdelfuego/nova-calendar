@@ -223,6 +223,15 @@ div.nova-calendar .day.single-day {
   border-top: none;
 }
 
+div.nova-calendar .week-label {
+  grid-column: 1;
+  opacity: 0.84;
+  text-align: right;
+  border: none;
+  padding-top: 0.4em;
+  padding-right: 0.6em;
+}
+
 /* TODO add striped background or something */
 div.nova-calendar .day:not(.withinRange),.slot:not(.withinRange) {
   opacity: 0.5;
@@ -244,12 +253,12 @@ div.nova-calendar .dayheader {
   padding: 0.4em;
 }
 
-div.nova-calendar .day .dayheader .daylabel {
+div.nova-calendar .dayheader .daylabel {
   font-size: 9pt;
   opacity: 0.84;
 }
 
-div.nova-calendar .day.today .dayheader .daylabel {
+div.nova-calendar .today .dayheader .daylabel {
   font-size: 10pt;
   font-weight: bold;
   opacity: 1.0;
@@ -282,7 +291,6 @@ div.nova-calendar .dayheader span.badge {
 
 div.nova-calendar .week-events {
   z-index: 2;
-  padding-top: 2.2em;
   grid-column: 1 / -1;
   grid-row: 1;
   display: grid;

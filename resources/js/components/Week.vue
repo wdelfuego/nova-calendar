@@ -48,7 +48,7 @@
               <!-- multi-day background -->
               <template v-for="day in $data.weekData">
                 <div class="day multi dark:border-gray-800 withinRange" :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
-                  <div class="dayheader text-gray-400 noselect"><span class="daylabel">{{ day.label }}</span></div>
+
                 </div>
               </template>
 
@@ -57,6 +57,12 @@
         
                 <!-- col with events -->
                 <template v-for="day in $data.weekData">
+
+                  <div :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
+                    <div class="dayheader text-gray-400 noselect">
+                      <button @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button>
+                    </div>
+                  </div>
 
                   <!-- multi-day events -->
                   <template v-for="event in day.eventsMultiDay">
@@ -76,6 +82,7 @@
                 
                 </template>
               </div>
+
             </div>
 
             <!-- row with single-day events -->  
@@ -133,9 +140,20 @@
 
 <script>
 export default {
+  
+  props: [
+    'proxyYear',
+    'proxyMonth',
+    'proxyWeek',
+    'proxyDay'
+  ],
         
   mounted() {
-    this.reset();
+    this.year = this.proxyYear,
+    this.month = this.proxyMonth,
+    this.week = this.proxyWeek,
+    this.day = this.proxyDay,
+    this.reload();
     
     Nova.addShortcut('alt+right', event => {  this.nextWeek(); });
     Nova.addShortcut('alt+left', event => {   this.prevWeek(); });
@@ -169,7 +187,9 @@ export default {
       Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/week/'+vue.year+'/'+vue.week)
         .then(response => {
             vue.year = response.data.year;
+            vue.month = response.data.month;
             vue.week = response.data.week;
+            vue.day = response.data.day;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.layout = response.data.layout;
@@ -224,7 +244,9 @@ export default {
   data () {
       return {
           year: null,
+          month: null,
           week: null,
+          day: null,
           title: '',
           loading: null,
           columns: Array(7).fill('-'),

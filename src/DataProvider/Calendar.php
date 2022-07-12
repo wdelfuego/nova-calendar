@@ -221,13 +221,20 @@ abstract class Calendar implements CalendarDataProviderInterface
 
         for ($i = 0; $i < self::N_CALENDAR_WEEKS; $i++) {
             $weekData = [];
-            $weekNumber = $dateCursor->weekOfYear;
+            $weekN = $dateCursor->weekOfYear;
+            $weekY = $dateCursor->year;
+            $weekM = $dateCursor->month;
+
             for ($j = 0; $j < 7; $j++) {
                 $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
                 $weekData[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
                 $dateCursor = $dateCursor->addDay();
             }
-            $month[] = ['number' => $weekNumber, 'data' => $weekData];
+            $month[] = [
+                'number' => $weekN,
+                'month' => $weekM,
+                'year' => $weekY,
+                'data' => $weekData];
         }
 
         return $month;

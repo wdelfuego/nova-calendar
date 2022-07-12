@@ -45,6 +45,7 @@ class CalendarController extends BaseController
         $year = is_null($year) || !is_numeric($year) ? now()->year : intval($year);
         $month = is_null($month) || !is_numeric($month) || intval($month) > 13 || intval($month) < 0 ? now()->month : intval($month);
         $day = is_null($day) || !is_numeric($day) || intval($month) > 32 || intval($month) < 0 ? now()->day : intval($day);
+        $week = Carbon::createFromDate($year, $month, $day)->weekOfYear;
 
         $monthDate = Carbon::createFromDate($year, $month, 1);
         $daysInMonth = $monthDate->daysInMonth;
@@ -73,6 +74,7 @@ class CalendarController extends BaseController
         return [
             'year' => $year,
             'month' => $month,
+            'week' => $week,
             'day' => $day,
             'day_name' => Carbon::createFromDate($year, $month, $day)->translatedFormat('l'),
             'title' => $this->dataProvider->title(),
@@ -85,6 +87,8 @@ class CalendarController extends BaseController
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
+        $month = Carbon::today()->setISODate($year, $week)->month;
+        $day = Carbon::today()->setISODate($year, $week)->day;
 
         while ($week > 52) {
             $year += 1;
@@ -100,6 +104,8 @@ class CalendarController extends BaseController
         return [
             'year' => $year,
             'week' => $week,
+            'month' => $month,
+            'day' => $day,
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),
             'layout' => $this->dataProvider->calendarDayLayout(),
@@ -113,6 +119,7 @@ class CalendarController extends BaseController
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+        $week = Carbon::createFromDate($year, $month, 1)->weekOfYear;
 
         while ($month > 12) {
             $year += 1;
@@ -127,6 +134,8 @@ class CalendarController extends BaseController
         return [
             'year' => $year,
             'month' => $month,
+            'week' => $week,
+            'day' => 1,
             'weekNumbers' => [],
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),

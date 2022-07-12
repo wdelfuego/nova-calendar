@@ -106,9 +106,19 @@
 
 <script>
 export default {
+    props: [
+    'proxyYear',
+    'proxyMonth',
+    'proxyWeek',
+    'proxyDay'
+  ],
         
   mounted() {
-    this.reset();
+    this.year = this.proxyYear,
+    this.month = this.proxyMonth,
+    this.week = this.proxyWeek,
+    this.day = this.proxyDay,
+    this.reload();
     
     Nova.addShortcut('alt+right', event => {  this.nextDay(); });
     Nova.addShortcut('alt+left', event => {   this.prevDay(); });
@@ -119,8 +129,10 @@ export default {
 
     reset() {
       this.loading = true;
-      this.day = null;
       this.year = null;
+      this.month = null,
+      this.week = null,
+      this.day = null;
       this.reload();
     },
 
@@ -142,6 +154,7 @@ export default {
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;
+            vue.week = response.data.week;
             vue.day = response.data.day;
             vue.dayName = response.data.day_name;
             vue.title = response.data.title;
@@ -190,6 +203,7 @@ export default {
     return {
         year: null,
         month: null,
+        week: null,
         day: null,
         loading: null,
         dayName: '',
