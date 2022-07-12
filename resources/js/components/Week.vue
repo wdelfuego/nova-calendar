@@ -13,7 +13,7 @@
  */
  
 <template>
-  <div>
+  <LoadingView :loading="loading">
     <div id="nc-control">
     
       <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
@@ -127,7 +127,7 @@
       </Card>
     </div>
     
-  </div>
+  </LoadingView>
 </template>
 
 <script>
@@ -144,17 +144,20 @@ export default {
   methods: {
 
     reset() {
+      this.loading = true;
       this.week = null;
       this.year = null;
       this.reload();
     },
 
     prevWeek() {
+      this.loading = true;
       this.week -= 1;
       this.reload();
     },
   
     nextWeek() {
+      this.loading = true;
       this.week += 1;
       this.reload();
     },
@@ -172,6 +175,8 @@ export default {
             vue.weekData = response.data.week_data;
             vue.styles = response.data.styles;
             vue.timeline = response.data.timeline;
+
+            vue.loading = false;
         });
     },
     
@@ -220,6 +225,7 @@ export default {
           year: null,
           week: null,
           title: '',
+          loading: null,
           columns: Array(7).fill('-'),
           layout: Array(4),
           weekData: (Array(7).fill({})),

@@ -13,7 +13,7 @@
  */
  
 <template>
-  <div>
+  <LoadingView :loading="loading">
     <div id="nc-control">
       <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
         <span>{{ $data.title }}</span>
@@ -101,7 +101,7 @@
         </div>         
       </Card>
     </div>
-  </div>
+  </LoadingView>
 </template>
 
 <script>
@@ -118,17 +118,20 @@ export default {
   methods: {
 
     reset() {
+      this.loading = true;
       this.day = null;
       this.year = null;
       this.reload();
     },
 
     prevDay() {
+      this.loading = true;
       this.day -= 1;
       this.reload();
     },
   
     nextDay() {
+      this.loading = true;
       this.day += 1;
       this.reload();
     },
@@ -144,6 +147,8 @@ export default {
             vue.title = response.data.title;
             vue.dayData = response.data.day_data;
             vue.styles = response.data.styles;
+
+            vue.loading = false;
         });
     },
     
@@ -186,6 +191,7 @@ export default {
         year: null,
         month: null,
         day: null,
+        loading: null,
         dayName: '',
         title: '',
         dayData: Array(),

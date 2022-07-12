@@ -13,7 +13,7 @@
  */
  
 <template>
-  <div>
+  <LoadingView :loading="loading">
     <div id="nc-control">
     
       <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
@@ -110,7 +110,7 @@
       </Card>
     </div>
     
-  </div>
+  </LoadingView>
 </template>
 
 <script>
@@ -127,17 +127,20 @@ export default {
   methods: {
 
     reset() {
+      this.loading = true;
       this.month = null;
       this.year = null;
       this.reload();
     },
 
     prevMonth() {
+      this.loading = true;
       this.month -= 1;
       this.reload();
     },
   
     nextMonth() {
+      this.loading = true;
       this.month += 1;
       this.reload();
     },
@@ -152,6 +155,8 @@ export default {
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
             vue.styles = response.data.styles;
+
+            vue.loading = false;
         });
     },
     
@@ -185,6 +190,7 @@ export default {
           year: null,
           month: null,
           title: '',
+          loading: null,
           columns: Array(7).fill('-'),
           weeks: Array(6).fill(Array(7).fill({})),
           styles: {
