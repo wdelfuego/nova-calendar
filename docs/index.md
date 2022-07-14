@@ -15,7 +15,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 
 # Release log
-## v1.4
+## v1.5
+- The calendar timezone can now be [customized](/nova-calendar/customizing-the-calendar.html)
+
+### v1.4
 - Badges can now be added to calendar day cells
 
 ### v1.3
