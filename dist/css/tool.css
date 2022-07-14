@@ -28,7 +28,7 @@
   --nc-highlight-border: rgba(var(--colors-primary-500), 0.4);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
-  --nc-event-height-multi-day: 2.2em;
+  --nc-event-height-multi-day: 2em;
   --nc-event-border: rgba(10, 10, 10, 0.3);
   --nc-event-border-radius: 5px;
 }
