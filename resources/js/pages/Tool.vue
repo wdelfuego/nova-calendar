@@ -31,6 +31,7 @@
       :proxyMonth="this.month"
       :proxyWeek="this.week"
       :proxyDay="this.day"
+      :calendarViews="this.calendarViews"
       @set-active-view="setActiveView"></component>
   </div>
 </template>
@@ -40,10 +41,11 @@
 import Month from '../components/Month'
 import Week from '../components/Week'
 import Day from '../components/Day'
+import Timeline from '../components/Timeline'
 
 export default {
   components: {
-    Month, Week, Day
+    Month, Week, Day, Timeline
   },
 
   data() {

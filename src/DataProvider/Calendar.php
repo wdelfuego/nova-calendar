@@ -35,7 +35,7 @@ use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 abstract class Calendar implements CalendarDataProviderInterface
 {
     const N_CALENDAR_WEEKS = 6;
-    const A_AVAILABLE_VIEWS = ['day', 'month', 'week'];
+    const A_AVAILABLE_VIEWS = ['timeline', 'day', 'month', 'week'];
     const A_CALENDAR_LAYOUT = [
         'openingHour' => 9,
         'closingHour' => 17,
