@@ -60,7 +60,8 @@
 
                   <div :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
                     <div class="dayheader text-gray-400 noselect">
-                      <button @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button>
+                      <button v-if="this.dayViewEnabled" @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button>
+                      <div v-else><span class="daylabel">{{ day.label }}</span></div>
                     </div>
                   </div>
 
@@ -145,7 +146,8 @@ export default {
     'proxyYear',
     'proxyMonth',
     'proxyWeek',
-    'proxyDay'
+    'proxyDay',
+    'calendarViews'
   ],
         
   mounted() {
@@ -259,13 +261,13 @@ export default {
       }
   },
 
-    computed: {
+  computed: {
     morningOffset() {
-      return this.layout.openingHour * 60 - 60;
+      return this.layout.openingHour * 60 - 30;
     },
 
     eveningOffset() {
-      return this.layout.closingHour * 60 + 60;
+      return this.layout.closingHour * 60 + 30;
     },
 
     gridRows() {
@@ -274,7 +276,11 @@ export default {
 
     morningOffsetRows() {
       return this.morningOffset / 10;
-    }
+    },
+
+    dayViewEnabled() {
+      return this.calendarViews.includes('day');
+    },
   }
 
 }

@@ -38,6 +38,8 @@ class Event
     
     protected $novaResource = null;
     protected $displayTime = false;
+    protected $displayTimeOnTimelineView = false;
+    protected $displayNotesOnTimelineView = false;
     protected $url = null;
     protected $styles = [];
     protected $timeFormat = 'H:i';
@@ -79,6 +81,8 @@ class Event
             'options' => [
                 'styles' => $this->styles,
                 'displayTime' => $this->displayTime ? 1 : 0,
+                'displayTimeOnTimelineView' => $this->displayTimeOnTimelineView ? 1 : 0,
+                'displayNotesOnTimelineView' => $this->displayNotesOnTimelineView ? 1 : 0,
             ],
         ];
     }
@@ -205,6 +209,18 @@ class Event
     public function displayTime(bool $v = true)
     {
         $this->displayTime = $v;
+        return $this;
+    }
+
+    public function displayTimeOnTimelineView(bool $v = true)
+    {
+        $this->displayTimeOnTimelineView = $v;
+        return $this;
+    }
+
+    public function displayNotesOnTimelineView(bool $v = true)
+    {
+        $this->displayNotesOnTimelineView = $v;
         return $this;
     }
     

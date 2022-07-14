@@ -49,7 +49,8 @@
             <!-- week wrapper -->
             <div v-for="(week, weekIndex) in $data.weeks" class="week">
               <div class="week-label dark:bg-gray-900 border-b dark:border-gray-800" style="grid-row: 2 / 3;">
-                <button @click="$emit('set-active-view', 'week', week.year, week.month, week.number, null)"><span class="text-xs">{{ __('W') }}{{ week.number }}</span></button>
+                <button v-if="this.weekViewEnabled" @click="$emit('set-active-view', 'week', week.year, week.month, week.number, null)"><span class="text-xs">{{ __('W') }}{{ week.number }}</span></button>
+                <div v-else><span class="text-xs">{{ __('W') }}{{ week.number }}</span></div>
               </div>
 
               <!-- a cell per day, background -->
@@ -66,7 +67,10 @@
 
                 <!-- a cell per day, background -->
                 <div :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
-                  <div class="dayheader text-gray-400 noselect"><button @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button></div>
+                  <div class="dayheader text-gray-400 noselect">
+                    <button v-if="this.dayViewEnabled" @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button>
+                    <div v-else><span class="daylabel">{{ day.label }}</span></div>
+                  </div>
                 </div>
                 
                   <template v-for="event in day.eventsMultiDay">
@@ -125,8 +129,25 @@ export default {
     'proxyYear',
     'proxyMonth',
     'proxyWeek',
-    'proxyDay'
+    'proxyDay',
+    'calendarViews'
   ],
+
+  data () {
+      return {
+          year: null,
+          month: null,
+          week: null,
+          day: null,
+          title: '',
+          loading: null,
+          columns: Array(7).fill('-'),
+          weeks: Array(6).fill(Array(7).fill({})),
+          styles: {
+            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
+          }
+      }
+  },
 
   mounted() {
     this.year = this.proxyYear,
@@ -203,22 +224,15 @@ export default {
   
   },
 
-  data () {
-      return {
-          year: null,
-          month: null,
-          week: null,
-          day: null,
-          title: '',
-          loading: null,
-          columns: Array(7).fill('-'),
-          weeks: Array(6).fill(Array(7).fill({})),
-          styles: {
-            default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
-          }
-      }
-  }
+  computed: {
+    dayViewEnabled() {
+      return this.calendarViews.includes('day');
+    },
 
+    weekViewEnabled() {
+      return this.calendarViews.includes('week');
+    }
+  }
 }
 </script>
 

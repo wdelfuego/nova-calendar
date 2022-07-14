@@ -36,13 +36,39 @@
         <div class="nova-calendar">
 
           <!-- row with multi-day events -->  
-          <div class="day-view">
+          <div class="timeline-view">
+           
+            <div class="header-container" :style="['grid-template-columns: repeat('+this.gridRows+', 1fr);']">
+              <!-- col with timeline labels -->
+              <template v-for="slot in dayData.timeline">
+                <template v-if="slotIsShown(slot.hour, slot.minute)">
+                  <div class="col-label dark:bg-gray-900 border-l border-r border-b dark:border-gray-800" 
+                    :style="['grid-column: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']">{{ slot.hour_minute }}</div>
+                  <div class="slot dark:bg-gray-900" :class="{'withinRange border-b dark:border-gray-800': slot.is_open}" :style="['grid-row: 2; grid-column: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']"></div>
+                </template>
+              </template>
+            </div>
 
-            <!-- col with multi-day events -->  
-            <div class="day-events-container">
+          </div>
+
+          <div class="timeline-view">
+
+            <div class="multi-events-container">
 
               <template v-for="event in dayData.eventsMultiDay">
-                <div class="nc-event multi withinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent }">
+                <div class="nc-event multi withinRange" 
+                  @click="open(event.url)" 
+                  :style="this.stylesForEvent(event)" 
+                  v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent }" 
+                  v-tooltip="{
+                    placement: 'bottom-start',
+                    distance: 10,
+                    skidding: 0,
+                    content: 
+                      event.name + ' - ' + 
+                      event.startDate + ' ' + ' - ' + event.endDate + 
+                      (event.notes ? (' - ' + event.notes) : '' )
+                  }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges noscrollbar">
                     <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
@@ -56,43 +82,71 @@
                 </div>
               </template>
             </div>
-          </div>   
 
-          <!-- row with single-day events -->  
-          <div class="hour-view" style="display: grid; grid-template-columns: 4em 1fr;" :style="['grid-template-rows: repeat('+this.gridRows+', 10px);']">
+          </div>
 
-            <!-- col with timeline labels -->
-            <template v-for="slot in dayData.timeline">
-              <template v-if="slotIsShown(slot.hour, slot.minute)">
-                <div class="hour-label dark:bg-gray-900 border-b dark:border-gray-800" 
-                  :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']">{{ slot.hour_minute }}</div>
-                <div class="slot dark:bg-gray-900 nc-col-1" :class="{'withinRange border-b dark:border-gray-800': slot.is_open}" :style="['grid-row: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']"></div>
+          <div class="timeline-view">
+
+            <div class="group-label">Młodożeniec Przemysław</div>
+
+            <div class="single-events-container" :style="['grid-template-columns: repeat('+this.gridRows+', 1fr);']">
+
+              <template v-for="slot in dayData.timeline">
+                <template v-if="slotIsShown(slot.hour, slot.minute)">
+                  <div class="slot dark:bg-gray-900" :class="{'withinRange border-b dark:border-gray-800': slot.is_open}" :style="['grid-row: 1; grid-column: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']"></div>
+                </template>
               </template>
-            </template>
 
-            <!-- col with single-day events -->
-            <div id="hour-events-container" :style="['grid-column: 2;', 'grid-row: 1 / span '+this.gridRows+';', 'display: grid;', 'grid-template-rows: repeat('+this.gridRows+', 10px);']">
-              <template v-for="event in dayData.eventsSingleDay">
-                <div :class="['nc-event']" 
+              <div class="timeline-events" :style="['grid-column: 1 / -1','grid-template-columns: repeat('+this.gridRows+', 1fr);']">
+
+                <template v-for="event in dayData.eventsSingleDay">
+                <div :class="['nc-event multi']" 
                   @click="open(event.url)" 
                   :style="[
-                    this.stylesForEvent(event), 
-                    'grid-row-start: '+rowForTime(event.startHour, event.startMinute)+';', 
-                    'grid-row-end: '+rowForTime(event.startHour, (event.startMinute + event.durationInMinutes))+';'
+                    this.stylesForEvent(event),
+                    'grid-column-start: '+rowForTime(event.startHour, event.startMinute)+';', 
+                    'grid-column-end: '+rowForTime(event.startHour, (event.startMinute + event.durationInMinutes))+';'
                     ]" 
-                  v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
+                  v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }"
+                  v-tooltip="{
+                    placement: 'bottom-start',
+                    distance: 10,
+                    skidding: 0,
+                    content: 
+                      event.name + ' - ' + 
+                      event.startTime + ' ' + (event.endTime ? (' - ' + event.endTime) : '' ) + 
+                      (event.notes ? (' - ' + event.notes) : '' )
+                  }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges">
                     <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
                   </div>
                   <div class="content noscrollbar">
-                    <template v-if="event.options.displayTime">
+                    <template v-if="event.options.displayTimeOnTimelineView">
                       <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
                       <span class="time" v-else>{{ event.startTime }}</span>
                     </template>
-                    <span class="notes">{{ event.notes }}</span>
+                    <template v-if="event.options.displayNotesOnTimelineView">
+                      <span class="notes">{{ event.notes }}</span>
+                    </template>
                   </div>
                 </div>
+              </template>
+              
+              </div>
+            </div>
+
+          </div>
+
+          <div class="timeline-view">
+
+            <div class="header-container" :style="['grid-template-columns: repeat('+this.gridRows+', 1fr);']">
+              <!-- col with timeline labels -->
+              <template v-for="slot in dayData.timeline">
+                <template v-if="slotIsShown(slot.hour, slot.minute)">
+                  <div class="col-label dark:bg-gray-900 border-l border-r dark:border-gray-800" 
+                    :style="['grid-column: '+rowForTime(slot.hour, slot.minute)+' / '+rowForTime(slot.hour, (slot.minute + this.dayData.timelineInterval))+';']">{{ slot.hour_minute }}</div>
+                </template>
               </template>
             </div>
 
@@ -106,29 +160,13 @@
 
 <script>
 export default {
-  props: [
+    props: [
     'proxyYear',
     'proxyMonth',
     'proxyWeek',
     'proxyDay',
     'calendarViews'
   ],
-
-  data () {
-    return {
-        year: null,
-        month: null,
-        week: null,
-        day: null,
-        loading: null,
-        dayName: '',
-        title: '',
-        dayData: Array(),
-        styles: {
-          default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
-        },
-    }
-  },
         
   mounted() {
     this.year = this.proxyYear,
@@ -214,6 +252,22 @@ export default {
       return ((slotStart >= this.morningOffset) && (slotStart < this.eveningOffset));
     }
 
+  },
+
+  data () {
+    return {
+        year: null,
+        month: null,
+        week: null,
+        day: null,
+        loading: null,
+        dayName: '',
+        title: '',
+        dayData: Array(),
+        styles: {
+          default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
+        },
+    }
   },
 
   computed: {
