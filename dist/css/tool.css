@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
+=======
+>>>>>>> p4
 /*
  * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
  * 
@@ -28,9 +31,15 @@
   --nc-highlight-border: rgba(var(--colors-primary-500), 0.4);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
+<<<<<<< HEAD
   --nc-event-height-multi-day: 2em;
   --nc-event-border: rgba(10, 10, 10, 0.3);
   --nc-event-border-radius: 5px;
+=======
+  --nc-event-height-multi-day: 2.2em;
+  --nc-event-border: rgba(10, 10, 10, 0.3);
+  --nc-event-border-radius: 7px;
+>>>>>>> p4
 }
 
 .nova-calendar.noselect {
@@ -54,11 +63,14 @@ cursor: default;
   scrollbar-width: none;  /* Firefox */
 }
 
+<<<<<<< HEAD
 /* Background colors that are not compiled in Nova stack */
 .bg-nc-primary-400 {
   background-color: rgb(var(--colors-primary-400));
 }
 
+=======
+>>>>>>> p4
 
 /*
  *  Controls (above calendar)
@@ -109,13 +121,23 @@ div.nova-calendar {
 }
 
 div.nova-calendar div.nc-header {
+<<<<<<< HEAD
   grid-row: 1 / 2;
+=======
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+div.nova-calendar div.nc-header div {
+>>>>>>> p4
   padding: 0.6em 0.6em 0.5em 0.6em;
   text-align: left;
   font-weight: bold;
   word-break: break-all;
 }
 
+<<<<<<< HEAD
 /*
  *  Calendar layouts
  */
@@ -170,6 +192,21 @@ div.nova-calendar .week-events .nc-col-4 { grid-column: 4 / 5; }
 div.nova-calendar .week-events .nc-col-5 { grid-column: 5 / 6; }
 div.nova-calendar .week-events .nc-col-6 { grid-column: 6 / 7; }
 div.nova-calendar .week-events .nc-col-7 { grid-column: 7 / -1; }
+=======
+div.nova-calendar .week {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+div.nova-calendar .nc-col-1 { grid-column: 1 / 2; }
+div.nova-calendar .nc-col-2 { grid-column: 2 / 3; }
+div.nova-calendar .nc-col-3 { grid-column: 3 / 4; }
+div.nova-calendar .nc-col-4 { grid-column: 4 / 5; }
+div.nova-calendar .nc-col-5 { grid-column: 5 / 6; }
+div.nova-calendar .nc-col-6 { grid-column: 6 / 7; }
+div.nova-calendar .nc-col-7 { grid-column: 7 / -1; }
+>>>>>>> p4
 
 div.nova-calendar .nc-event.multi.span-1 { grid-column-end: span 1; }
 div.nova-calendar .nc-event.multi.span-2 { grid-column-end: span 2; }
@@ -178,6 +215,7 @@ div.nova-calendar .nc-event.multi.span-4 { grid-column-end: span 4; }
 div.nova-calendar .nc-event.multi.span-5 { grid-column-end: span 5; }
 div.nova-calendar .nc-event.multi.span-6 { grid-column-end: span 6; }
 div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
+<<<<<<< HEAD
 div.nova-calendar .nc-event.multi.span-8 { grid-column-end: span 8; }
 
 /*
@@ -202,6 +240,9 @@ div.nova-calendar .day-events-container {
   display: grid;
   grid-template-rows: 1fr auto;
 }
+=======
+
+>>>>>>> p4
 
 /*
  *  Day cells
@@ -209,6 +250,7 @@ div.nova-calendar .day-events-container {
 
 div.nova-calendar .day {
   z-index: 0;
+<<<<<<< HEAD
   grid-row: 2 / 3;
   border-width: 0.5px;
   min-height: 12em;
@@ -234,6 +276,15 @@ div.nova-calendar .week-label {
 
 /* TODO add striped background or something */
 div.nova-calendar .day:not(.withinRange),.slot:not(.withinRange) {
+=======
+  grid-row: 1/-1;
+  min-height: 9em;
+  border-width: 0.5px;
+}
+
+/* TODO add striped background or something */
+div.nova-calendar .day:not(.withinRange) {
+>>>>>>> p4
   opacity: 0.5;
   background: repeating-linear-gradient(
     -45deg,
@@ -253,12 +304,20 @@ div.nova-calendar .dayheader {
   padding: 0.4em;
 }
 
+<<<<<<< HEAD
 div.nova-calendar .dayheader .daylabel {
+=======
+div.nova-calendar .day .dayheader .daylabel {
+>>>>>>> p4
   font-size: 9pt;
   opacity: 0.84;
 }
 
+<<<<<<< HEAD
 div.nova-calendar .today .dayheader .daylabel {
+=======
+div.nova-calendar .day.today .dayheader .daylabel {
+>>>>>>> p4
   font-size: 10pt;
   font-weight: bold;
   opacity: 1.0;
@@ -267,6 +326,7 @@ div.nova-calendar .today .dayheader .daylabel {
   border-radius: 100%;
 }
 
+<<<<<<< HEAD
 /*
  *  Day Badges
  */
@@ -284,6 +344,8 @@ div.nova-calendar .dayheader span.badge {
   padding: 0.25em;
 }
 
+=======
+>>>>>>> p4
 
 /*
  *  Events, general
@@ -291,6 +353,10 @@ div.nova-calendar .dayheader span.badge {
 
 div.nova-calendar .week-events {
   z-index: 2;
+<<<<<<< HEAD
+=======
+  padding-top: 2em;
+>>>>>>> p4
   grid-column: 1 / -1;
   grid-row: 1;
   display: grid;
@@ -302,6 +368,10 @@ div.nova-calendar .single-day-events {
   border: 0px #f00 solid;      
   grid-row-start: span 9000;
   min-height: 2px;
+<<<<<<< HEAD
+=======
+  margin-bottom: 1em;
+>>>>>>> p4
 }
 
 div.nova-calendar .nc-event {
@@ -310,19 +380,35 @@ div.nova-calendar .nc-event {
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
+<<<<<<< HEAD
   grid-template-rows: minmax(-webkit-min-content,-webkit-max-content) auto;
   grid-template-rows: minmax(min-content,max-content) auto;
+=======
+  grid-template-rows: auto auto;
+  align-items: center;
+>>>>>>> p4
   min-height: var(--nc-event-height-multi-day);
   margin: 0.1em 0.1em;
   padding: 0.2em;
   font-size: 10pt;
   text-align: left;
+<<<<<<< HEAD
+=======
+  border-bottom: 1px var(--nc-event-border) solid;
+>>>>>>> p4
 }
 
 div.nova-calendar .nc-event:not(.withinRange) {
   opacity: 0.6;
 }
 
+<<<<<<< HEAD
+=======
+div.nova-calendar .nc-event:hover {
+  opacity: 1.0;
+}
+
+>>>>>>> p4
 div.nova-calendar .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
   border-bottom-left-radius: var(--nc-event-border-radius);
@@ -337,6 +423,7 @@ div.nova-calendar div.nc-event.clickable {
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 /*
  *  Events, day view
  */
@@ -369,6 +456,8 @@ div.nova-calendar .week-events {
   grid-template-columns: repeat(7, 1fr);
   grid-auto-flow: column dense;
 }
+=======
+>>>>>>> p4
 
 /*
  *  Events, single day
@@ -387,11 +476,22 @@ div.nova-calendar div.nc-event div.name {
 
 div.nova-calendar div.nc-event:not(.starts) div.name {
   font-weight: normal;
+<<<<<<< HEAD
   opacity: 0.8;
 }
 
 /*
  *  Event Badges
+=======
+  font-size: 9pt;
+  opacity: 0.8;
+  padding-top: 0.1em;
+}
+
+
+/*
+ *  Badges
+>>>>>>> p4
  */
 
 div.nova-calendar div.nc-event div.badges {
@@ -454,7 +554,11 @@ div.nova-calendar div.nc-event span.notes {
 
 div.nova-calendar .nc-event.multi {
   max-height: var(--nc-event-height-multi-day);
+<<<<<<< HEAD
   align-items: center;
+=======
+  align-items: top;
+>>>>>>> p4
   overflow: hidden;
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto;
