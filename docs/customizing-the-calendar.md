@@ -4,6 +4,31 @@
 
 # Customizing the calendar
 
+### Changing the calendar timezone
+By default, calendar events are displayed in your app's timezone as specified under `timezone` in `config/app.php`.
+
+As of version 1.5, you can override this by implementing the `timezone()` method in your `CalendarDataProvider`.
+
+To hardcode the timezone:
+```php
+public function timezone(): string
+{
+    return 'Europe/Lisbon';
+}
+```
+
+To set the calendar timezone on a per-user basis: 
+```php
+public function timezone(): string
+{
+    return $this->request->user()->timezone;
+}
+```
+
+This example assumes the user has a `timezone` attribute.
+
+As you can see, you can rely on the internal `request` attribute to get to the user. 
+
 ### Adding badges to calendar day cells
 In your `CalendarDataProvider`, implement the `customizeCalendarDay()` method as follows:
 

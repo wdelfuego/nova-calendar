@@ -65,6 +65,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         
     }
     
+    public function timezone(): string
+    {
+        return config('app.timezone') ?? 'UTC';
+    }
+    
     public function startOfCalendar() : Carbon
     {
         return $this->startOfCalendar;
@@ -308,6 +313,11 @@ abstract class MonthCalendar implements MonthDataProviderInterface
             }
             
             $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
+            
+            foreach($this->allEvents as $event)
+            {
+                $event->timezone($this->timezone());
+            }
             
             return array_map(fn($e) : Event => $this->customizeEvent($e), $this->allEvents);
         }
