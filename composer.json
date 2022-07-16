@@ -9,7 +9,6 @@
         "events",
         "date"
     ],
-    "license": "Dual: AGPLv3 or free (as in beer) use, under conditions",
     "require": {
         "php": "^8.1",
         "illuminate/support": "^9.0",
