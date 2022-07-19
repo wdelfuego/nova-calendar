@@ -10,7 +10,7 @@ Events for Nova resources the current user is not authorized to see due to Larav
 All instances of a Nova resource will be shown if no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, unless you hide them manually by implementing the `exclude` method on your CalendarDataProvider.
 
 ## Hiding events from the calendar manually
-You can exclude Nova resources from the calendar by implementing the `exclude` method on your CalendarDataProvider.
+You can exclude specific instances of Nova resources from the calendar by implementing the `exclude` method on your CalendarDataProvider.
 
 For example, if you want to hide events for resources with an Eloquent model that have an `is_finished` property that is `true`, you could write:
 
