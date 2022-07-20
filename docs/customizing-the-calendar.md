@@ -1,4 +1,4 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)
 
 ---
 
@@ -86,17 +86,6 @@ public function initialize(): void
     
 ```
 
-### Changing what happens when an event is clicked
-Implement the following method in your calendar data provider to change the URL that the user is sent to when they click the event:
-
-```php
-protected function urlForResource(NovaResource $resource)
-{
-    return '/resources/' .$resource::uriKey() .'/' .$resource->id;
-}
-```
-This example shows the default behavior. If you append `/edit` to the string, users will be sent directly to the resource's Edit view, instead of to its Detail view.
-
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.
 
@@ -122,4 +111,4 @@ Any events you return here that fall outside that date range are never displayed
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)

@@ -1,9 +1,14 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)
 
 ---
 
 ## Table of Contents
 - [Customizing events](#customizing-events)
+  - [The `customizeEvent` method](#the-customizeevent-method)
+  - [Adding badges to events](#adding-badges-to-events)
+  - [Chainable customization methods](#chainable-customization-methods)
+  - [Non-chainable customization methods](#non-chainable-customization-methods)
+  - [Changing what happens when an event is clicked](#changing-what-happens-when-an-event-is-clicked)
 - [Customizing the CSS](#customizing-the-css)
   - [Customizing the default event style](#customizing-the-default-event-style)
   - [Adding custom event styles](#adding-custom-event-styles)
@@ -12,6 +17,7 @@
   
 # Customizing Events
 
+## The `customizeEvent` method
 You can customize event info (name, start time, end time, notes, badges) and customize the CSS styles applied to the event div by implementing the `customizeEvent(Event $event)` method in your calendar data provider. Every event gets passed through this method before it's delivered to the frontend. The method must return the customized event. 
 
 By default, your events get the title that the Nova resource's `title()` method returns and the start time is set to the value of the attribute specified in your data provider's `novaResources()` method. Other event fields are left empty by default but can easily be loaded from the event's associated model:
@@ -112,6 +118,18 @@ These function as simple setters when you supply an argument, and as getters whe
 - `notes(string $v = null) : string`
 - `badges(array $v = null) : array`
 - `styles(array $v = null) : array`
+
+
+## Changing what happens when an event is clicked
+Implement the following method in your calendar data provider to change the URL that the user is sent to when they click the event:
+
+```php
+protected function urlForResource(NovaResource $resource)
+{
+    return '/resources/' .$resource::uriKey() .'/' .$resource->id;
+}
+```
+This example shows the default behavior. If you append `/edit` to the string, users will be sent directly to the resource's Edit view, instead of to its Detail view.
 
 # Customizing the CSS
 You can customize the CSS that is applied to the event divs in the calendar view on a per-event basis, or on a global basis by customizing the default event style.
@@ -218,4 +236,4 @@ protected function customizeEvent(Event $event) : Event
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)

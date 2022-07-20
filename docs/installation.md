@@ -1,15 +1,23 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)
 
 ---
 
 #  Installation
 
-Start by requiring the package:
+## Requirements
+
+This package requires:
+
+- [Laravel Nova](https://nova.laravel.com) 4.2.4 or newer
+- [PHP](https://www.php.net) 8.1 or newer
+
+If your installation meets the requirements, start by requiring the package:
 
 ```sh
 composer require wdelfuego/nova-calendar
 ```
 
+## Adding the calendar to Nova
 The calendar just needs a single data provider class that supplies event data to the frontend, and for the data provider and tool to be added to your `NovaServiceProvider`:
 
 1. Create a data provider class with a name of your choice anywhere you like in your project, or run the following artisan command to create the default data provider:
@@ -92,4 +100,4 @@ That's it! Your calendar should now be up and running.
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)

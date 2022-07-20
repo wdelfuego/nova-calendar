@@ -4,12 +4,32 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 ## Documentation
 
-- [Installation](/nova-calendar/installation.html)
-- [Usage](/nova-calendar/usage.html)
+- Installation
+  - [Requirements](/nova-calendar/installation.html#requirements)
+  - [Adding the calendar to Nova](/nova-calendar/installation.html#add-the-calendar-to-nova)
+- Usage
+  - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
+  - [Clicking events](/nova-calendar/usage.html/#clicking-events)
 - Customization
   - [Customizing events](/nova-calendar/customizing-events.html)
+    - [The `customizeEvent` method](/nova-calendar/customizing-events.html#the-customizeevent-method)
+    - [Adding badges to events](/nova-calendar/customizing-events.html#adding-badges-to-events)
+    - [Chainable customization methods](/nova-calendar/customizing-events.html#chainable-customization-methods)
+    - [Non-chainable customization methods](/nova-calendar/customizing-events.html#non-chainable-customization-methods)
+    - [Changing what happens when an event is clicked](/nova-calendar/customizing-events.html#changing-what-happens-when-an-event-is-clicked)
+  - [Customizing the CSS](/nova-calendar/customizing-events.html#customizing-the-css)
+    - [Customizing the default event style](/nova-calendar/customizing-events.html#customizing-the-default-event-style)
+    - [Adding custom event styles](/nova-calendar/customizing-events.html#adding-custom-event-styles)
+    - [Adding multiple custom event styles to a single event](/nova-calendar/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
   - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
-  - [Hiding events from the calendar](/nova-calendar/hiding-events.html)
+    - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
+    - [Adding badges to calendar day cells](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
+    - [Changing the default menu icon and label](/nova-calendar/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
+    - [Changing the first day of the week](/nova-calendar/customizing-the-calendar.html#changing-the-first-day-of-the-week)
+    - [Adding events from other sources](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources)
+  - [Event visibility](/nova-calendar/event-visibility.html)
+    - [What events are shown by default?](/nova-calendar/event-visibility.html#what-events-are-shown-by-default)
+    - [Hiding individual events](/nova-calendar/event-visibility.html#hiding-individual-events)
 - [Release log](#release-log)
 - [License](#license)
 
