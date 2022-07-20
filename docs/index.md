@@ -6,10 +6,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 - Installation
   - [Requirements](/nova-calendar/installation.html#requirements)
-  - [Adding the calendar to Nova](/nova-calendar/installation.html#add-the-calendar-to-nova)
+  - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
 - Usage
   - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
-  - [Clicking events](/nova-calendar/usage.html/#clicking-events)
+  - [Clicking events](/nova-calendar/usage.html#clicking-events)
 - Customization
   - [Customizing events](/nova-calendar/customizing-events.html)
     - [The `customizeEvent` method](/nova-calendar/customizing-events.html#the-customizeevent-method)
