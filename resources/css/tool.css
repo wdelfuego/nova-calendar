@@ -144,6 +144,7 @@ div.nova-calendar div.group-label {
   padding-right: 0.5rem;
 }
 
+
 /*
  *  Calendar layouts
  */
@@ -155,6 +156,7 @@ div.nova-calendar .hour-view {
 
 div.nova-calendar .hour-view .nc-col-0 { grid-column: 1 / 2; }
 div.nova-calendar .hour-view .nc-col-1 { grid-column: 2 / -1; }
+
 
 div.nova-calendar .timeline-view {
   z-index: 0;
@@ -185,6 +187,7 @@ div.nova-calendar .timeline-view .single-events-container {
   min-height: 2em;
 }
 
+
 div.nova-calendar .day-view {
   z-index: 0;
   width: 100%;
@@ -195,6 +198,7 @@ div.nova-calendar .day-view {
 div.nova-calendar .day-view .nc-col-0 { grid-column: 1 / 2; }
 div.nova-calendar .day-view .nc-col-1 { grid-column: 2 / -1; }
 
+
 div.nova-calendar .week-view {
   z-index: 0;
   width: 100%;
@@ -204,6 +208,7 @@ div.nova-calendar .week-view {
 
 div.nova-calendar .week-view .nc-col-0 { grid-column: 1 / 2; }
 div.nova-calendar .week-view .nc-col-1 { grid-column: 2 / -1; }
+
 
 div.nova-calendar .week {
   width: 100%;
@@ -344,7 +349,6 @@ div.nova-calendar .dayheader span.badge {
 /*
  *  Events, general
  */
- 
 
 div.nova-calendar .single-day-events {
   border: 0px #f00 solid;      
@@ -385,12 +389,33 @@ div.nova-calendar div.nc-event.clickable {
 }
 
 /*
+ *  Events, single day
+ */
+
+div.nova-calendar div.nc-event div.name {
+  grid-row: 1/2;
+  grid-column: 1/2;
+  white-space: nowrap; 
+  overflow: scroll;
+  border: 0px #fff dashed;
+  font-weight: bold;
+  margin-right: 0.2em;
+  margin-left: 0.2em;
+}
+
+div.nova-calendar div.nc-event:not(.starts) div.name {
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+/*
  *  Events, day view
  */
 
 div.nova-calendar .hour-events {
   z-index: 2;
 }
+
 
 /*
  *  Events, week view
@@ -403,6 +428,7 @@ div.nova-calendar .day-events {
   display: grid;
   grid-auto-flow: column dense;
 }
+
 
 /*
  *  Events, month view
@@ -423,25 +449,6 @@ div.nova-calendar .week-events {
   grid-auto-flow: column dense;
 }
 
-/*
- *  Events, single day
- */
-
-div.nova-calendar div.nc-event div.name {
-  grid-row: 1/2;
-  grid-column: 1/2;
-  white-space: nowrap; 
-  overflow: scroll;
-  border: 0px #fff dashed;
-  font-weight: bold;
-  margin-right: 0.2em;
-  margin-left: 0.2em;
-}
-
-div.nova-calendar div.nc-event:not(.starts) div.name {
-  font-weight: normal;
-  opacity: 0.8;
-}
 
 /*
  *  Event Badges

@@ -263,11 +263,11 @@ export default {
 
   computed: {
     morningOffset() {
-      return this.layout.openingHour * 60 - 30;
+      return this.layout.openingHour * 60 - 30; /* 30 minutes margin for UI purposes */
     },
 
     eveningOffset() {
-      return this.layout.closingHour * 60 + 30;
+      return this.layout.closingHour * 60 + 30; /* 30 minutes margin for UI purposes */
     },
 
     gridRows() {

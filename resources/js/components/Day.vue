@@ -218,11 +218,11 @@ export default {
 
   computed: {
     morningOffset() {
-      return Math.min((this.dayData.openingHour * 60), this.dayData.earliestEvent) - 30;
+      return Math.min((this.dayData.openingHour * 60), this.dayData.earliestEvent) - 30; /* 30 minutes margin for UI purposes */
     },
 
     eveningOffset() {
-      return Math.max((this.dayData.closingHour * 60), this.dayData.latestEvent) + 30;
+      return Math.max((this.dayData.closingHour * 60), this.dayData.latestEvent) + 30; /* 30 minutes margin for UI purposes */
     },
 
     gridRows() {
