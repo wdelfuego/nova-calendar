@@ -211,13 +211,25 @@ class Event
         $this->displayTime = $v;
         return $this;
     }
-
+    
+    /**
+     * Sets to display time on timeline view or not. Standard displayTime mothod is not used in timeline view due to specific of this view.
+     *
+     * @param  bool $v
+     * @return self
+     */
     public function displayTimeOnTimelineView(bool $v = true)
     {
         $this->displayTimeOnTimelineView = $v;
         return $this;
     }
 
+    /**
+     * Sets to display motes on timeline view or not.
+     *
+     * @param  bool $v
+     * @return self
+     */
     public function displayNotesOnTimelineView(bool $v = true)
     {
         $this->displayNotesOnTimelineView = $v;

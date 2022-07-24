@@ -1,7 +1,7 @@
 <?php
 
 /*
- * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
+ * © Copyright 2022 · Willem Vervuurt, Studio Delfuego, Bartosz Bujak
  * 
  * You can modify, use and distribute this package under one of two licenses:
  * 1. GNU AGPLv3
@@ -35,11 +35,11 @@ use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 abstract class Calendar implements CalendarDataProviderInterface
 {
     const N_CALENDAR_WEEKS = 6;
-    const A_AVAILABLE_VIEWS = ['timeline', 'day', 'month', 'week'];
+    const A_AVAILABLE_VIEWS = ['timeline', 'day', 'month', 'week'];     // available views in Calendar
     const A_CALENDAR_LAYOUT = [
-        'openingHour' => 9,
-        'closingHour' => 17,
-        'timelineInterval' => 30
+        'openingHour' => 9,         // calendar not rendered prior this hour on timeline, day, week views unless there are Events before this hour
+        'closingHour' => 17,        // calendar not rendered after this hour on timeline, day, week views unless there are Events after this hour
+        'timelineInterval' => 30    // for UI purposes, sets granulation of timeslots
     ];
 
     protected $firstDayOfWeek;
@@ -118,8 +118,15 @@ abstract class Calendar implements CalendarDataProviderInterface
         $this->updateViewRanges();
         return $this;
     }
-    
-    public function setYearAndWeek(int $year, int $week): self
+        
+    /**
+     * Sets Year and Week for week view
+     *
+     * @param  int $year
+     * @param  int $week
+     * @return self
+     */
+    public function setYearAndWeek(int $year, int $week) : self
     {
         $this->year = $year;
         $this->month = Carbon::now()->setISODate($year, $week)->month;
@@ -129,6 +136,14 @@ abstract class Calendar implements CalendarDataProviderInterface
         return $this;
     }
 
+    /**
+     * Sets Year, MOnth and Day for Day and Timeline views
+     *
+     * @param  int $year
+     * @param  int $month
+     * @param  int $day
+     * @return self
+     */
     public function setYearAndMonthAndDay(int $year, int $month, int $day): self
     {
         $this->year = $year;
@@ -152,7 +167,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         $this->request = $request;
         return $this;
     }
-    
+        
+    /**
+     * Gets title string according to selected view 
+     *
+     * @return string
+     */
     public function title() : string
     {
         if ($this->periodDuration == 1) {
@@ -178,7 +198,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         }
         return $out;
     }
-
+    
+    /**
+     * Gets data for calendar day
+     *
+     * @return array
+     */
     public function calendarDayData(): array
     {
         $dateCursor = $this->startOfCalendar();
@@ -193,7 +218,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         )->toArray();
     }
 
-    public function calendarWeek(): array
+    /**
+     * Gets data for calendar week
+     *
+     * @return array
+     */
+    public function calendarWeekData(): array
     {
         $dateCursor = $this->startOfCalendar();
 
@@ -214,7 +244,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         return $week;
     }
 
-    public function calendarWeeks(): array
+    /**
+     * Gets data for calendar month
+     *
+     * @return array
+     */
+    public function calendarMonthData(): array
     {
         $month = [];
         $dateCursor = $this->startOfCalendar();
@@ -438,17 +473,33 @@ abstract class Calendar implements CalendarDataProviderInterface
             $this->endOfCalendar = $this->endOfPeriod->copy();
         }
     }
-
+    
+    /**
+     * Gets default available calendar Views
+     *
+     * @return array
+     */
     public function calendarViews() : array
     {
         return self::A_AVAILABLE_VIEWS;
     }
-
+    
+    /**
+     * Gets defualt calendar layout 
+     *
+     * @return array
+     */
     public function calendarDayLayout(): array
     {
         return self::A_CALENDAR_LAYOUT;
     }
-
+    
+    /**
+     * Gets default hours timeline for rendering purposes. 
+     * ToDo: add time locale support
+     *
+     * @return array
+     */
     public function timeline(): array
     {
         $openingMinute = $this->openingHour * 60;

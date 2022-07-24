@@ -1258,7 +1258,7 @@ var _hoisted_19 = {
 
 var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "group-label"
-}, "Młodożeniec Przemysław", -1
+}, null, -1
 /* HOISTED */
 );
 

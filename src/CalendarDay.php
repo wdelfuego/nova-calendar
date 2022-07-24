@@ -111,13 +111,25 @@ class CalendarDay implements CalendarDayInterface
         return array_filter($this->events, fn($e): bool => !$e['isSingleDayEvent']);
     }
 
+    /**
+     * Gets minute of startTime of first event during the day. If no first event found, opening hour is returned.
+     * It's used for rendering purposes to check at what time the day view should start. 
+     *
+     * @return int
+     */
     private function earliestEventStart(): int
     {
         $events = $this->eventsSingleDay();
         $firstEvent = reset($events);
         return $firstEvent ? intval($firstEvent['startHour']) * 60 : $this->openingHour * 60;
     }
-
+    
+    /**
+     * Gets minute of endTime of latest event during the day. If no last event found, closing hour is returned.
+     * It's used for rendering purposes to check at what time the day view should finish. 
+     *
+     * @return int
+     */
     private function latestEventEnd(): int
     {
         $events = array_filter($this->eventsSingleDay(), fn($e): bool => !is_null($e['endTime']));

@@ -19,6 +19,8 @@ namespace Wdelfuego\NovaCalendar\DataProvider;
 use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
 use Wdelfuego\NovaCalendar\NovaCalendar;
 
+/* for backward compatibility purposes */ 
+
 abstract class MonthCalendar extends Calendar implements MonthDataProviderInterface
 {   
     public function __construct(int $year = null, int $month = null)

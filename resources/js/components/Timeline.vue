@@ -87,7 +87,7 @@
 
           <div class="timeline-view">
 
-            <div class="group-label">Młodożeniec Przemysław</div>
+            <div class="group-label"></div>
 
             <div class="single-events-container" :style="['grid-template-columns: repeat('+this.gridRows+', 1fr);']">
 

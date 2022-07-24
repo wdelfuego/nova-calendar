@@ -27,10 +27,10 @@ interface CalendarDataProviderInterface
     public function daysOfTheWeek() : array;
     
     // A multi-dimensional array with all display data for all weeks in the calendar
-    public function calendarWeeks() : array;
+    public function calendarMonthData() : array;
 
     // A multi-dimensional array with all display data for 1 week in the calendar
-    public function calendarWeek(): array;
+    public function calendarWeekData(): array;
 
     // A multi-dimensional array with all display data for 1 day in the calendar
     public function calendarDayData(): array;

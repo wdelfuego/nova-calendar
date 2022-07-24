@@ -32,15 +32,28 @@ class CalendarController extends BaseController
         $this->request = $request;
         $this->dataProvider = $dataProvider;
     }
-
+    
+    /**
+     * Gets available calendar views (timeline, day, week, month). Can be customized in Calendar Data provider
+     *
+     * @return array
+     */
     public function getCalendarViews() : array
     {
         return [
             'calendar_views' => $this->sanitizeCalendarViews($this->dataProvider->calendarViews()),
         ];
     }
-    
-    public function getDayCalendarData($year = null, $month = null, $day = null)
+        
+    /**
+     * Gets calendar data for one day
+     *
+     * @param  int $year
+     * @param  int $month
+     * @param  int $day
+     * @return array
+     */
+    public function getDayCalendarData($year = null, $month = null, $day = null) : array
     {
         $year = is_null($year) || !is_numeric($year) ? now()->year : intval($year);
         $month = is_null($month) || !is_numeric($month) || intval($month) > 13 || intval($month) < 0 ? now()->month : intval($month);
@@ -83,7 +96,14 @@ class CalendarController extends BaseController
         ];
     }
 
-    public function getWeekCalendarData($year = null, $week = null)
+    /**
+     * Gets calendar data for one week
+     *
+     * @param  int $year
+     * @param  int $week
+     * @return array
+     */
+    public function getWeekCalendarData($year = null, $week = null) : array
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
@@ -110,12 +130,19 @@ class CalendarController extends BaseController
             'columns' => $this->dataProvider->daysOfTheWeek(),
             'layout' => $this->dataProvider->calendarDayLayout(),
             'timeline' => $this->dataProvider->timeline(),
-            'week_data' => $this->dataProvider->calendarWeek(),
+            'week_data' => $this->dataProvider->calendarWeekData(),
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
 
-    public function getMonthCalendarData($year = null, $month = null)
+    /**
+     * Gets calendar data for one month
+     *
+     * @param  int $year
+     * @param  int $month
+     * @return array
+     */
+    public function getMonthCalendarData($year = null, $month = null) : array
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
@@ -139,7 +166,7 @@ class CalendarController extends BaseController
             'weekNumbers' => [],
             'title' => $this->dataProvider->title(),
             'columns' => $this->dataProvider->daysOfTheWeek(),
-            'weeks' => $this->dataProvider->calendarWeeks(),
+            'weeks' => $this->dataProvider->calendarMonthData(),
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
@@ -153,7 +180,13 @@ class CalendarController extends BaseController
             ]
         ];
     }
-
+    
+    /**
+     * Sanitizes array of provided calendar views. Chcecks if view name exists in A_AVAILABLE_VIEWS constant, removes duplicates.
+     *
+     * @param  array $cv
+     * @return array
+     */
     private function sanitizeCalendarViews(array $cv): array
     {
         $out = [];
