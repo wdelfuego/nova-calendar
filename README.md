@@ -9,6 +9,11 @@
 composer require wdelfuego/nova-calendar
 ```
 
+# License summary
+Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
+Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
+Usage in Nova is not compatible with the AGPLv3 license. More details [below](#license).
+
 # Support & Documentation
 
 You can find the documentation, including lots of examples, [here](https://wdelfuego.github.io/nova-calendar).
@@ -39,7 +44,10 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.4
+## v1.5
+- The calendar timezone can now be [customized](https://wdelfuego.github.io/nova-calendar/customizing-the-calendar.html)
+
+### v1.4
 - Badges can now be added to calendar day cells
 
 ### v1.3

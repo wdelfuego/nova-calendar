@@ -60,8 +60,20 @@
 
                   <div :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'today': day.isToday }">
                     <div class="dayheader text-gray-400 noselect">
-                      <button v-if="this.dayViewEnabled" @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)"><span class="daylabel">{{ day.label }}</span></button>
-                      <div v-else><span class="daylabel">{{ day.label }}</span></div>
+                      <button v-if="this.dayViewEnabled" @click="$emit('set-active-view', 'day', this.year, this.month, this.week, day.label)">
+                        <div class="dayheader text-gray-400 noselect">
+                          <span class="daylabel">{{ day.label }}</span>
+                          <div class="badges noscrollbar">
+                            <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge">{{ badge }}</span></span>
+                          </div>
+                        </div>
+                      </button>
+                      <div v-else class="dayheader text-gray-400 noselect">
+                        <span class="daylabel">{{ day.label }}</span>
+                        <div class="badges noscrollbar">
+                          <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge">{{ badge }}</span></span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -70,7 +82,7 @@
                     <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
                       <div class="badges noscrollbar">
-                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                       </div>
                       <div class="content noscrollbar">
                         <template v-if="event.options.displayTime">
@@ -118,7 +130,7 @@
                       v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
                       <div class="badges">
-                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                        <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                       </div>
                       <div class="content noscrollbar">
                         <template v-if="event.options.displayTime">

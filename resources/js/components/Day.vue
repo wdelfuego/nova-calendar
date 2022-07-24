@@ -45,7 +45,7 @@
                 <div class="nc-event multi withinRange" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges noscrollbar">
-                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                   </div>
                   <div class="content noscrollbar">
                     <template v-if="event.options.displayTime">
@@ -83,7 +83,7 @@
                   v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges">
-                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                   </div>
                   <div class="content noscrollbar">
                     <template v-if="event.options.displayTime">

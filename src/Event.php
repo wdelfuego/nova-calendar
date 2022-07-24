@@ -29,8 +29,9 @@ class Event
             ? (new self($resource->title(), $resource->model()->$dateAttributeStart))->withResource($resource)
             : (new self($resource->title(), $resource->model()->$dateAttributeStart, $resource->model()->$dateAttributeEnd))->withResource($resource);
     }
-            
+    
     protected $name;
+    protected $timezone = null;
     protected $start;
     protected $end;
     protected $notes;
@@ -174,22 +175,6 @@ class Event
         return $this->addStyle($v);
     }
     
-    public function timeFormat(string $v = null) : string
-    {
-        if(!is_null($v))
-        {
-            $this->timeFormat = $v;
-        }
-        
-        return $this->timeFormat;
-    }
-    
-    public function withTimeFormat(string $v)
-    {
-        $this->timeFormat($v);
-        return $this;
-    }
-    
     public function url(string $v = null) : ?string
     {
         if(!is_null($v))
@@ -259,6 +244,40 @@ class Event
     public function withName(string $v) : self
     {
         $this->name($v);
+        return $this;
+    }
+    
+    public function timezone(string $v = null) : string
+    {
+        if(!is_null($v)) 
+        {
+            $this->timezone = $v;
+            $this->start = $this->start->setTimezone($v);
+            $this->end = $this->end() ? $this->end->setTimezone($v) : $this->end;
+        }
+        
+        return $this->timezone;
+    }
+    
+    public function withTimezone(string $v) : self
+    {
+        $this->timezone($v);
+        return $this;
+    }
+    
+    public function timeFormat(string $v = null) : string
+    {
+        if(!is_null($v))
+        {
+            $this->timeFormat = $v;
+        }
+        
+        return $this->timeFormat;
+    }
+    
+    public function withTimeFormat(string $v)
+    {
+        $this->timeFormat($v);
         return $this;
     }
     

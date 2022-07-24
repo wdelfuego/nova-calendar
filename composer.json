@@ -9,7 +9,10 @@
         "events",
         "date"
     ],
-    "license": "MIT",
+    "license": [
+      "AGPL-3.0-or-later",
+      "proprietary"
+    ],
     "require": {
         "php": "^8.1",
         "illuminate/support": "^9.0",

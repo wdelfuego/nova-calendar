@@ -59,7 +59,7 @@ class CalendarDay implements CalendarDayInterface
     private $timelineInterval;
     private $timeline;
     
-    public function __construct(Carbon $date, int $weekdayColumn, int $label, bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
+    public function __construct(DateTimeInterface $date, int $weekdayColumn, int $label, bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
     {
         $this->date = $date;
         $this->weekdayColumn = $weekdayColumn;

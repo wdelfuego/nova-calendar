@@ -1,8 +1,33 @@
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)
 
 ---
 
 # Customizing the calendar
+
+### Changing the calendar timezone
+By default, calendar events are displayed in your app's timezone as specified under `timezone` in `config/app.php`.
+
+As of version 1.5, you can override this by implementing the `timezone()` method in your `CalendarDataProvider`.
+
+To hardcode the timezone:
+```php
+public function timezone(): string
+{
+    return 'Europe/Lisbon';
+}
+```
+
+To set the calendar timezone on a per-user basis: 
+```php
+public function timezone(): string
+{
+    return $this->request->user()->timezone;
+}
+```
+
+This example assumes the user has a `timezone` attribute.
+
+As you can see, you can rely on the internal `request` attribute to get to the user. 
 
 ### Adding badges to calendar day cells
 In your `CalendarDataProvider`, implement the `customizeCalendarDay()` method as follows:
@@ -25,6 +50,16 @@ protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
 
 As badges, you could use any combination of short words or single letters, symbols or 
 even emoji 🤯 to make certain calendar days stand out visually.
+
+You can also use html in your badge, so you can use mark-up or include hero icons using svg tags:
+
+```php
+    // Html mark-up
+    $event->addBadge($count .'/<b>' .$total .'</b>');
+    
+    // Hero icon
+    $event->addBadge('<svg xmlns="http://www.w3.org/2000/svg" style="display:inline-block" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>');
+```
 
 ### Changing the default menu icon and label
 In your `NovaServiceProvider`, update the `tools()` method as follows:
@@ -51,17 +86,6 @@ public function initialize(): void
     
 ```
 
-### Changing what happens when an event is clicked
-Implement the following method in your calendar data provider to change the URL that the user is sent to when they click the event:
-
-```php
-protected function urlForResource(NovaResource $resource)
-{
-    return '/resources/' .$resource::uriKey() .'/' .$resource->id;
-}
-```
-This example shows the default behavior. If you append `/edit` to the string, users will be sent directly to the resource's Edit view, instead of to its Detail view.
-
 ### Adding events from other sources
 If the events you want to show don't have a related Nova resource, you can still add them to the calendar. In your calendar data provider, implement the `nonNovaEvents` method to push any kind of event data you want to the frontend.
 
@@ -87,4 +111,4 @@ Any events you return here that fall outside that date range are never displayed
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar/#support)
+[⬅️ Back to Documentation overview](/nova-calendar)

@@ -271,6 +271,7 @@ div.nova-calendar .day {
   z-index: 0;
   grid-row: 2 / 3;
   border-width: 0.5px;
+  border-color: rgba(var(--colors-gray-500), 0.15);
   min-height: 12em;
 }
 

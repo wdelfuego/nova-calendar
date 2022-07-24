@@ -71,7 +71,7 @@
                   }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges noscrollbar">
-                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                   </div>
                   <div class="content noscrollbar">
                     <template v-if="event.options.displayTime">
@@ -119,7 +119,7 @@
                   }">
                   <div class="name noscrollbar">{{ event.name }}</div>
                   <div class="badges">
-                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge">{{ badge }}</span></span>
+                    <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                   </div>
                   <div class="content noscrollbar">
                     <template v-if="event.options.displayTimeOnTimelineView">

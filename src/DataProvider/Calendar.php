@@ -86,7 +86,12 @@ abstract class Calendar implements CalendarDataProviderInterface
         $this->timelineInterval = $this->calendarDayLayout()['timelineInterval'];
         $this->timeline = $this->timeline();
     }
-    
+
+    public function timezone(): string
+    {
+        return config('app.timezone') ?? 'UTC';
+    }
+
     public function startOfCalendar() : Carbon
     {
         return $this->startOfCalendar;
@@ -230,6 +235,7 @@ abstract class Calendar implements CalendarDataProviderInterface
         $week = [];
         for ($j = 0; $j < 7; $j++) {
             $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
+            $calendarDay = $this->customizeCalendarDay($calendarDay);
             $week[] = $calendarDay->withEvents(
                 $this->eventDataForDate($dateCursor), 
                 $this->openingHour, 
@@ -262,6 +268,7 @@ abstract class Calendar implements CalendarDataProviderInterface
 
             for ($j = 0; $j < 7; $j++) {
                 $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek);
+                $calendarDay = $this->customizeCalendarDay($calendarDay);
                 $weekData[] = $calendarDay->withEvents($this->eventDataForDate($dateCursor))->toArray();
                 $dateCursor = $dateCursor->addDay();
             }
@@ -284,7 +291,12 @@ abstract class Calendar implements CalendarDataProviderInterface
     {
         return $event;
     }
-    
+
+    protected function customizeCalendarDay(CalendarDay $day): CalendarDay
+    {
+        return $day;
+    }
+
     protected function nonNovaEvents() : array
     {
         return [];
@@ -432,7 +444,11 @@ abstract class Calendar implements CalendarDataProviderInterface
             }
             
             $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
-            
+
+            foreach ($this->allEvents as $event) {
+                $event->timezone($this->timezone());
+            }
+
             return array_map(fn($e) : Event => $this->customizeEvent($e), $this->allEvents);
         }
         
