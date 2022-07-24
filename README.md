@@ -25,7 +25,7 @@ This calendar tool for Nova 4 shows existing Nova resources and, if you want, dy
 
 The following features are supported:
 
-- Automatically display Nova resources on a monthly calendar view
+- Automatically display Nova resources on a timeline, daily, weekly and monthly calendar view
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
 - Add badges to events to indicate status or attract attention
@@ -33,6 +33,7 @@ The following features are supported:
 - Laravel policies are respected to exclude events from the calendar automatically
 - Allows end users to navigate through the calendar with hotkeys
 - Allows end users to navigate to the resources' Detail or Edit views by clicking events
+- Allows end users to navigate between calendar views (monthly to weekly or daily, weekly to daily)
 
 # What can it not do (yet)?
 The following features are not (yet) supported:
@@ -44,6 +45,10 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
+
+## v1.6
+- Adds timeline, day and week views
+
 ## v1.5
 - The calendar timezone can now be [customized](https://wdelfuego.github.io/nova-calendar/customizing-the-calendar.html)
 
@@ -71,7 +76,7 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 
 # License
-Copyright © 2022 • Willem Vervuurt, Studio Delfuego
+Copyright © 2022 • Willem Vervuurt, Studio Delfuego, Bartosz Bujak
 
 This entire copyright and license notice must be included with any copy, back-up, 
 fork or otherwise modified version of this package.
