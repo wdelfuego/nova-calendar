@@ -52,4 +52,25 @@ class CalendarDataProvider extends Calendar
                 ->withNotes('these are the event notes')
         ];
     }
+
+    // Use this method to define what calendar views should be rendered and visible to the end user. 
+    // Return and array of 1 to 4 view names.
+    public function calendarViews(): array
+    {
+        return ['timeline', 'day', 'week', 'month'];
+    }
+
+    // This method lets you define what are opening and closing hours, the timeline, daily and weekly 
+    // views will be limited only to this time period, unless there are events starting before opening 
+    // hour or ending after closing hour.
+    // Timelineinterval value let's you decide what granulatity of your timeline should be. On small 
+    // screens, higher values are recommended.
+    public function calendarDayLayout(): array
+    {
+        return [
+            'openingHour' => 8,
+            'closingHour' => 20,
+            'timelineInterval' => 30
+        ];
+    }
 }
