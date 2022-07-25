@@ -1,7 +1,7 @@
 <?php
 
 /*
- * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
+ * © Copyright 2022 · Willem Vervuurt, Studio Delfuego, Bartosz Bujak
  * 
  * You can modify, use and distribute this package under one of two licenses:
  * 1. GNU AGPLv3
@@ -13,22 +13,20 @@
  *     using calendar views, but don't embed this package or a modified version
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
- 
+
 namespace Wdelfuego\NovaCalendar\DataProvider;
 
-use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
+use Illuminate\Support\Carbon;
 use Wdelfuego\NovaCalendar\NovaCalendar;
+use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
 
-/* for backward compatibility purposes */ 
+/* for backward compatibility purposes */
 
 abstract class MonthCalendar extends Calendar implements MonthDataProviderInterface
-{   
+{
     public function __construct(int $year = null, int $month = null)
     {
-        $this->firstDayOfWeek = NovaCalendar::MONDAY;
-        $this->year = $year ?? now()->year;
-        $this->month = $month ?? now()->month;
-        $this->updateViewRanges();
-        $this->initialize();
+        parent::__construct();
+        info('WARNING: change parent of your Calendar Data Provider class to Wdelfuego\NovaCalendar\DataProvider\Calendar instead of Wdelfuego\NovaCalendar\DataProvider\MonthCalendar');
     }
 }
