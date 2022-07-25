@@ -39,6 +39,8 @@ class Event
     
     protected $novaResource = null;
     protected $displayTime = false;
+    protected $displayTimeOnTimelineView = false;
+    protected $displayNotesOnTimelineView = false;
     protected $url = null;
     protected $styles = [];
     protected $timeFormat = 'H:i';
@@ -63,8 +65,12 @@ class Event
             'name' => $this->name,
             'startDate' => $this->start->format("Y-m-d"),
             'startTime' => $this->start->format($this->timeFormat),
+            'startTimestamp' => $this->start->timestamp,
+            'startHour' => $this->start->hour,
+            'startMinute' => $this->start->minute,
             'endDate' => $this->end ? $this->end->format("Y-m-d") : null,
             'endTime' => $this->end ? $this->end->format($this->timeFormat) : null,
+            'durationInMinutes' => $this->end ? $this->end->diffInMinutes($this->start) : 60,
             'isWithinRange' => $this->touchesRange($startOfRange, $endOfRange),
             'isSingleDayEvent' => $this->isSingleDayEvent() ? 1 : 0,
             'spansDaysN' => min($this->spansDaysFrom($displayDate), 7),
@@ -76,6 +82,8 @@ class Event
             'options' => [
                 'styles' => $this->styles,
                 'displayTime' => $this->displayTime ? 1 : 0,
+                'displayTimeOnTimelineView' => $this->displayTimeOnTimelineView ? 1 : 0,
+                'displayNotesOnTimelineView' => $this->displayNotesOnTimelineView ? 1 : 0,
             ],
         ];
     }
@@ -186,6 +194,30 @@ class Event
     public function displayTime(bool $v = true)
     {
         $this->displayTime = $v;
+        return $this;
+    }
+    
+    /**
+     * Sets to display time on timeline view or not. Standard displayTime mothod is not used in timeline view due to specific of this view.
+     *
+     * @param  bool $v
+     * @return self
+     */
+    public function displayTimeOnTimelineView(bool $v = true)
+    {
+        $this->displayTimeOnTimelineView = $v;
+        return $this;
+    }
+
+    /**
+     * Sets to display motes on timeline view or not.
+     *
+     * @param  bool $v
+     * @return self
+     */
+    public function displayNotesOnTimelineView(bool $v = true)
+    {
+        $this->displayNotesOnTimelineView = $v;
         return $this;
     }
     

@@ -16,10 +16,10 @@
 
 namespace Wdelfuego\NovaCalendar\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
-
+use Wdelfuego\NovaCalendar\DataProvider\Calendar;
+use Illuminate\Routing\Controller as BaseController;
 use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 
 class CalendarController extends BaseController
@@ -33,26 +33,144 @@ class CalendarController extends BaseController
         $this->dataProvider = $dataProvider;
     }
     
-    public function getMonthCalendarData($year = null, $month = null)
+    /**
+     * Gets available calendar views (timeline, day, week, month). Can be customized in Calendar Data provider
+     *
+     * @return array
+     */
+    public function getCalendarViews() : array
     {
-        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
-        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+        return [
+            'calendar_views' => $this->sanitizeCalendarViews($this->dataProvider->calendarViews()),
+        ];
+    }
         
-        while($month > 12) { $year += 1; $month -= 12; }
-        while($month < 1)  { $year -= 1; $month += 12; }
-        
-        $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
-            
+    /**
+     * Gets calendar data for one day
+     *
+     * @param  int $year
+     * @param  int $month
+     * @param  int $day
+     * @return array
+     */
+    public function getDayCalendarData($year = null, $month = null, $day = null) : array
+    {
+        $year = is_null($year) || !is_numeric($year) ? now()->year : intval($year);
+        $month = is_null($month) || !is_numeric($month) || intval($month) > 13 || intval($month) < 0 ? now()->month : intval($month);
+        $day = is_null($day) || !is_numeric($day) || intval($month) > 32 || intval($month) < 0 ? now()->day : intval($day);
+        $week = Carbon::createFromDate($year, $month, $day)->weekOfYear;
+
+        $monthDate = Carbon::createFromDate($year, $month, 1);
+        $daysInMonth = $monthDate->daysInMonth;
+
+        if ($day > $daysInMonth) {
+            $month += 1;
+            if ($month > 12) {
+                $year += 1;
+                $month -= 12;
+            }
+            $day = $day - $daysInMonth;
+        }
+
+        if ($day < 1) {
+            $month -= 1;
+            if ($month < 1) {
+                $year -= 1;
+                $month += 12;
+            }
+            $daysInPreviousMonth = $monthDate->subMonth()->daysInMonth;
+            $day = $daysInPreviousMonth - $day;
+        }
+
+        $this->dataProvider->setRequest($this->request)->setYearAndMonthAndDay($year, $month, $day);
+
         return [
             'year' => $year,
             'month' => $month,
+            'week' => $week,
+            'day' => $day,
+            'day_name' => Carbon::createFromDate($year, $month, $day)->translatedFormat('l'),
             'title' => $this->dataProvider->title(),
-            'columns' => $this->dataProvider->daysOfTheWeek(),
-            'weeks' => $this->dataProvider->calendarWeeks(),
+            'day_data' => $this->dataProvider->calendarDayData(),
             'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
         ];
     }
-    
+
+    /**
+     * Gets calendar data for one week
+     *
+     * @param  int $year
+     * @param  int $week
+     * @return array
+     */
+    public function getWeekCalendarData($year = null, $week = null) : array
+    {
+        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
+        $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
+        $month = Carbon::today()->setISODate($year, $week)->month;
+        $day = Carbon::today()->setISODate($year, $week)->day;
+
+        while ($week > 52) {
+            $year += 1;
+            $week -= 52;
+        }
+        while ($week < 1) {
+            $year -= 1;
+            $week += 52;
+        }
+        
+        $this->dataProvider->setRequest($this->request)->setYearAndWeek($year, $week);
+
+        return [
+            'year' => $year,
+            'week' => $week,
+            'month' => $month,
+            'day' => $day,
+            'title' => $this->dataProvider->title(),
+            'columns' => $this->dataProvider->daysOfTheWeek(),
+            'layout' => $this->dataProvider->calendarDayLayout(),
+            'timeline' => $this->dataProvider->timeline(),
+            'week_data' => $this->dataProvider->calendarWeekData(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
+
+    /**
+     * Gets calendar data for one month
+     *
+     * @param  int $year
+     * @param  int $month
+     * @return array
+     */
+    public function getMonthCalendarData($year = null, $month = null) : array
+    {
+        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
+        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+        $week = Carbon::createFromDate($year, $month, 1)->weekOfYear;
+
+        while ($month > 12) {
+            $year += 1;
+            $month -= 12;
+        }
+        while ($month < 1) {
+            $year -= 1;
+            $month += 12;
+        }
+
+        $this->dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
+        return [
+            'year' => $year,
+            'month' => $month,
+            'week' => $week,
+            'day' => 1,
+            'weekNumbers' => [],
+            'title' => $this->dataProvider->title(),
+            'columns' => $this->dataProvider->daysOfTheWeek(),
+            'weeks' => $this->dataProvider->calendarMonthData(),
+            'styles' => array_replace_recursive($this->defaultStyles(), $this->dataProvider->eventStyles()),
+        ];
+    }
+  
     public function defaultStyles() : array
     {
         return [
@@ -61,5 +179,27 @@ class CalendarController extends BaseController
                 'background-color' => 'rgba(var(--colors-primary-500), 0.9)',
             ]
         ];
+    }
+    
+    /**
+     * Sanitizes array of provided calendar views. Chcecks if view name exists in A_AVAILABLE_VIEWS constant, removes duplicates.
+     *
+     * @param  array $cv
+     * @return array
+     */
+    private function sanitizeCalendarViews(array $cv): array
+    {
+        $out = [];
+        if (($cv == Calendar::A_AVAILABLE_VIEWS) || empty($cv)) {
+            $out = $cv;
+        } else {
+            foreach ($cv as $view) {
+                if (in_array($view, Calendar::A_AVAILABLE_VIEWS) && !in_array($view, $out)) {
+                    $out[] = $view;
+                }
+            }
+        }
+
+        return $out;
     }
 }

@@ -31,7 +31,7 @@ class CalendarDay implements CalendarDayInterface
         return new self(
             $date->copy()->setTime(0,0),
             self::weekdayColumn($date, $firstDayOfWeek),
-            $date->format('j'),
+            $date->day,
             $date->year == $year && $date->month == $month,
             $date->isToday(),
             $date->isWeekend(),
@@ -46,7 +46,7 @@ class CalendarDay implements CalendarDayInterface
         return $mod + 1;
     }
     
-    public $start;
+    public $date;
     protected $weekdayColumn;
     protected $label;
     protected $badges;
@@ -54,18 +54,14 @@ class CalendarDay implements CalendarDayInterface
     protected $isToday;
     protected $isWeekend;
     protected $events;
+    private $openingHour;
+    private $closingHour;
+    private $timelineInterval;
+    private $timeline;
     
-    public function __construct(
-        DateTimeInterface $start,
-        int $weekdayColumn,
-        string $label = '',
-        bool $isWithinRange = true,
-        bool $isToday = false,
-        bool $isWeekend = false,
-        array $events = [], 
-    )
+    public function __construct(DateTimeInterface $date, int $weekdayColumn, int $label, bool $isWithinRange = true, bool $isToday = false, bool $isWeekend = false, array $events = [])
     {
-        $this->start = $start;
+        $this->date = $date;
         $this->weekdayColumn = $weekdayColumn;
         $this->label = $label;
         $this->badges = [];
@@ -75,12 +71,16 @@ class CalendarDay implements CalendarDayInterface
         $this->events = $events;
     }
     
-    public function withEvents(array $events) : self
+    public function withEvents(array $events, int $openingHour = 9, int $closingHour = 17, int $timelineInterval = 30, array $timeline = []) : self
     {
         $this->events = $events;
+        $this->openingHour = $openingHour;
+        $this->closingHour = $closingHour;
+        $this->timelineInterval = $timelineInterval;
+        $this->timeline = $timeline;
         return $this;
     }
-    
+
     public function toArray() : array
     {
         return [
@@ -90,6 +90,12 @@ class CalendarDay implements CalendarDayInterface
             'isWithinRange' => $this->isWithinRange ? 1 : 0,
             'isToday' => $this->isToday ? 1 : 0,
             'isWeekend' => $this->isWeekend ? 1 : 0,
+            'openingHour' => $this->openingHour,
+            'closingHour' => $this->closingHour,
+            'timelineInterval' => $this->timelineInterval,
+            'timeline' => $this->timeline,
+            'earliestEvent' => $this->earliestEventStart(),
+            'latestEvent' => $this->latestEventEnd(),
             'eventsSingleDay' => $this->eventsSingleDay(),
             'eventsMultiDay' => $this->eventsMultiDay(),
         ];
@@ -102,8 +108,33 @@ class CalendarDay implements CalendarDayInterface
     
     private function eventsMultiDay() : array
     {
-        
         return array_filter($this->events, fn($e): bool => !$e['isSingleDayEvent']);
+    }
+
+    /**
+     * Gets minute of startTime of first event during the day. If no first event found, opening hour is returned.
+     * It's used for rendering purposes to check at what time the day view should start. 
+     *
+     * @return int
+     */
+    private function earliestEventStart(): int
+    {
+        $events = $this->eventsSingleDay();
+        $firstEvent = reset($events);
+        return $firstEvent ? intval($firstEvent['startHour']) * 60 : $this->openingHour * 60;
+    }
+    
+    /**
+     * Gets minute of endTime of latest event during the day. If no last event found, closing hour is returned.
+     * It's used for rendering purposes to check at what time the day view should finish. 
+     *
+     * @return int
+     */
+    private function latestEventEnd(): int
+    {
+        $events = array_filter($this->eventsSingleDay(), fn($e): bool => !is_null($e['endTime']));
+        $lastEvent = end($events);
+        return $lastEvent ? (intval($lastEvent['startHour']) * 60 + intval($lastEvent['durationInMinutes'])) : $this->closingHour * 60;
     }
     
     public function badges(array $v = null) : array
