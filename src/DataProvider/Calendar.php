@@ -59,10 +59,10 @@ abstract class Calendar implements CalendarDataProviderInterface
 
     private $allEvents = null;
 
-    private $openingHour = null;
-    private $closingHour = null;
-    private $timelineInterval = null;
-    private $timeline = null;
+    private $openingHour = 9;
+    private $closingHour = 17;
+    private $timelineInterval = 30;
+    private $timeline = [];
 
     protected array $views = [];
     

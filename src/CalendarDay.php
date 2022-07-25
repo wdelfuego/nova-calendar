@@ -71,7 +71,7 @@ class CalendarDay implements CalendarDayInterface
         $this->events = $events;
     }
     
-    public function withEvents(array $events, int $openingHour = 8, int $closingHour = 20, int $timelineInterval = 30, array $timeline = []) : self
+    public function withEvents(array $events, int $openingHour, int $closingHour, int $timelineInterval, array $timeline) : self
     {
         $this->events = $events;
         $this->openingHour = $openingHour;
