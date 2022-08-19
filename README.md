@@ -9,6 +9,11 @@
 composer require wdelfuego/nova-calendar
 ```
 
+### Publishing the config file
+```sh
+php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
+```
+
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
 Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).

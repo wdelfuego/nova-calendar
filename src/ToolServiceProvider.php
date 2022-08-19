@@ -49,6 +49,10 @@ class ToolServiceProvider extends ServiceProvider
                 CreateDefaultCalendarDataProvider::class,
             ]);
         }
+
+        $this->publishes([
+            __DIR__.'/../config/nova-calendar.php' => config_path('nova-calendar.php'),
+        ], 'config');
     }
 
     /**
@@ -62,7 +66,7 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], 'wdelfuego/nova-calendar')
+        Nova::router(['nova', Authorize::class], config('nova-calendar.uri', 'wdelfuego/nova-calendar'))
             ->group(__DIR__.'/../routes/inertia.php');
 
         Route::middleware(['nova', Authorize::class])
