@@ -44,7 +44,8 @@ class NovaCalendar extends Tool
     {
         return MenuSection::make($this->menuLabel)
             ->icon($this->menuIcon)
-            ->path('/wdelfuego/nova-calendar');
+            ->path(config('nova-calendar.uri', 'wdelfuego/nova-calendar'));
+        
     }
     
     public function withMenuLabel(string $label)
