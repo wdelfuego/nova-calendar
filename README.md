@@ -9,11 +9,6 @@
 composer require wdelfuego/nova-calendar
 ```
 
-### Publishing the config file
-```sh
-php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
-```
-
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
 Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
@@ -49,7 +44,12 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.5
+## v1.6
+- The URI of the calendar tool is now configurable, thanks @kitchetof!
+- Multiple events can now be generated from a single Nova resource
+- 
+
+### v1.5
 - The calendar timezone can now be [customized](https://wdelfuego.github.io/nova-calendar/customizing-the-calendar.html)
 
 ### v1.4
@@ -74,9 +74,9 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 ### v1.0
 - Initial release with support for single-day events only
 
-
 # License
-Copyright © 2022 • Willem Vervuurt, Studio Delfuego
+Copyright © 2022 • Willem Vervuurt, Studio Delfuego, @wdelfuego
+Copyright © 2022 • Christophe Francey, @kitchetof
 
 This entire copyright and license notice must be included with any copy, back-up, 
 fork or otherwise modified version of this package.

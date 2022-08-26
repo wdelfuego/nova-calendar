@@ -2,6 +2,7 @@
 
 /*
  * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
+ * © Copyright 2022 · Christophe Francey
  * 
  * You can modify, use and distribute this package under one of two licenses:
  * 1. GNU AGPLv3

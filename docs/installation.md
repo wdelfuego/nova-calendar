@@ -77,13 +77,14 @@ The calendar just needs a single data provider class that supplies event data to
     }
     ```
 
+   The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
+
 	- This method must return an array that maps Nova resource classes to attribute names (for events that only have a starting timestamp) or arrays of attribute names (for events that have both a start and an end timestamp).
 	- Nova resources for which you specify a single attribute will be added as single-day events using the specified attribute to determine its date and time.
 	- Nova resources for which you specify an array with two attribute names will be added as single or multi-day events for which the first attribute determines the start date and time, and the second attribute determines the end date and time. 
 	- All specified attributes must be cast to a `DateTime` object by the underlying Eloquent model.
 	- If you let `novaResources()` return an empty array, the calendar will work but will not contain any events.
 
-   The `novaResources()` method is the only method that's required. You can include more types of Nova resources to be shown on the calendar by simply adding more class names and attributes.
 
 
 4. If you're using Nova's default main menu, you're already done. 
@@ -92,11 +93,29 @@ The calendar just needs a single data provider class that supplies event data to
 
     ```php
     MenuSection::make('Calendar')
-        ->path('/wdelfuego/nova-calendar')
+        ->path(config('nova-calendar.uri', 'wdelfuego/nova-calendar'))
         ->icon('calendar'),
     ````
 
 That's it! Your calendar should now be up and running.
+
+
+## Publishing the config file
+Most calendar configuration is done at runtime directly from your `CalendarDataProvider`.
+
+Some options need to be configured through a config file, such as the URI under which the tool is exposed to end users.
+
+To publish the config file to your project, run the following command:
+```sh
+php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
+```
+
+The following options are currently supported:
+- `uri` - The URI under which the calendar is available to your users. 
+
+	For example, if you set this option to `calendar` and your Nova installation is available on `domain.com/nova`, the calendar will be available on `domain.com/nova/calendar`.
+	
+    If you don't use Nova's default menu and change the URI in an existing installation, make sure to update the menu you generate in the `boot()` method of your `NovaServiceProvider` as shown under step 4 above so it will automatically respect the configured option from now on.
 
 ---
 

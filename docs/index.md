@@ -7,6 +7,7 @@ For any problems you might run into, please [open an issue](https://github.com/w
 - Installation
   - [Requirements](/nova-calendar/installation.html#requirements)
   - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
+  - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
 - Usage
   - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
   - [Clicking events](/nova-calendar/usage.html#clicking-events)
@@ -24,6 +25,7 @@ For any problems you might run into, please [open an issue](https://github.com/w
   - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
     - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
     - [Adding badges to calendar day cells](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
+    - [Changing the calendar URI](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-uri)
     - [Changing the default menu icon and label](/nova-calendar/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
     - [Changing the first day of the week](/nova-calendar/customizing-the-calendar.html#changing-the-first-day-of-the-week)
     - [Adding events from other sources](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources)
@@ -35,7 +37,9 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 
 # Release log
-## v1.5
+## v1.6
+
+### v1.5
 - The calendar timezone can now be [customized](/nova-calendar/customizing-the-calendar.html)
 
 ### v1.4
