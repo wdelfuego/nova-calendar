@@ -20,7 +20,7 @@ Before you make a pull request;
 
     Whatever the decision, it will be argumented and explained in public on GitHub so anyone can see the considerations behind it and weigh in with their opinion.
 
-For any questions, doubts or remarks you have, please create a [discussion]() on GitHub and we'll discuss your thoughts there :).
+For any questions, doubts or remarks you have, please create a [discussion](https://github.com/wdelfuego/nova-calendar/discussions) on GitHub and we'll discuss your thoughts there :).
 
 ## Running tests
 This package comes with a basic test suite that will be expanded as we run into issues. 
