@@ -34,9 +34,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
     - [Adding multiple custom event styles to a single event](/nova-calendar/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
   - [Custom event generators](/nova-calendar/custom-event-generators.html)
     - [Example: multiple calendar events from a single model](/nova-calendar/custom-event-generators.html#example-multiple-calendar-events-from-a-single-model)
+- [Contributing to this package](/nova-calendar/contributing.html)
+    - [Running the test suite](/nova-calendar/contributing.html#running-tests)
 - [Release log](#release-log)
 - [License](#license)
-
 
 # Release log
 ## v1.6
