@@ -16,9 +16,9 @@ Usage in Nova is not compatible with the AGPLv3 license. More details [below](#l
 
 # Support & Documentation
 
-You can find the documentation, including lots of examples, [here](https://wdelfuego.github.io/nova-calendar).
+For help implementing and using the calendar, first take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
 
-For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
+For any problems or doubts you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
 # What can it do?
 This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
@@ -46,8 +46,8 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 # Release log
 ## v1.6
 - The URI of the calendar tool is now configurable, thanks @kitchetof!
-- Multiple events can now be generated from a single Nova resource
-- 
+- Adds support for [custom event generators](/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
+- For developers of this package: added first set of unit tests
 
 ### v1.5
 - The calendar timezone can now be [customized](https://wdelfuego.github.io/nova-calendar/customizing-the-calendar.html)
@@ -57,7 +57,7 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 ### v1.3
 - Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
-- Calendar events for Nova resources can now be excluded from the calendar by implementing `exclude(NovaResource $resource) : bool` in your `CalendarDataProvider`
+- Calendar events for Nova resources can now be excluded from the calendar on an individual basis
 
 ### v1.2
 - Adds support for customizing non-Nova events
@@ -76,6 +76,7 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 # License
 Copyright © 2022 • Willem Vervuurt, Studio Delfuego, @wdelfuego
+
 Copyright © 2022 • Christophe Francey, @kitchetof
 
 This entire copyright and license notice must be included with any copy, back-up, 
