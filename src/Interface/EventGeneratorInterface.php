@@ -14,13 +14,11 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\EventGenerator;
+namespace Wdelfuego\NovaCalendar\Interface;
 
-class EventGeneratorCallable extends EventGenerator
+use Illuminate\Support\Carbon;
+
+interface EventGeneratorInterface
 {
-    public function generateEvents() : array
-    {
-        return [];
-    }
-    
+    public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array;
 }

@@ -177,7 +177,13 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         return '/resources/' .$resource::uriKey() .'/' .$resource->id;
     }
 
+    // Deprecated, here for BC
     protected function exclude(NovaResource $resource) : bool
+    {
+        return $this->excludeResource($resource);
+    }
+    
+    protected function excludeResource(NovaResource $resource) : bool
     {
         return false;
     }
@@ -246,12 +252,12 @@ abstract class MonthCalendar implements MonthDataProviderInterface
         foreach($this->novaResources() as $novaResourceClass => $toEventSpec)
         {
             $eventGenerator = null;
-            if(!($eventGenerator = EventGenerator::from($this, $novaResourceClass, $toEventSpec)))
+            if(!($eventGenerator = EventGenerator::from($novaResourceClass, $toEventSpec)))
             {
-                throw new \Exception("Invalid calendar event specification supplied for Nova Resource $novaResourceClass");
+                throw new \Exception("Invalid calendar event specification supplied for Nova resource $novaResourceClass");
             }
             
-            foreach($eventGenerator->generateEvents() as $event)
+            foreach($eventGenerator->generateEvents($this->startOfCalendar(), $this->endOfCalendar()) as $event)
             {
                 if($event->resource()->authorizedToView($this->request) && !$this->exclude($event->resource()))
                 {

@@ -16,22 +16,29 @@
  
 namespace Wdelfuego\NovaCalendar\EventGenerator;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
 
 use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
 use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
-use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
 use Wdelfuego\NovaCalendar\Event;
 
-class EventGeneratorMultiDay extends EventGenerator
+class MultiDay extends EventGenerator
 {
-    public function generateEvents() : array
+    public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array
     {
-        $novaResourceClass = $this->novaResourceClass;
+        $novaResourceClass = $this->novaResourceClass();
         $eloquentModelClass = $novaResourceClass::$model;
-        $dateAttributeStart = $this->toEventSpec[0];
-        $dateAttributeEnd = $this->toEventSpec[1];
+        $toEventSpec = $this->toEventSpec();
+        
+        if(!is_array($toEventSpec) || 2 != count($toEventSpec) || !is_string($toEventSpec[0]) || !is_string($toEventSpec[1]))
+        {
+            throw new \Exception("Invalid toEventSpec: expected the names of two datetime attributes that start and end the event as an array of exactly two strings");
+        }
+        
+        $dateAttributeStart = $toEventSpec[0];
+        $dateAttributeEnd = $toEventSpec[1];
         
         $afterFilter = new AfterOrOnDate('', $dateAttributeEnd);
         $beforeFilter = new BeforeOrOnDate('', $dateAttributeStart);
@@ -40,16 +47,16 @@ class EventGeneratorMultiDay extends EventGenerator
         // all models..
         $models = $eloquentModelClass::orderBy($dateAttributeStart);
         // a) that start before the end of the calendar, 
-        $models = $beforeFilter->modulateQuery($models, $this->dataProvider->endOfCalendar());
+        $models = $beforeFilter->modulateQuery($models, $rangeEnd);
         // and that..
-        $models = $models->where(function($query) use ($dateAttributeStart, $dateAttributeEnd) {
+        $models = $models->where(function($query) use ($dateAttributeStart, $dateAttributeEnd, $rangeStart, $rangeEnd) {
             //    b) EITHER don't have an end date AND start on or after the calendar start
-            $query->where(function($query) use ($dateAttributeStart, $dateAttributeEnd) {
+            $query->where(function($query) use ($dateAttributeStart, $dateAttributeEnd, $rangeStart, $rangeEnd) {
                 $query->whereNull($dateAttributeEnd)
-                      ->whereDate($dateAttributeStart, '>=', $this->dataProvider->startOfCalendar());
+                      ->whereDate($dateAttributeStart, '>=', $rangeStart);
             //    c) OR have an end date that lies on or after the start of the calendar
-            })->orWhere(function($query) use ($dateAttributeStart, $dateAttributeEnd) {
-                $query->whereDate($dateAttributeEnd, '>=', $this->dataProvider->startOfCalendar());
+            })->orWhere(function($query) use ($dateAttributeStart, $dateAttributeEnd, $rangeStart, $rangeEnd) {
+                $query->whereDate($dateAttributeEnd, '>=', $rangeStart);
             });
         });
 
@@ -60,10 +67,5 @@ class EventGeneratorMultiDay extends EventGenerator
         }
 
         return $out;
-    }
-    
-    protected function resourceToEvent(NovaResource $resource, string $dateAttributeStart, string $dateAttributeEnd) : Event
-    {
-        return Event::fromResource($resource, $dateAttributeStart, $dateAttributeEnd);
     }
 }
