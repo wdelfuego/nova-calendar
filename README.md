@@ -46,7 +46,7 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 # Release log
 ## v1.6
 - The URI of the calendar tool is now configurable, thanks @kitchetof!
-- Adds support for [custom event generators](/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
+- Adds support for [custom event generators](https://wdelfuego.github.io/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
 - For developers of this package: added first set of unit tests
 
 ### v1.5

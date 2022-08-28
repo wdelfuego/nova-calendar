@@ -7,7 +7,7 @@
 ## What events are shown by default?
 Events for Nova resources the current user is not authorized to see due to Laravel policies are excluded from the calendar automatically.
 
-All instances of a Nova resource will be shown if no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, unless you hide specific instances manually by implementing the `excludeResource` method on your CalendarDataProvider.
+All instances of a Nova resource will be shown if no Laravel policy is defined for the underlying Eloquent model or if the static `authorizable` method on the Nova resource class returns `false`, unless you hide specific instances manually by implementing the `excludeResource` method on your CalendarDataProvider; see below.
 
 ## Hiding individual events
 You can exclude specific instances of Nova resources from the calendar by implementing the `excludeResource` method on your CalendarDataProvider.

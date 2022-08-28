@@ -143,3 +143,7 @@ class FlightEventGenerator extends CustomEventGenerator
     }
 }
 ```
+
+---
+
+[⬅️ Back to Documentation overview](/nova-calendar)
