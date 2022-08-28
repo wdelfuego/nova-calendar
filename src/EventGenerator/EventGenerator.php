@@ -47,7 +47,7 @@ abstract class EventGenerator implements EventGeneratorInterface
             // be the name of a datetime attribute on the underlying Eloquent model
             // that will be used as the starting date/time for a single-day event
             // Support single attributes supplied in an array, too, since it's bound to happen
-            return new EventGeneratorSingleDay($novaResourceClass, is_array($toEventSpec) ? $toEventSpec[0] : $toEventSpec);
+            return new SingleDay($novaResourceClass, is_array($toEventSpec) ? $toEventSpec[0] : $toEventSpec);
         }
         else if(is_array($toEventSpec) && count($toEventSpec) == 2 && is_string($toEventSpec[0]) && is_string($toEventSpec[1]))
         {
@@ -55,7 +55,7 @@ abstract class EventGenerator implements EventGeneratorInterface
             // be the name of two datetime attributes on the underlying Eloquent model
             // that will be used as the start and end datetime for an event
             // that can be either single or multi-day (depending on the values of each model instance)
-            return new EventGeneratorMultiDay($novaResourceClass, $toEventSpec);
+            return new MultiDay($novaResourceClass, $toEventSpec);
         }
         else if(is_object($toEventSpec) && $toEventSpec instanceof EventGeneratorInterface)
         {
