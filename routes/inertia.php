@@ -30,5 +30,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 */
 
 Route::get('/', function (NovaRequest $request) {
-    return inertia('NovaCalendar');
+    return inertia('NovaCalendar', [
+        'pageTitle' => config('nova-calendar.title', 'Nova Calendar'),
+    ]);
 });

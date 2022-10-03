@@ -20,4 +20,5 @@ return [
      * Custom URI for Nova Calendar
      */
     'uri' => 'wdelfuego/nova-calendar',
+    'title' => 'Nova Calendar',
 ];
