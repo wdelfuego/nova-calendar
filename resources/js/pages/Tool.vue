@@ -14,7 +14,7 @@
  
 <template>
   <div>
-    <Head title="Nova Calendar" />
+    <Head :title="pageTitle" />
 
     <div id="nc-control">
     
@@ -180,7 +180,15 @@ export default {
         return this.styles.default;
       }
     }
-  
+
+  },
+
+  props: {
+    pageTitle: {
+      type: String,
+      required: false,
+      default: 'Nova Calendar',
+    },
   },
 
   data () {
