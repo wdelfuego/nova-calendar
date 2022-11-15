@@ -109,16 +109,14 @@ To publish the config file to your project, run the following command:
 php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
 ```
 
-The following options are currently supported:
+The following options exist:
 - `uri` - The URI under which the calendar is available to your users. 
 
-	For example, if you set this option to `calendar` and your Nova installation is available on `domain.com/nova`, the calendar will be available on `domain.com/nova/calendar`.
-	
+    For example, if you set this option to `calendar` and your Nova installation is available on `domain.com/nova`, the calendar will be available on `domain.com/nova/calendar`.
+
     If you change the URI in an existing installation that doesn't use Nova's default main menu, make sure to update the menu you generate in the `boot()` method of your `NovaServiceProvider` to be as shown under step 4 above, so it will automatically respect the configured option from now on.
 
-- `title` - The title of the calendar page (the one that appears on the browser tab)
-
-    Default value is `"Nova Calendar"`, but you can customize it to you liking.
+- `title` - The browser window title for the calendar page; the default value is 'Nova Calendar'.
 ---
 
 [⬅️ Back to Documentation overview](/nova-calendar)
