@@ -86,7 +86,7 @@ class CalendarDay implements CalendarDayInterface
         return [
             'weekdayColumn' => $this->weekdayColumn,
             'label' => $this->label,
-            'badges' => $this->badges,
+            'badges' => $this->badgesToArray(),
             'isWithinRange' => $this->isWithinRange ? 1 : 0,
             'isToday' => $this->isToday ? 1 : 0,
             'isWeekend' => $this->isWeekend ? 1 : 0,
@@ -106,26 +106,35 @@ class CalendarDay implements CalendarDayInterface
         return array_filter($this->events, fn($e): bool => !$e['isSingleDayEvent']);
     }
     
+    private function badgesToArray() : array
+    {
+        return array_map(fn($b): array => $b->toArray(), $this->badges);
+    }
+    
     public function badges(array $v = null) : array
     {
         if(!is_null($v)) 
         {
-            $this->badges = $v;
+            foreach($v as $badge)
+            {
+                $this->addBadge($badge);
+            }
         }
         
         return $this->badges;
     }
     
-    public function addBadge(string $v) : self
+    public function addBadge(string $v, string $tooltip = null) : self
     {
-        return $this->addBadges($v);
+        $this->badges[] = new Badge($v, $tooltip);
+        return $this;
     }
     
     public function addBadges(string ...$v) : self
     {
         foreach($v as $badge)
         {
-            $this->badges[] = $badge;            
+            $this->addBadge($badge);
         }
         
         return $this;
@@ -141,7 +150,7 @@ class CalendarDay implements CalendarDayInterface
         foreach($v as $badge)
         {
             $this->badges = array_filter($this->badges, function($b) use ($badge) {
-                return $b != $badge;
+                return $b->badge != $badge;
             });
         }
         return $this;

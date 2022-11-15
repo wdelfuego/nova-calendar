@@ -29,7 +29,7 @@
       <a @click="nextMonth" class="right" href="#">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
       </a>
-            
+      
     </div>
     
     <div style="width:100%;overflow:scroll">
@@ -54,8 +54,12 @@
                 <div class="day dark:bg-gray-900 dark:border-gray-800"  :class="['nc-col-'+day.weekdayColumn]" v-bind:class="{'withinRange': day.isWithinRange, 'today': day.isToday }">
                   <div class="dayheader text-gray-400 noselect">
                     <span class="daylabel">{{ day.label }}</span>
-                    <div class="badges noscrollbar">
-                      <span class="badge-bg text-gray-200" v-for="badge in day.badges"><span class="badge" v-html="badge"></span></span>
+                    <div class="badges">
+                      <span class="badge-bg text-gray-200" v-for="badge in day.badges">
+                        <Tooltip><template #content><span v-html="badge.tooltip"></span></template>
+                          <span class="badge" v-html="badge.badge"></span>
+                        </Tooltip>
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -147,7 +147,6 @@ div.nova-calendar .day {
   border-color: rgba(var(--colors-gray-500), 0.15);
 }
 
-/* TODO add striped background or something */
 div.nova-calendar .day:not(.withinRange) {
   opacity: 0.5;
   background: repeating-linear-gradient(
@@ -207,7 +206,7 @@ div.nova-calendar .dayheader span.badge {
 
 div.nova-calendar .week-events {
   z-index: 2;
-  padding-top: 2.2em;
+  margin-top: 2.2em;
   grid-column: 1 / -1;
   grid-row: 1;
   display: grid;
