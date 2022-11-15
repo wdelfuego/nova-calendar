@@ -51,11 +51,30 @@ protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
 As badges, you could use any combination of short words or single letters, symbols or 
 even emoji 🤯 to make certain calendar days stand out visually.
 
-You can also use html in your badge, so you can use mark-up or include hero icons using svg tags:
+You can add tooltips to calendar day badges to show more details to the user.
+Simply supply a second string argument to the `addBadge` method:
+
+```php
+protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
+{
+    if($day->start->format('d') % 2 == 0)
+    {
+        $day->addBadge('even', 'the opposite of odd');
+    }
+    else
+    {
+        $day->addBadge('odd', 'the opposite of even');
+    }
+    
+    return $day;
+}
+```
+
+You can use html in badges and their tooltips, so you can use mark-up or include hero icons using svg tags:
 
 ```php
     // Html mark-up
-    $event->addBadge($count .'/<b>' .$total .'</b>');
+    $event->addBadge($count .'/<b>' .$total .'</b>', 'This is an <u>estimate</u>');
     
     // Hero icon
     $event->addBadge('<svg xmlns="http://www.w3.org/2000/svg" style="display:inline-block" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>');
