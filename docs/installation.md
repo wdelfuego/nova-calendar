@@ -117,6 +117,8 @@ The following options exist:
     If you change the URI in an existing installation that doesn't use Nova's default main menu, make sure to update the menu you generate in the `boot()` method of your `NovaServiceProvider` to be as shown under step 4 above, so it will automatically respect the configured option from now on.
 
 - `title` - The browser window title for the calendar page; the default value is 'Nova Calendar'.
+
+
 ---
 
 [⬅️ Back to Documentation overview](/nova-calendar)
