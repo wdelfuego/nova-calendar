@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
 
-use Wdelfuego\NovaCalendar\Interface\MonthDataProviderInterface;
+use Wdelfuego\NovaCalendar\Contracts\MonthDataProviderInterface;
 use Wdelfuego\NovaCalendar\EventGenerator\EventGenerator;
 
 use Wdelfuego\NovaCalendar\NovaCalendar;

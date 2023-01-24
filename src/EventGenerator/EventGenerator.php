@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
 
-use Wdelfuego\NovaCalendar\Interface\EventGeneratorInterface;
+use Wdelfuego\NovaCalendar\Contracts\EventGeneratorInterface;
 use Wdelfuego\NovaCalendar\Event;
 
 // TODO v2 generalize towards non-Nova event generators,

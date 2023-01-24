@@ -32,7 +32,7 @@ The calendar just needs a single data provider class that supplies event data to
 
     ```php
     use Wdelfuego\NovaCalendar\NovaCalendar;
-    use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
+    use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
     use App\Providers\CalendarDataProvider;
 
     public function tools()
