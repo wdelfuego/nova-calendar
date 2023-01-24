@@ -151,7 +151,9 @@ export default {
 
     reload() {
       let vue = this;
-      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar/calendar-data/'+vue.year+'/'+vue.month)
+      // Work out the apiPath from the current Tool path, this works
+      // because the ToolServiceProvider enforces that both use the same configurable uri part
+      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '?y='+vue.year+'&m='+vue.month)
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;

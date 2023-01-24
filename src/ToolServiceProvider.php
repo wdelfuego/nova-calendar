@@ -45,6 +45,7 @@ class ToolServiceProvider extends ServiceProvider
             ]);
         });
         
+        // TODO v2 replace with normal stub? like the config file below
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateDefaultCalendarDataProvider::class,
@@ -67,12 +68,21 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], config('nova-calendar.uri', 'wdelfuego/nova-calendar'))
-            ->group(__DIR__.'/../routes/inertia.php');
+        foreach(config('nova-calendar', []) as $calendarKey => $calendarConfig)
+        {
+            if(!isset($calendarConfig['uri']))
+            {
+                throw new \Exception("Missing calendar config option 'uri' for calendar $calendarKey in config/nova-calendar.php");
+            }
+                
+            Nova::router(['nova', Authorize::class], $calendarConfig['uri'])
+                ->group(__DIR__.'/../routes/inertia.php');
 
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/wdelfuego/nova-calendar')
-            ->group(__DIR__.'/../routes/api.php');
+            Route::middleware(['nova', Authorize::class])
+                ->prefix('nova-vendor/wdelfuego/nova-calendar/' .$calendarConfig['uri'])
+                ->group(__DIR__.'/../routes/api.php');
+        }
+
     }
 
     /**

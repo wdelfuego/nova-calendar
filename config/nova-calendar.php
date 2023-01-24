@@ -14,16 +14,36 @@
  *     using calendar views, but don't embed this package or a modified version
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
- 
+
+// use App\Nova\Calendar\FirstCalendarDataProvider;
+// use App\Nova\Calendar\SecondCalendarDataProvider;
+
 return [
 
-    /*
-     * Custom URI for Nova Calendar (will be appended to your Nova path, /nova by default)
-     */
-    'uri' => 'wdelfuego/nova-calendar',
-    
-    /*
-     * Browser window/tab title
-     */
-    'title' => 'Nova Calendar',
+    // 'calendar1' => [
+    //
+    //     /*
+    //      * The class of the calendar data provider for this Nova Calendar
+    //        Don't forget to add the proper use statement above
+    //      */
+    //     'provider' => FirstCalendarDataProvider::class
+    //
+    //     /*
+    //      * Custom URI for this Nova Calendar (will be appended to the Nova path, /nova by default)
+    //      */
+    //     'uri' => 'first-calendar',
+    //
+    //     /*
+    //      * Browser window/tab title for this Nova Calendar
+    //      */
+    //     'title' => 'First Calendar',
+    //
+    // ],
+    //
+    // 'calendar2' => [
+    //     'provider' => SecondCalendarDataProvider::class
+    //     'uri' => 'second-calendar',
+    //     'title' => 'Second Calendar',
+    // ],
+
 ];

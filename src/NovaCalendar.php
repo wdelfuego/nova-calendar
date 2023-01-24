@@ -31,8 +31,24 @@ class NovaCalendar extends Tool
     const SATURDAY = 6;
     const SUNDAY = 7;
     
+    private $calendarKey = null;
+    private $calendarConfig = [];
+    
     private $menuLabel = 'Calendar';
     private $menuIcon = 'calendar';
+    
+    public function __construct(string $calendarKey)
+    {
+        if(!isset(config('nova-calendar')[$calendarKey]))
+        {
+            throw new \Exception("Missing calendar config for calendar key '$calendarKey' in config/nova-calendar.php");
+        }
+        
+        $this->calendarKey = $calendarKey;
+        $this->calendarConfig = config('nova-calendar')[$calendarKey];
+
+        // TODO v2 validate calendar config? provider + uri are required
+    }
     
     public function boot()
     {
@@ -42,9 +58,10 @@ class NovaCalendar extends Tool
 
     public function menu(Request $request)
     {
+        // TODO v2 make label and icon configurable through calendar config?
         return MenuSection::make($this->menuLabel)
             ->icon($this->menuIcon)
-            ->path(config('nova-calendar.uri', 'wdelfuego/nova-calendar'));
+            ->path($this->calendarConfig['uri']);
         
     }
     
