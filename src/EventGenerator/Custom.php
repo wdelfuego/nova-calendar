@@ -27,6 +27,7 @@ use Wdelfuego\NovaCalendar\Event;
 abstract class Custom extends EventGenerator
 {
     abstract protected function modelQuery(EloquentBuilder $queryBuilder, Carbon $startOfCalendar, Carbon $endOfCalendar) : EloquentBuilder;
+    // TODO v2 add rangeStart and rangeEnd arguments to resourceToEvents method
     abstract protected function resourceToEvents(NovaResource $resource) : array;
     
     public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array
