@@ -80,7 +80,7 @@
                         <template v-if="event.startsEvent && event.options.displayTime">
                           <span class="time">{{ event.startTime }}</span>
                         </template>
-                        <span v-if="event.startsEvent" class="notes">{{ event.notes }}</span>
+                        <span v-if="event.startsEvent" class="notes" v-html="event.notes"></span>
                       </div>
                     </div>
                   </template>
@@ -100,7 +100,7 @@
                             <span class="time" v-if="event.endTime">{{ event.startTime }} - {{ event.endTime }}</span>
                             <span class="time" v-else>{{ event.startTime }}</span>
                           </template>
-                          <span class="notes">{{ event.notes }}</span>
+                          <span class="notes" v-html="event.notes"></span>
                         </div>
                       </div>
                     </template>
@@ -164,7 +164,7 @@ export default {
     
     open(e, url) {
       if (e.metaKey || e.ctrlKey) {
-        window.open(`/nova${url}`)
+        window.open(Nova.url(url))
       } else {
         Nova.visit(url);
       }
