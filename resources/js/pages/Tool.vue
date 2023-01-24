@@ -71,7 +71,7 @@
                 <!-- multi day events for all days first -->
                 <template v-for="day in week">
                   <template v-for="event in day.eventsMultiDay">
-                    <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
+                    <div :class="['nc-event','multi','nc-col-'+day.weekdayColumn,'span-'+event.spansDaysN]" @click="open($event, event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                       <div class="name noscrollbar">{{ event.name }}</div>
                       <div class="badges noscrollbar">
                         <span v-if="event.startsEvent" class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
@@ -90,7 +90,7 @@
                 <template v-for="day in week">
                   <div :class="['single-day-events','nc-col-'+day.weekdayColumn]">
                     <template v-for="event in day.eventsSingleDay">
-                      <div :class="['nc-event']" @click="open(event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
+                      <div :class="['nc-event']" @click="open($event, event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                         <div class="name noscrollbar">{{ event.name }}</div>
                         <div class="badges">
                           <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
@@ -162,8 +162,12 @@ export default {
         });
     },
     
-    open(url) {
-      Nova.visit(url);
+    open(e, url) {
+      if (e.metaKey || e.ctrlKey) {
+        window.open(`/nova${url}`)
+      } else {
+        Nova.visit(url);
+      }
     },
 
     stylesForEvent(event) {
