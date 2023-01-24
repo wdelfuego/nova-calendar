@@ -14,9 +14,11 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\Contracts;
 
-interface CalendarDayInterface
+use Illuminate\Support\Carbon;
+
+interface EventGeneratorInterface
 {
-    public function toArray() : array;
+    public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array;
 }

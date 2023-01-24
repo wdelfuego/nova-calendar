@@ -14,7 +14,7 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\Contracts;
 
 interface MonthDataProviderInterface extends CalendarDataProviderInterface
 {

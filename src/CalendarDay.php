@@ -18,7 +18,8 @@ namespace Wdelfuego\NovaCalendar;
 
 use DateTimeInterface;
 use Wdelfuego\NovaCalendar\NovaCalendar;
-use Wdelfuego\NovaCalendar\Interface\CalendarDayInterface;
+use Wdelfuego\NovaCalendar\Contracts\CalendarDayInterface;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -62,7 +63,7 @@ class CalendarDay implements CalendarDayInterface
         bool $isWithinRange = true,
         bool $isToday = false,
         bool $isWeekend = false,
-        array $events = [], 
+        array $events = []
     )
     {
         $this->start = $start;
