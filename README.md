@@ -44,7 +44,11 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.6
+## v1.7
+- Holding Ctrl or Meta key while clicking an Event now opens the target URL in a new browser window, thanks @vesper8!
+- Event notes now support HTML content
+
+### v1.6
 - The URI of the calendar tool is now configurable, thanks @kitchetof!
 - Adds support for [custom event generators](https://wdelfuego.github.io/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
 - For developers of this package: added first set of unit tests
