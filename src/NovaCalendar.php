@@ -43,11 +43,32 @@ class NovaCalendar extends Tool
         {
             throw new \Exception("Missing calendar config for calendar key '$calendarKey' in config/nova-calendar.php");
         }
+        else if(!isset(config('nova-calendar')[$calendarKey]['provider']) || !trim(config('nova-calendar')[$calendarKey]['provider']))
+        {
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; a data provider class is required");
+        }
+        else if(!class_exists(config('nova-calendar')[$calendarKey]['provider'], false))
+        {
+            $setting = config('nova-calendar')[$calendarKey]['provider'];
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; the supplied data provider class '$setting' does not seem to exist");
+        }
+        else if(!isset(config('nova-calendar')[$calendarKey]['uri']) || !trim(config('nova-calendar')[$calendarKey]['uri']))
+        {
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'uri' in config/nova-calendar.php; a uri is required");
+        }
         
         $this->calendarKey = $calendarKey;
         $this->calendarConfig = config('nova-calendar')[$calendarKey];
-
-        // TODO v2 validate calendar config? provider + uri are required
+        
+        if(isset($this->calendarConfig['menu-icon']) && trim($this->calendarConfig['menu-icon']))
+        {
+            $this->menuIcon = $this->calendarConfig['menu-icon'];
+        }
+        
+        if(isset($this->calendarConfig['menu-label']) && trim($this->calendarConfig['menu-label']))
+        {
+            $this->menuLabel = $this->calendarConfig['menu-label'];
+        }
     }
     
     public function boot()

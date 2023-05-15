@@ -72,7 +72,7 @@ class CalendarController extends BaseController
             'month' => $month,
             'title' => $dataProvider->title(),
             'columns' => $dataProvider->daysOfTheWeek(),
-            'weeks' => $dataProvider->calendarWeeks(),
+            'weeks' => $dataProvider->calendarData(),
             'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
         ];
     }

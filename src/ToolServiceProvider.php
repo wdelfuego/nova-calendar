@@ -45,7 +45,6 @@ class ToolServiceProvider extends ServiceProvider
             ]);
         });
         
-        // TODO v2 replace with normal stub? like the config file below
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateDefaultCalendarDataProvider::class,

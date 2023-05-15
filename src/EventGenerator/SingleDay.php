@@ -24,7 +24,7 @@ use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
 use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
 use Wdelfuego\NovaCalendar\Event;
 
-class SingleDay extends EventGenerator
+class SingleDay extends NovaEventGenerator
 {
     public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array
     {

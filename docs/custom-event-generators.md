@@ -47,7 +47,7 @@ If you want to add events to the calendar that are not mappable to the Nova reso
      You must add _where_ clauses to the query builder using those timestamps to select the proper Eloquent models, then return the query builder.
 
     ```php
-    protected function resourceToEvents(NovaResource $resource) : array
+    protected function resourceToEvents(NovaResource $resource, Carbon $startOfCalendar, Carbon $endOfCalendar) : array
     ```
     The `resourceToEvents` method is used to generate an array with 0 or more `Event` objects given a single Nova resource instance.
     
@@ -114,7 +114,7 @@ class FlightEventGenerator extends CustomEventGenerator
 
     }
 
-    protected function resourceToEvents(NovaResource $resource) : array
+    protected function resourceToEvents(NovaResource $resource, Carbon $startOfCalendar, Carbon $endOfCalendar) : array
     {
         // Implement this method to return an array of Event objects for
         // the supplied Nova resource instance

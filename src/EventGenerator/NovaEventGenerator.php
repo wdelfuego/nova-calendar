@@ -24,11 +24,9 @@ use Laravel\Nova\Resource as NovaResource;
 use Wdelfuego\NovaCalendar\Contracts\EventGeneratorInterface;
 use Wdelfuego\NovaCalendar\Event;
 
-// TODO v2 generalize towards non-Nova event generators,
-// move Nova-specific stuff to subclass
-abstract class EventGenerator implements EventGeneratorInterface
+abstract class NovaEventGenerator implements EventGeneratorInterface
 {
-    public static function from(string $novaResourceClass, mixed $toEventSpec) : ?EventGeneratorInterface
+    public static function from(string $novaResourceClass, $toEventSpec) : ?EventGeneratorInterface
     {
         // Check validity of arguments
         if(!is_subclass_of($novaResourceClass, NovaResource::class))
@@ -72,7 +70,7 @@ abstract class EventGenerator implements EventGeneratorInterface
     private $novaResourceClass = null;
     private $toEventSpec = null;
     
-    public function __construct(string $novaResourceClass = null, mixed $toEventSpec = null)
+    public function __construct(string $novaResourceClass = null, $toEventSpec = null)
     {
         $this->novaResourceClass = $novaResourceClass;
         $this->toEventSpec = $toEventSpec;
@@ -91,7 +89,7 @@ abstract class EventGenerator implements EventGeneratorInterface
         return $this->novaResourceClass;
     }
     
-    protected function toEventSpec() : mixed
+    protected function toEventSpec()
     {
         return $this->toEventSpec;
     }
