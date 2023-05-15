@@ -40,7 +40,11 @@ For any problems you might run into, please [open an issue](https://github.com/w
 - [License](#license)
 
 # Release log
-## v1.7
+## v1.8
+- Added support for Laravel 10, thanks @pcorrick!
+- Fixed issue where some multi-day events were not properly shown on the calendar in all cases, thanks @SamMakesCode!
+
+### v1.7
 - Holding Ctrl or Meta key while clicking an Event now opens the target URL in a new browser window, thanks @vesper8!
 - Event notes now support HTML content
 
