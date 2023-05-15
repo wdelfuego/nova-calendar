@@ -11,6 +11,31 @@ use Wdelfuego\NovaCalendar\Testing\CalendarDataProvider;
 
 class CalendarDataProviderTest extends TestCase
 {
+    const GITHUB_ISSUE_56_EVENT_TITLE = "testMultiDayEventThatEndsOnDayZeroGitHubIssue56";
+    
+    public function testMultiDayEventThatEndsOnDayZeroGitHubIssue56()
+    {
+        // Set up the calendar for may '23 and let weeks start on monday
+        $dp = new CalendarDataProvider(2023, 5);
+        $dp->setYearAndMonth(2023, 5);
+        $dp->startWeekOn(NovaCalendar::MONDAY);
+        
+        // Get event data for the 15th which is a monday
+        // The testing calendardataprovider is set up to include a multi-day event that ends that day at 00:00:00
+        $reflection = new \ReflectionMethod($dp, 'eventDataForDate');
+        $reflection->setAccessible(true);
+        $result = $reflection->invoke($dp, Carbon::create(2023,5,15, 12, 0, 0));
+        
+        // Check if the eventData for that date contains the test event, as it should
+        $foundTestEvent = false;
+        foreach($result as $eventData)
+        {
+            $foundTestEvent = $foundTestEvent || $eventData['name'] == self::GITHUB_ISSUE_56_EVENT_TITLE;
+        }
+        
+        $this->assertTrue($foundTestEvent, "Multi-day test event not returned for its last day");
+    }
+    
     /**
      * @dataProvider provideStartOfCalendarData
      */
