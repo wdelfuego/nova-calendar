@@ -202,7 +202,7 @@ abstract class MonthCalendar implements MonthDataProviderInterface
                     ($isFirstDayColumn
                         && $e->end() 
                         && $e->start()->isBefore($date) 
-                        && $e->end()->isAfter($date));
+                        && $e->end()->isAfter($date->clone()->subDay()));
         });
 
         // Sort events (as a heuristic, since CSS won't always match event order 
