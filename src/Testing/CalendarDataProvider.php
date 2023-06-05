@@ -16,6 +16,7 @@
  
 namespace Wdelfuego\NovaCalendar\Testing;
 
+use Wdelfuego\NovaCalendar\DataProvider\AbstractCalendarDataProvider;
 use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
 use Wdelfuego\NovaCalendar\Event;
 use Wdelfuego\NovaCalendar\Tests\Unit\CalendarDataProviderTest;
@@ -24,14 +25,14 @@ use Illuminate\Support\Carbon;
 
 class CalendarDataProvider extends MonthCalendar
 {
-    public function novaResources()
+    public function novaResources() : array
     {
         return [];
     }
     
     public function appendEvent(Event $event) 
     {
-        $reflection = new \ReflectionProperty(MonthCalendar::class, 'allEvents');
+        $reflection = new \ReflectionProperty(AbstractCalendarDataProvider::class, 'allEvents');
         $reflection->setAccessible(true);
         $allEvents = $reflection->getValue($this);
         if(!is_array($allEvents)) {
