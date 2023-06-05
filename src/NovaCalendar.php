@@ -49,14 +49,14 @@ class NovaCalendar extends Tool
         {
             throw new \Exception("Missing calendar config for calendar key '$calendarKey' in config/nova-calendar.php");
         }
-        else if(!isset(config('nova-calendar')[$calendarKey]['provider']) || !trim(config('nova-calendar')[$calendarKey]['provider']))
+        else if(!isset(config('nova-calendar')[$calendarKey]['dataProvider']) || !trim(config('nova-calendar')[$calendarKey]['dataProvider']))
         {
-            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; a data provider class is required");
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'dataProvider' in config/nova-calendar.php; a data provider class is required");
         }
-        else if(!class_exists(config('nova-calendar')[$calendarKey]['provider']))
+        else if(!class_exists(config('nova-calendar')[$calendarKey]['dataProvider']))
         {
-            $setting = config('nova-calendar')[$calendarKey]['provider'];
-            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; the supplied data provider class '$setting' does not seem to exist");
+            $setting = config('nova-calendar')[$calendarKey]['dataProvider'];
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'dataProvider' in config/nova-calendar.php; the supplied data provider class '$setting' does not seem to exist");
         }
         else if(!isset(config('nova-calendar')[$calendarKey]['uri']) || !trim(config('nova-calendar')[$calendarKey]['uri']))
         {
@@ -86,6 +86,16 @@ class NovaCalendar extends Tool
     public function uri()
     {
         return $this->calendarConfig['uri'];
+    }
+    
+    public function windowTitle() : string
+    {
+        if(isset($this->calendarConfig['windowTitle']) && strlen(trim($this->calendarConfig['windowTitle'])))
+        {
+            return $this->calendarConfig['windowTitle'];
+        }
+        
+        return '';
     }
 
     public function menu(Request $request)

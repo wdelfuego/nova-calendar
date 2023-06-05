@@ -14,7 +14,7 @@
  
 <template>
   <div>
-    <Head :title="pageTitle" />
+    <Head :title="$data.windowTitle || $data.title" />
 
     <div id="nc-control">
     
@@ -157,6 +157,7 @@ export default {
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;
+            vue.windowTitle = response.data.windowTitle;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
@@ -189,22 +190,19 @@ export default {
       } else {
         return this.styles.default;
       }
-    }
-
+    },
+    
   },
 
   props: {
-    pageTitle: {
-      type: String,
-      required: false,
-      default: 'Nova Calendar',
-    },
+
   },
 
   data () {
       return {
           year: null,
           month: null,
+          windowTitle: '',
           title: '',
           columns: Array(7).fill('-'),
           weeks: Array(6).fill(Array(7).fill({})),

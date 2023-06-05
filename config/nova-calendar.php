@@ -2,7 +2,6 @@
 
 /*
  * © Copyright 2022 · Willem Vervuurt, Studio Delfuego
- * © Copyright 2022 · Christophe Francey
  * 
  * You can modify, use and distribute this package under one of two licenses:
  * 1. GNU AGPLv3
@@ -15,35 +14,40 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
 
-// use App\Nova\Calendar\FirstCalendarDataProvider;
+use App\Nova\Calendar\CalendarDataProvider;
 // use App\Nova\Calendar\SecondCalendarDataProvider;
 
 return [
 
-    // 'calendar1' => [
-    //
-    //     /*
-    //      * The class of the calendar data provider for this Nova Calendar
-    //        Don't forget to add the proper use statement above
-    //      */
-    //     'provider' => FirstCalendarDataProvider::class
-    //
-    //     /*
-    //      * Custom URI for this Nova Calendar (will be appended to the Nova path, /nova by default)
-    //      */
-    //     'uri' => 'first-calendar',
-    //
-    //     /*
-    //      * Browser window/tab title for this Nova Calendar
-    //      */
-    //     'title' => 'First Calendar',
-    //
-    // ],
-    //
+    'calendar' => [
+
+        /*
+         * The class of the calendar data provider for this Nova Calendar
+           Don't forget to add the proper use statement above.
+           This key is required.
+         */
+        'dataProvider' => CalendarDataProvider::class
+
+        /*
+         * URI for this Nova Calendar (will be appended to the Nova path, /nova by default)
+           This key is required.
+         */
+        'uri' => 'wdelfuego/calendar',
+
+        /*
+         * Browser window/tab title for this Nova Calendar.
+           This key is optional.
+           If you remove it or set it to an empty string, the dynamic title displayed above 
+           the calendar view will be used as window/tab title in the browser.
+         */
+        'windowTitle' => 'Nova Calendar',
+
+    ],
+
     // 'calendar2' => [
-    //     'provider' => SecondCalendarDataProvider::class
-    //     'uri' => 'second-calendar',
-    //     'title' => 'Second Calendar',
+    //     'uri' => 'wdelfuego/second-calendar',
+    //     'dataProvider' => SecondCalendarDataProvider::class
+    //     'windowTitle' => 'Second Calendar',
     // ],
 
 ];

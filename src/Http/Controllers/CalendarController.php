@@ -37,7 +37,12 @@ class CalendarController extends BaseController
         // Load data providers, keyed by uri
         foreach(config('nova-calendar', []) as $calendarKey => $calendarConfig)
         {
-            $this->dataProviders[$calendarConfig['uri']] = new ($calendarConfig['provider']);
+            // We are assuming these keys to exist since the Nova Tool 
+            // Wdelfuego\NovaCalendar\NovaCalendar does all sorts of checks on initiation
+            // Not sure if that assumption is completely valid but assuming valid config for now
+            $dataProvider = new ($calendarConfig['dataProvider']);
+            $dataProvider->setConfig($calendarConfig);
+            $this->dataProviders[$calendarConfig['uri']] = $dataProvider;
         }
     }
 
@@ -70,6 +75,7 @@ class CalendarController extends BaseController
         return [
             'year' => $year,
             'month' => $month,
+            'windowTitle' => $dataProvider->windowTitle(),
             'title' => $dataProvider->title(),
             'columns' => $dataProvider->daysOfTheWeek(),
             'weeks' => $dataProvider->calendarData(),

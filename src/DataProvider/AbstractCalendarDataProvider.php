@@ -45,6 +45,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     private $endOfRange = null;
         
     private $allEvents = null;
+    private $config = [];
     
     public function __construct()
     {
@@ -60,6 +61,21 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     public function initialize(): void
     {
 
+    }
+    
+    public function setConfig(array $config)
+    {
+        $this->config = $config;
+    }
+    
+    public function configValue($key)
+    {
+        return $this->config[$key] ?? null;
+    }
+    
+    public function windowTitle() : string
+    {
+        return $this->configValue('windowTitle') ?? '';
     }
     
     public function timezone(): string
