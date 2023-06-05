@@ -9,14 +9,14 @@
 composer require wdelfuego/nova-calendar
 ```
 
+For help implementing and using the calendar, take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
+
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
 Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
 Usage in Nova is not compatible with the AGPLv3 license. More details [below](#license).
 
 # Support & Documentation
-
-For help implementing and using the calendar, first take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
 
 For any problems or doubts you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
