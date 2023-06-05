@@ -162,7 +162,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return false;
     }
     
-    private function eventDataForDate(Carbon $date) : array
+    protected function eventDataForDate(Carbon $date) : array
     {
         $date->setTime(0,0,0);
         $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
@@ -233,7 +233,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
             
             foreach($eventGenerator->generateEvents($this->startOfCalendar(), $this->endOfCalendar()) as $event)
             {
-                if($event->resource()->authorizedToView($this->request) && !$this->exclude($event->resource()))
+                if($event->resource()->authorizedToView($this->request) && !$this->excludeResource($event->resource()))
                 {
                     $this->allEvents[] = $event->withUrl($this->urlForResource($event->resource()));
                 } 

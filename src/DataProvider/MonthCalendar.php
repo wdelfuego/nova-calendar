@@ -41,8 +41,8 @@ abstract class MonthCalendar extends AbstractCalendarDataProvider implements Mon
 
     public function __construct(int $year = null, int $month = null)
     {
-        parent::__construct();
         $this->setYearAndMonth($year ?? now()->year, $month ?? now()->month);
+        parent::__construct();
     }
 
     public function title() : string
@@ -72,7 +72,7 @@ abstract class MonthCalendar extends AbstractCalendarDataProvider implements Mon
         return $out;
     }
     
-    private function updateViewRanges() : void
+    protected function updateViewRanges() : void
     {
         // Calculate month range
         $this->startOfRange(Carbon::createFromFormat('Y-m-d H:i:s', $this->year.'-'.$this->month.'-1 00:00:00'));

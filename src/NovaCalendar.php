@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
-
+    
 class NovaCalendar extends Tool
 {
     const MONDAY = 1;
@@ -37,6 +37,12 @@ class NovaCalendar extends Tool
     private $menuLabel = 'Calendar';
     private $menuIcon = 'calendar';
     
+    public static function pathToCalendar(string $calendarKey) : string
+    {
+        $calendar = new static($calendarKey);
+        return $calendar->uri();
+    }
+    
     public function __construct(string $calendarKey)
     {
         if(!isset(config('nova-calendar')[$calendarKey]))
@@ -47,7 +53,7 @@ class NovaCalendar extends Tool
         {
             throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; a data provider class is required");
         }
-        else if(!class_exists(config('nova-calendar')[$calendarKey]['provider'], false))
+        else if(!class_exists(config('nova-calendar')[$calendarKey]['provider']))
         {
             $setting = config('nova-calendar')[$calendarKey]['provider'];
             throw new \Exception("Invalid config for calendar key '$calendarKey', key 'provider' in config/nova-calendar.php; the supplied data provider class '$setting' does not seem to exist");
@@ -77,12 +83,16 @@ class NovaCalendar extends Tool
         Nova::style('nova-calendar', __DIR__.'/../dist/css/tool.css');
     }
 
+    public function uri()
+    {
+        return $this->calendarConfig['uri'];
+    }
+
     public function menu(Request $request)
     {
-        // TODO v2 make label and icon configurable through calendar config?
         return MenuSection::make($this->menuLabel)
             ->icon($this->menuIcon)
-            ->path($this->calendarConfig['uri']);
+            ->path($this->uri());
         
     }
     
