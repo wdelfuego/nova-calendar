@@ -205,7 +205,7 @@
 export default {
         
   mounted() {
-    this.reset();
+    this.reset(true);
     
     Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
     Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
@@ -214,10 +214,10 @@ export default {
 
   methods: {
 
-    reset() {
+    reset(isInitRequest = false) {
       this.month = null;
       this.year = null;
-      this.reload();
+      this.reload(true);
     },
 
     prevMonth() {
@@ -230,13 +230,17 @@ export default {
       this.reload();
     },
 
-    reload() {
+    reload(isInitRequest = false) {
       let vue = this;
       // Work out the apiPath from the current Tool path, this works
       // because the ToolServiceProvider enforces that both use the same configurable uri part
       let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '/month?y='+vue.year+'&m='+vue.month;
       if(vue.activeFilterKey) {
         apiUrl += '&filter='+vue.activeFilterKey;
+      }
+      else if(isInitRequest)
+      {
+        apiUrl += '&isInitRequest=1';
       }
       Nova.request().get(apiUrl)
         .then(response => {
@@ -246,9 +250,12 @@ export default {
             vue.windowTitle = response.data.windowTitle;
             vue.resetFiltersLabel = response.data.resetFiltersLabel;
             vue.availableFilters = response.data.filters;
+            vue.activeFilterKey = response.data.activeFilterKey;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
+            
+            this.setFilter(vue.activeFilterKey);
             vue.loading = false;
         });
     },
@@ -281,6 +288,11 @@ export default {
     },
     
     chooseFilter(filterKey) {
+      this.setFilter(filterKey);
+      this.reload();
+    },
+    
+    setFilter(filterKey) {
       this.activeFilterKey = filterKey;
       for(var filterKey in this.availableFilters)
       {
@@ -289,8 +301,6 @@ export default {
           this.activeFilterLabel = this.availableFilters[filterKey];
         }
       }
-      
-      this.reload();
     }
     
   },

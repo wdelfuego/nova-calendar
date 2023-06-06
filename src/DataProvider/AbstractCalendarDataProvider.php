@@ -190,7 +190,12 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     {
         return false;
     }
-    
+
+    public function activeFilterKey() : ?string
+    {
+        return $this->activeFilterKey;
+    }
+        
     public function setActiveFilterKey(string $v = null) : void
     {
         $this->activeFilterKey = $v;
