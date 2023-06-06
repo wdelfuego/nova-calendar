@@ -66,6 +66,8 @@ abstract class AbstractView implements ViewInterface
             'windowTitle' => $dataProvider->windowTitle(),
             'title' => $dataProvider->titleForView($this->specifier()),
             'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
+            'filters' => $dataProvider->filtersToArray(),
+            'resetFiltersLabel' => $dataProvider->resetFiltersLabel(),
         ], $this->viewData($dataProvider));
     }
     

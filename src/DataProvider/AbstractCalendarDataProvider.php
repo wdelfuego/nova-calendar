@@ -25,13 +25,13 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\Resource as NovaResource;
 
 use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
+use Wdelfuego\NovaCalendar\Contracts\EventFilterInterface as EventFilter;
 use Wdelfuego\NovaCalendar\EventGenerator\NovaEventGenerator;
 
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\CalendarDay;
 use Wdelfuego\NovaCalendar\Event;
 use Wdelfuego\NovaCalendar\View\AbstractView as View;
-
 
 abstract class AbstractCalendarDataProvider implements CalendarDataProviderInterface
 {
@@ -44,7 +44,8 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     private $endOfCalendar = null;
     private $startOfRange = null;
     private $endOfRange = null;
-        
+
+    private $activeFilterKey = null;
     private $allEvents = null;
     private $config = [];
     
@@ -190,6 +191,52 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return false;
     }
     
+    public function setActiveFilterKey(string $v = null) : void
+    {
+        $this->activeFilterKey = $v;
+    }
+    
+    public function resetFiltersLabel() : string
+    {
+        return __('Show all');
+    }
+    
+    public function filtersToArray() : array
+    {
+        $out = [];
+        foreach($this->filters() as $filter)
+        {
+            $out[$filter->getKey()] = $filter->getLabel();
+        }
+        return $out;
+    }
+    
+    protected function filterWithKey(string $filterKey) : ?EventFilter
+    {
+        foreach($this->filters() as $filter)
+        {
+            if($filter->hasKey($filterKey))
+            {
+                return $filter;
+            }
+        }
+        
+        throw new \Exception("Calendar event filter not found for key: $filterKey");
+    }
+    
+    public function defaultFilterKey() : ?string
+    {
+        foreach($this->filters() as $filter)
+        {
+            if($filter->isDefaultFilter())
+            {
+                return $filter->getKey();
+            }
+        }
+        
+        return null;
+    }
+    
     public function allEvents() : array
     {
         if(is_null($this->allEvents))
@@ -224,6 +271,13 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         
         // Second, add the non-nova Events
         $this->allEvents = array_merge($this->allEvents, $this->nonNovaEvents());
+        
+        // Apply active filter, if set
+        if($this->activeFilterKey)
+        {
+            $filter = $this->filterWithKey($this->activeFilterKey);
+            $this->allEvents = array_filter($this->allEvents, function($event) use ($filter) { return $filter->showEvent($event); });
+        }
         
         // Third, set all event timezones to calendar timezone
         foreach($this->allEvents as $event)

@@ -67,6 +67,8 @@ class CalendarController extends BaseController
         $calendarUri = substr($calendarUri, 0, strrpos($calendarUri, '/'));
 
         $dataProvider = $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+        $dataProvider->setActiveFilterKey($this->request->query('filter'));
+            
         $view = View::get($view);
         $view->initFromRequest($this->request);
         return $view->calendarData($this->request, $dataProvider);

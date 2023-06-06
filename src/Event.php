@@ -136,7 +136,7 @@ class Event
             return !is_null($this->novaResource);
         }
 
-        return ($this->novaResource instanceof $class);
+        return ($this->hasNovaResource() && $this->novaResource instanceof $class);
     }
     
     // Deprecated; here for backwards compatibility with pre-1.2 releases,

@@ -18,17 +18,98 @@
 
     <div id="nc-control">
     
-      <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
-        <span>{{ $data.title }}</span>
-      </h1>
+      <div class="left-items">
+        <a @click="prevMonth" href="#" class="button hover:bg-gray-100 dark:hover:bg-gray-700" title="Alt + ←">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
+        </a>
+
+        <a @click="reset" href="#" class="button hover:bg-gray-100 dark:hover:bg-gray-700" title="Alt + H">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+        </a>
+          
+        <a @click="nextMonth" href="#" class="button hover:bg-gray-100 dark:hover:bg-gray-700" title="Alt + →">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
+        </a>
+        
+        <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
+          <span>{{ $data.title }}</span>
+        </h1>
+        
+      </div>
+
+      <div class="center-items">
+      </div>
       
-      <a @click="prevMonth" class="left" href="#">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
-      </a>
+      <div class="right-items">
+
+        <Dropdown
+          v-if="availableFilters"
+          :handle-internal-clicks="true"
+          :class="{
+            'bg-primary-500 hover:bg-primary-600 border-primary-500':
+              activeFilterKey != null,
+            'dark:bg-primary-500 dark:hover:bg-primary-600 dark:border-primary-500':
+              activeFilterKey != null,
+          }"
+          class="flex h-9 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+          dusk="filter-selector"
+        >
+          <DropdownTrigger
+            :class="{
+              'text-white hover:text-white dark:text-gray-800 dark:hover:text-gray-800':
+                activeFilterKey != null,
+            }"
+            class="toolbar-button px-2"
+          >
+            <Icon type="filter" />
+            <span
+              v-if="activeFilterKey != null"
+              :class="{
+                'text-white dark:text-gray-800': activeFilterKey != null,
+              }"
+              class="ml-2 font-bold"
+              v-html="activeFilterLabel"
+            >
+            </span>
+          </DropdownTrigger>
+
+          <template #menu>
+            <DropdownMenu width="260">
+
+              <ScrollWrap :height="350" class="bg-white dark:bg-gray-900">
+                <div
+                  ref="theForm"
+                  class="divide-y divide-gray-200 dark:divide-gray-800 divide-solid"
+                >
+                  <div v-if="activeFilterKey != null" class="bg-gray-100">
+                    <button
+                      class="py-2 w-full block tracking-wide text-center text-gray-500 dark:bg-gray-800 dark:hover:bg-gray-700 focus:outline-none"
+                      @click="chooseFilter(null)"
+                      v-html="$data.resetFiltersLabel"
+                    >
+                    </button>
+                  </div>
+
+                  <div>
+                    <template v-for="(filterLabel, filterKey) in $data.availableFilters">
+                      <button
+                        class="py-2 w-full block dark:bg-gray-800 dark:hover:bg-gray-700 hover:bg-gray-200"
+                        :class="{'font-bold': activeFilterKey == filterKey}"
+                        v-html="filterLabel"
+                        @click="chooseFilter(filterKey)"
+                      >
+                      </button>
+                    </template>
+                  </div>
+
+                </div>
+              </ScrollWrap>
+            </DropdownMenu>
+          </template>
+        </Dropdown>
   
-      <a @click="nextMonth" class="right" href="#">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-      </a>
+
+      </div>
       
     </div>
     
@@ -92,7 +173,7 @@
                     <template v-for="event in day.eventsSingleDay">
                       <div :class="['nc-event']" @click="open($event, event.url)" :style="this.stylesForEvent(event)" v-bind:class="{'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                         <div class="name noscrollbar">{{ event.name }}</div>
-                        <div class="badges">
+                        <div class="badges" v-if="event.badges.length > 0">
                           <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span class="badge" v-html="badge"></span></span>
                         </div>
                         <div class="content noscrollbar">
@@ -153,15 +234,21 @@ export default {
       let vue = this;
       // Work out the apiPath from the current Tool path, this works
       // because the ToolServiceProvider enforces that both use the same configurable uri part
-      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '/month?y='+vue.year+'&m='+vue.month)
+      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '/month?y='+vue.year+'&m='+vue.month;
+      if(vue.activeFilterKey) {
+        apiUrl += '&filter='+vue.activeFilterKey;
+      }
+      Nova.request().get(apiUrl)
         .then(response => {
+            vue.styles = response.data.styles;
             vue.year = response.data.year;
             vue.month = response.data.month;
             vue.windowTitle = response.data.windowTitle;
+            vue.resetFiltersLabel = response.data.resetFiltersLabel;
+            vue.availableFilters = response.data.filters;
             vue.title = response.data.title;
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
-            vue.styles = response.data.styles;
             vue.loading = false;
         });
     },
@@ -193,6 +280,19 @@ export default {
       }
     },
     
+    chooseFilter(filterKey) {
+      this.activeFilterKey = filterKey;
+      for(var filterKey in this.availableFilters)
+      {
+        if(this.activeFilterKey == filterKey)
+        {
+          this.activeFilterLabel = this.availableFilters[filterKey];
+        }
+      }
+      
+      this.reload();
+    }
+    
   },
 
   props: {
@@ -202,6 +302,10 @@ export default {
   data () {
       return {
           loading: true,
+          resetFiltersLabel: 'All events',
+          availableFilters: {},
+          activeFilterKey: null,
+          activeFilterLabel: null,
           year: null,
           month: null,
           windowTitle: '',
