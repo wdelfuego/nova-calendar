@@ -38,7 +38,7 @@
         style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)"
       >
 
-        <div class="nova-calendar noselect">
+        <div class="nova-calendar noselect" v-if="!loading">
 
           <div class="nc-header">
             <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
@@ -153,7 +153,7 @@ export default {
       let vue = this;
       // Work out the apiPath from the current Tool path, this works
       // because the ToolServiceProvider enforces that both use the same configurable uri part
-      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '?y='+vue.year+'&m='+vue.month)
+      Nova.request().get('/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '/month?y='+vue.year+'&m='+vue.month)
         .then(response => {
             vue.year = response.data.year;
             vue.month = response.data.month;
@@ -162,6 +162,7 @@ export default {
             vue.columns = response.data.columns;
             vue.weeks = response.data.weeks;
             vue.styles = response.data.styles;
+            vue.loading = false;
         });
     },
     
@@ -200,6 +201,7 @@ export default {
 
   data () {
       return {
+          loading: true,
           year: null,
           month: null,
           windowTitle: '',

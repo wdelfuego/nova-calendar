@@ -6,25 +6,38 @@ use Tests\TestCase;
 
 use Illuminate\Support\Carbon;
 use Wdelfuego\NovaCalendar\NovaCalendar;
-use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
+
 use Wdelfuego\NovaCalendar\Testing\CalendarDataProvider;
+use Wdelfuego\NovaCalendar\View\AbstractView as View;
+use Wdelfuego\NovaCalendar\View\Month as MonthView;
 
 class CalendarDataProviderTest extends TestCase
 {
     const GITHUB_ISSUE_56_EVENT_TITLE = "testMultiDayEventThatEndsOnDayZeroGitHubIssue56";
     
+    protected function getMonthView(int $year, int $month) : MonthView
+    {
+        $view = View::get(View::MONTH);
+        $this->assertEquals(get_class($view), MonthView::class, "View doesn't seem to be of type month");
+
+        $view->setYearAndMonth($year, $month);
+        return $view;
+    }
+    
     public function testMultiDayEventThatEndsOnDayZeroGitHubIssue56()
     {
         // Set up the calendar for may '23 and let weeks start on monday
-        $dp = new CalendarDataProvider(2023, 5);
-        $dp->setYearAndMonth(2023, 5);
+        $dp = new CalendarDataProvider();
         $dp->startWeekOn(NovaCalendar::MONDAY);
-        
+
+        $view = $this->getMonthView(2023, 5);
+        $view->updateViewRanges($dp);
+
         // Get event data for the 15th which is a monday
         // The testing calendardataprovider is set up to include a multi-day event that ends that day at 00:00:00
-        $reflection = new \ReflectionMethod($dp, 'eventDataForDate');
+        $reflection = new \ReflectionMethod($view, 'eventDataForDate');
         $reflection->setAccessible(true);
-        $result = $reflection->invoke($dp, Carbon::create(2023,5,15, 12, 0, 0));
+        $result = $reflection->invoke($view, $dp, Carbon::create(2023,5,15, 12, 0, 0));
         
         // Check if the eventData for that date contains the test event, as it should
         $foundTestEvent = false;
@@ -41,8 +54,12 @@ class CalendarDataProviderTest extends TestCase
      */
     public function testStartOfCalendar(int $year, int $month, int $firstDayOfWeek, string $expectedDate)
     {
-        $dp = new CalendarDataProvider($year, $month);
+        $dp = new CalendarDataProvider();
         $dp->startWeekOn($firstDayOfWeek);
+        
+        $view = $this->getMonthView($year, $month);
+        $view->updateViewRanges($dp);
+        
         $calendarStartsOn = $dp->startOfCalendar()->format('Y-m-d');
         $calendarStartsOnTime = $dp->startOfCalendar()->format('H:i');
         $expectedTime = '00:00';
@@ -57,10 +74,14 @@ class CalendarDataProviderTest extends TestCase
     {
         $dp = new CalendarDataProvider($year, $month);
         $dp->startWeekOn($firstDayOfWeek);
+
+        $view = $this->getMonthView($year, $month);
+        $view->updateViewRanges($dp);
+
         $calendarEndsOn = $dp->endOfCalendar()->format('Y-m-d');
         $calendarEndsOnTime = $dp->endOfCalendar()->format('H:i');
-        $expectedDate = Carbon::createFromFormat('Y-m-d', $expectedDate)->addWeeks(MonthCalendar::N_CALENDAR_WEEKS)->subSeconds(1)->format('Y-m-d');
-        $expectedTime = Carbon::createFromFormat('Y-m-d H:i', "$expectedDate 00:00")->addWeeks(MonthCalendar::N_CALENDAR_WEEKS)->subSeconds(1)->format('H:i');
+        $expectedDate = Carbon::createFromFormat('Y-m-d', $expectedDate)->addWeeks(MonthView::N_CALENDAR_WEEKS)->subSeconds(1)->format('Y-m-d');
+        $expectedTime = Carbon::createFromFormat('Y-m-d H:i', "$expectedDate 00:00")->addWeeks(MonthView::N_CALENDAR_WEEKS)->subSeconds(1)->format('H:i');
         $this->assertEquals($expectedDate, $calendarEndsOn, "Calendar ends on $calendarEndsOn instead of on expected date $expectedDate for month $year-$month when the week starts on day $firstDayOfWeek (1 = Monday, 7 = Sunday)");
         $this->assertEquals($expectedTime, $calendarEndsOnTime, "Calendar ends at $calendarEndsOnTime instead of on expected time $expectedTime for month $year-$month when the week starts on day $firstDayOfWeek (1 = Monday, 7 = Sunday)");
     }

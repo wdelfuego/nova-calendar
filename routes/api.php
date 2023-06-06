@@ -18,4 +18,4 @@
 use Illuminate\Support\Facades\Route;
 use Wdelfuego\NovaCalendar\Http\Controllers\CalendarController;
 
-Route::get('/', [CalendarController::class, 'getMonthCalendarData']);
+Route::get('/{view}/', [CalendarController::class, 'getCalendarData']);

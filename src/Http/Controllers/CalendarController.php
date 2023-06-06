@@ -20,7 +20,9 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
+use Wdelfuego\NovaCalendar\View\AbstractView as View;
+// use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
+// use Wdelfuego\NovaCalendar\Contracts\ViewInterface;
 
 class CalendarController extends BaseController
 {
@@ -55,41 +57,20 @@ class CalendarController extends BaseController
         
         return $this->dataProviders[$calendarUri];
     }
-            
-    public function getMonthCalendarData($year = null, $month = null)
+    
+    public function getCalendarData(string $view = 'month')
     {
         $requestUri = substr($this->request->url(), strlen($this->request->schemeAndHttpHost()));
+
+        // Get calendar URI from full request URI by ditching the prefix and the last path element (view)
         $calendarUri = substr($requestUri, strlen(self::API_PATH_PREFIX));
-        $dataProvider = $this->getCalendarDataProviderForUri($calendarUri);
-        
-        $year = $this->request->query('y');
-        $month = $this->request->query('m');
-        $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
-        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
-        
-        while($month > 12) { $year += 1; $month -= 12; }
-        while($month < 1)  { $year -= 1; $month += 12; }
-        
-        $dataProvider->setRequest($this->request)->setYearAndMonth($year, $month);
-        
-        return [
-            'year' => $year,
-            'month' => $month,
-            'windowTitle' => $dataProvider->windowTitle(),
-            'title' => $dataProvider->title(),
-            'columns' => $dataProvider->daysOfTheWeek(),
-            'weeks' => $dataProvider->calendarData(),
-            'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
-        ];
+        $calendarUri = substr($calendarUri, 0, strrpos($calendarUri, '/'));
+
+        $dataProvider = $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+        $view = View::get($view);
+        $view->initFromRequest($this->request);
+        return $view->calendarData($this->request, $dataProvider);
     }
     
-    public function defaultStyles() : array
-    {
-        return [
-            'default' => [
-                'color' => '#fff',
-                'background-color' => 'rgba(var(--colors-primary-500), 0.9)',
-            ]
-        ];
-    }
+
 }

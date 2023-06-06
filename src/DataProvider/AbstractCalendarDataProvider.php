@@ -30,6 +30,7 @@ use Wdelfuego\NovaCalendar\EventGenerator\NovaEventGenerator;
 use Wdelfuego\NovaCalendar\NovaCalendar;
 use Wdelfuego\NovaCalendar\CalendarDay;
 use Wdelfuego\NovaCalendar\Event;
+use Wdelfuego\NovaCalendar\View\AbstractView as View;
 
 
 abstract class AbstractCalendarDataProvider implements CalendarDataProviderInterface
@@ -53,10 +54,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         $this->initialize();
     }
 
-    abstract public function title() : string;
-    abstract public function calendarData() : array;
     abstract public function novaResources() : array;
-    abstract protected function updateViewRanges() : void;
     
     public function initialize(): void
     {
@@ -83,7 +81,22 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return config('app.timezone') ?? 'UTC';
     }
     
-    public function setRequest(Request $request) : self
+    public function titleForView(string $viewSpecifier) : string
+    {
+        if($viewSpecifier == View::MONTH)
+        {
+            return ucfirst($this->startOfRange()->translatedFormat('F \'y'));
+        }
+        
+        return __('Calendar');
+    }
+    
+    public function firstDayOfWeek() : int
+    {
+        return $this->firstDayOfWeek;
+    }
+    
+    public function withRequest(Request $request) : self
     {
         $this->request = $request;
         return $this;
@@ -132,7 +145,6 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     public function startWeekOn(int $dayOfWeekIso) : self
     {
         $this->firstDayOfWeek = min(NovaCalendar::SUNDAY, max($dayOfWeekIso, NovaCalendar::MONDAY));
-        $this->updateViewRanges();
         return $this;
     }
 
@@ -158,7 +170,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return $event;
     }
     
-    protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
+    public function customizeCalendarDay(CalendarDay $day) : CalendarDay
     {
         return $day;
     }
@@ -178,53 +190,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return false;
     }
     
-    protected function eventDataForDate(Carbon $date) : array
-    {
-        $date->setTime(0,0,0);
-        $isFirstDayColumn = ($date->dayOfWeekIso == $this->firstDayOfWeek);
-        
-        // Get all events that start today, and if the date is the first day of the week
-        // also get all multiday events that started before today and end on or after it
-        // ('running multiday events')
-        $events = array_filter($this->allEvents(), function($e) use ($date, $isFirstDayColumn) {
-            return $e->start()->isSameDay($date)
-                    ||
-                    ($isFirstDayColumn
-                        && $e->end() 
-                        && $e->start()->isBefore($date) 
-                        && $e->end()->gte($date));
-        });
-
-        // Sort events (as a heuristic, since CSS won't always match event order 
-        // between different week rows perfectly due to 'column dense')
-        usort($events, function($a, $b) use ($date, $isFirstDayColumn) { 
-
-            $aDays = min(7,$a->spansDaysFrom($date));
-            $bDays = min(7,$b->spansDaysFrom($date));
-
-            // Longer events first
-            if($aDays != $bDays) { return $bDays - $aDays; }
-
-            // If we're in the first day column and both events span 7 days,
-            // let running multi-day events precede events that start today
-            if($isFirstDayColumn && $aDays == 7 && $bDays == 7)
-            {
-                if(!$a->startsEvent($date)) { return -1 ;}
-                if(!$b->startsEvent($date)) { return 1 ;}
-                return 0;
-            }
-
-            // Events have the same length and don't span 7 full days
-            // Let the one that starts earlier come first.
-            return $b->start()->diffInMinutes($a->start(), false); 
-        });
-        
-        // Finally return the resultant event array, but convert each event to an array
-        // that the front-end can use to render the calendar
-        return array_map(fn($e): array => $e->toArray($date, $this->startOfRange, $this->endOfRange, $this->firstDayOfWeek), $events);
-    }
-
-    private function allEvents() : array
+    public function allEvents() : array
     {
         if(is_null($this->allEvents))
         {

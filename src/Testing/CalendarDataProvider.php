@@ -17,13 +17,12 @@
 namespace Wdelfuego\NovaCalendar\Testing;
 
 use Wdelfuego\NovaCalendar\DataProvider\AbstractCalendarDataProvider;
-use Wdelfuego\NovaCalendar\DataProvider\MonthCalendar;
 use Wdelfuego\NovaCalendar\Event;
 use Wdelfuego\NovaCalendar\Tests\Unit\CalendarDataProviderTest;
 
 use Illuminate\Support\Carbon;
 
-class CalendarDataProvider extends MonthCalendar
+class CalendarDataProvider extends AbstractCalendarDataProvider
 {
     public function novaResources() : array
     {

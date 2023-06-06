@@ -85,8 +85,6 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 # License
 Copyright © 2022 • Willem Vervuurt, Studio Delfuego, wdelfuego
 
-Copyright © 2022 • Christophe Francey, kitchetof
-
 This entire copyright and license notice must be included with any copy, back-up, 
 fork or otherwise modified version of this package.
 

@@ -16,7 +16,17 @@
  
 namespace Wdelfuego\NovaCalendar\Contracts;
 
-interface MonthDataProviderInterface extends CalendarDataProviderInterface
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+interface ViewInterface
 {
-    public function __construct(int $year = null, int $month = null);
+    public function specifier() : string;    
+    public function initFromRequest(NovaRequest $request);
+    public function viewData(CalendarDataProviderInterface $dataProvider) : array;
+    
+    public function calendarData(NovaRequest $request, CalendarDataProviderInterface $dataProvider) : array;
+    public function defaultStyles() : array;
+    public function firstDayOfWeek() : int;
+    public function updateViewRanges(CalendarDataProviderInterface $dataProvider) : void;
+
 }
