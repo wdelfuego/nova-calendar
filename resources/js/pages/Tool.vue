@@ -34,7 +34,7 @@
         <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
           <span>{{ $data.title }}</span>
         </h1>
-        
+
       </div>
 
       <div class="center-items">
@@ -119,7 +119,7 @@
         style="min-height: 300px;min-width:800px;background-color:var(--bg-gray-800)"
       >
 
-        <div class="nova-calendar noselect" v-if="!loading">
+        <div class="nova-calendar noselect" v-if="title.length">
 
           <div class="nc-header">
             <div v-for="column in $data.columns" class="border-gray-200 dark:border-gray-900 dark:text-gray-300"><span>{{ column }}</span></div>
@@ -205,7 +205,7 @@
 export default {
         
   mounted() {
-    this.reset(true);
+    this.init();
     
     Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
     Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
@@ -214,10 +214,21 @@ export default {
 
   methods: {
 
-    reset(isInitRequest = false) {
+    reset() {
       this.month = null;
       this.year = null;
-      this.reload(true);
+      this.reload();
+    },
+        
+    init() {
+      if(this.hasStoredSettings()) {
+        this.restoreSettings();
+        this.reload(false);
+      }
+      else
+      {
+        this.reload(true);
+      }
     },
 
     prevMonth() {
@@ -232,14 +243,15 @@ export default {
 
     reload(isInitRequest = false) {
       let vue = this;
+      vue.loading = true;
+      
       // Work out the apiPath from the current Tool path, this works
       // because the ToolServiceProvider enforces that both use the same configurable uri part
-      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + window.location.pathname.substring(Nova.url('').length) + '/month?y='+vue.year+'&m='+vue.month;
+      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + this.calendarUrl() + '/month?y='+vue.year+'&m='+vue.month;
       if(vue.activeFilterKey) {
         apiUrl += '&filter='+vue.activeFilterKey;
       }
-      else if(isInitRequest)
-      {
+      else if(isInitRequest) {
         apiUrl += '&isInitRequest=1';
       }
       Nova.request().get(apiUrl)
@@ -257,6 +269,7 @@ export default {
             
             this.setFilter(vue.activeFilterKey);
             vue.loading = false;
+            this.storeSettings();
         });
     },
     
@@ -301,7 +314,36 @@ export default {
           this.activeFilterLabel = this.availableFilters[filterKey];
         }
       }
-    }
+    },
+    
+    calendarUrl() {
+      return window.location.pathname.substring(Nova.url('').length);
+    },
+    
+    storageKey() {
+      return 'wdelfuego-nova-calendar-' + this.calendarUrl();
+    },
+    
+    hasStoredSettings() { 
+      return (localStorage.getItem(this.storageKey()) !== null);
+    },
+    
+    storeSettings() {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        year: this.year,
+        month: this.month,
+        activeFilterKey: this.activeFilterKey
+      }));
+    },
+    
+    restoreSettings() {
+      const storedData = JSON.parse(localStorage.getItem(this.storageKey()));
+      if (storedData) {
+        this.year = storedData.year;
+        this.month = storedData.month;
+        this.activeFilterKey = storedData.activeFilterKey;
+      }
+    },
     
   },
 
