@@ -43,7 +43,7 @@
       <div class="right-items">
 
         <Dropdown
-          v-if="availableFilters"
+          v-if="Object.keys(availableFilters).length"
           :handle-internal-clicks="true"
           :class="{
             'bg-primary-500 hover:bg-primary-600 border-primary-500':
