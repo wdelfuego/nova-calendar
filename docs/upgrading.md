@@ -19,13 +19,15 @@ If you are using this package commercially and find it helpful, please consider 
 Config file `config/nova-calender.php` was optional in v1 but is required in v2, and its structure has changed to accomodate configuring multiple calendar instances.
 
 Check if `config/nova-calender.php` already exists in your project.
-* If it doesn't exist yet; publish it now by running the following command, then continue with step 2:
+
+If it doesn't exist yet; publish it first by running the following command.
 
     ```sh
     php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
     ```
 
-* If it does already exist, upgrade the structure as follows:
+Now that you're guaranteed to have a config file, upgrade the structure as follows:
+
     1. If it contains an entry with key `title`, change that key to `windowTitle`.
     1. Add a key `dataProvider` and set it to the full class name of your `CalendarDataProvider`. 
 
