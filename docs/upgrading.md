@@ -116,9 +116,7 @@ In your calendar data provider, perform the following changes:
     public function titleForView(string $viewSpecifier) : string
     ```
 
-    This is an infrastructural preparation that will allow you to render different calendar titles for different views in the future.
-
-    You can leave the implementation of the method unchanged, since there is currently only a month view, so the supplied `$viewSpecifier` is currently always `'month'`.
+    This is an infrastructural preparation that will allow you to render different calendar titles for different views in the future. You can leave the implementation of the method unchanged, since there is currently only a month view, so the supplied `$viewSpecifier` is currently always `'month'`.
 
 1. Methods `firstDayOfCalendar()` and `lastDayOfCalendar()` have been removed; update any calls to them to `startOfCalendar()` and `endOfCalendar()`, respectively.
 
@@ -136,7 +134,7 @@ In your calendar data provider, perform the following changes:
 These changes most probably do not affect you, but are mentioned in any case so that you can be sure:
 
   1. Method `eventDataForDate()` no longer exists. That logic has been moved to the View layer in `src/View/Month.php`. If your calendar data provider implements that method, remove it and find another way to reach what you want. Create a GitHub issue for some guidance; updates to this package to restore missing functionality will be released promptly if required.
-  1. Method `calendarWeeks` has been renamed to `calendarData`
+  1. Method `calendarWeeks()` has been renamed to `calendarData()`
 
 ## 4. Update your custom event generators
 

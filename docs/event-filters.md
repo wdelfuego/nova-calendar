@@ -177,7 +177,7 @@ When a user opens the calendar view for the first time, the default behavior is 
 
 The `useAsDefaultFilter` method has an optional boolean argument that when it's `false` will not set the filter as the default, so you can easily make the behavior dynamic if you want.
 
-Note that as of version 2.0 of this package, the calendar stores it's state in localStorage and resumes it when you open it again. That means the default filter will not be applied if you've visited the calendar before and changed the filter settings.
+Note that as of version 2.0 of this package, the calendar stores its state in localStorage and resumes it when you open it again. That means the default filter will not be applied if you've visited the calendar before and changed the filter settings.
 
 ---
 
