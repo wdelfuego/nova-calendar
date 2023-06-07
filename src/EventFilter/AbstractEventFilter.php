@@ -31,6 +31,7 @@ abstract class AbstractEventFilter implements EventFilterInterface
     public function __construct(string $label)
     {
         $this->label = $label;
+        $this->setKey(md5(implode('-',[get_called_class(), $label])));
     }
 
     protected function setKey(string $filterKey) : void

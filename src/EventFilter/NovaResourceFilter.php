@@ -34,18 +34,15 @@ class NovaResourceFilter extends AbstractEventFilter
             throw new \InvalidArgumentException("NovaResourceFilter constructor takes a single Nnova resource class as string or an array of them as second argument");
         }
         
-        $hashBase = [get_called_class(), $label];
         foreach($novaResourceClasses as $novaResourceClass)
         {
             if(!is_subclass_of($novaResourceClass, NovaResource::class))
             {
                 throw new \Exception("A NovaResourceFilter can only filter Nova resources ($novaResourceClass is not a Nova resource)");
             }
-            $hashBase[] = preg_replace('/[^a-z]/', '', strtolower($novaResourceClass));
         }
         
         parent::__construct($label);
-        $this->setKey(md5(implode('-',$hashBase)));
         $this->novaResourceClasses = $novaResourceClasses;
         $this->setCustomFilter($customFilter);
     }
