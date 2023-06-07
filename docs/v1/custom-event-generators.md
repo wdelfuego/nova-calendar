@@ -1,6 +1,4 @@
-| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
-|---------------------------------------------------------------------------------|
-
+<h4>Warning: this documentation is for version 1.x of the package</h4>
 [⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---

@@ -1,6 +1,4 @@
-| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
-|---------------------------------------------------------------------------------|
-
+<h4>Warning: this documentation is for version 1.x of the package</h4>
 # Support
 For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
