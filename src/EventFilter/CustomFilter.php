@@ -14,9 +14,20 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\EventFilter;
 
-interface MonthDataProviderInterface extends CalendarDataProviderInterface
+use Wdelfuego\NovaCalendar\Event;
+
+class CustomFilter extends AbstractEventFilter
 {
-    public function __construct(int $year = null, int $month = null);
+    public function __construct(string $label, $customFilter)
+    {
+        parent::__construct($label);
+        $this->setCustomFilter($customFilter);
+    }
+    
+    public function showEvent(Event $event): bool
+    {
+        return $this->passesCustomFilter($event);
+    }
 }

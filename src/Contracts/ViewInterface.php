@@ -14,9 +14,19 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\Contracts;
 
-interface CalendarDayInterface
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+interface ViewInterface
 {
-    public function toArray() : array;
+    public function specifier() : string;    
+    public function initFromRequest(NovaRequest $request);
+    public function viewData(CalendarDataProviderInterface $dataProvider) : array;
+    
+    public function calendarData(NovaRequest $request, CalendarDataProviderInterface $dataProvider) : array;
+    public function defaultStyles() : array;
+    public function firstDayOfWeek() : int;
+    public function updateViewRanges(CalendarDataProviderInterface $dataProvider) : void;
+
 }

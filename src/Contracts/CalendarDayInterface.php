@@ -13,9 +13,10 @@
  *     using calendar views, but don't embed this package or a modified version
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
+ 
+namespace Wdelfuego\NovaCalendar\Contracts;
 
-
-use Illuminate\Support\Facades\Route;
-use Wdelfuego\NovaCalendar\Http\Controllers\CalendarController;
-
-Route::get('/{view}/', [CalendarController::class, 'getCalendarData']);
+interface CalendarDayInterface
+{
+    public function toArray() : array;
+}

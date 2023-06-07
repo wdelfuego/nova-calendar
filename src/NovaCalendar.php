@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
-
+    
 class NovaCalendar extends Tool
 {
     const MONDAY = 1;
@@ -31,8 +31,51 @@ class NovaCalendar extends Tool
     const SATURDAY = 6;
     const SUNDAY = 7;
     
+    private $calendarKey = null;
+    private $calendarConfig = [];
+    
     private $menuLabel = 'Calendar';
     private $menuIcon = 'calendar';
+    
+    public static function pathToCalendar(string $calendarKey) : string
+    {
+        $calendar = new static($calendarKey);
+        return $calendar->uri();
+    }
+    
+    public function __construct(string $calendarKey)
+    {
+        if(!isset(config('nova-calendar')[$calendarKey]))
+        {
+            throw new \Exception("Missing calendar config for calendar key '$calendarKey' in config/nova-calendar.php");
+        }
+        else if(!isset(config('nova-calendar')[$calendarKey]['dataProvider']) || !trim(config('nova-calendar')[$calendarKey]['dataProvider']))
+        {
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'dataProvider' in config/nova-calendar.php; a data provider class is required");
+        }
+        else if(!class_exists(config('nova-calendar')[$calendarKey]['dataProvider']))
+        {
+            $setting = config('nova-calendar')[$calendarKey]['dataProvider'];
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'dataProvider' in config/nova-calendar.php; the supplied data provider class '$setting' does not seem to exist");
+        }
+        else if(!isset(config('nova-calendar')[$calendarKey]['uri']) || !trim(config('nova-calendar')[$calendarKey]['uri']))
+        {
+            throw new \Exception("Invalid config for calendar key '$calendarKey', key 'uri' in config/nova-calendar.php; a uri is required");
+        }
+        
+        $this->calendarKey = $calendarKey;
+        $this->calendarConfig = config('nova-calendar')[$calendarKey];
+        
+        if(isset($this->calendarConfig['menu-icon']) && trim($this->calendarConfig['menu-icon']))
+        {
+            $this->menuIcon = $this->calendarConfig['menu-icon'];
+        }
+        
+        if(isset($this->calendarConfig['menu-label']) && trim($this->calendarConfig['menu-label']))
+        {
+            $this->menuLabel = $this->calendarConfig['menu-label'];
+        }
+    }
     
     public function boot()
     {
@@ -40,11 +83,26 @@ class NovaCalendar extends Tool
         Nova::style('nova-calendar', __DIR__.'/../dist/css/tool.css');
     }
 
+    public function uri()
+    {
+        return $this->calendarConfig['uri'];
+    }
+    
+    public function windowTitle() : string
+    {
+        if(isset($this->calendarConfig['windowTitle']) && strlen(trim($this->calendarConfig['windowTitle'])))
+        {
+            return $this->calendarConfig['windowTitle'];
+        }
+        
+        return '';
+    }
+
     public function menu(Request $request)
     {
         return MenuSection::make($this->menuLabel)
             ->icon($this->menuIcon)
-            ->path(config('nova-calendar.uri', 'wdelfuego/nova-calendar'));
+            ->path($this->uri());
         
     }
     

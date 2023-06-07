@@ -14,21 +14,23 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\EventFilter;
 
-interface CalendarDataProviderInterface
+use Laravel\Nova\Resource as NovaResource;
+use Wdelfuego\NovaCalendar\Event;
+
+class ExcludeNovaResourceFilter extends NovaResourceFilter
 {
-    public function __construct();
-    
-    // Will be displayed above the calendar
-    public function title() : string;
-    
-    // A 1D array with the names of the seven days of the week, in order of display L -> R
-    public function daysOfTheWeek() : array;
-    
-    // A multi-dimensional array with all display data for 1 week in the calendar
-    public function calendarWeeks() : array;
-    
-    // A multi-dimensional array of event styles, see documentation
-    public function eventStyles() : array;
+    public function showEvent(Event $event): bool
+    {
+        foreach($this->novaResourceClasses as $novaResourceClass)
+        {
+            if($event->hasNovaResource($novaResourceClass))
+            {
+                return !$this->passesCustomFilter($event);;
+            }
+        }
+        
+        return true;
+    }
 }

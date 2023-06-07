@@ -1,4 +1,7 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
@@ -24,11 +27,4 @@ protected function excludeResource(NovaResource $resource) : bool
 }
 ```
 
-
-## A note with regard to event filters
-
-As of version 2.0 of this package, you can implement [Event filters](/nova-calendar/event-filters.html) that allow the end user to choose which events to show on the calendar dynamically.
-
-Events hidden due to Laravel policies or using the `excludeResource` method as described above are never shown to the user, regardless of any event filters that may be active.
-
-[⬅️ Back to Documentation overview](/nova-calendar)
+In older versions, this method was simply called `exclude`. That method still works but is deprecated now.

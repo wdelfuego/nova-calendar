@@ -4,85 +4,61 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 ## Documentation
 
-- Installation
+### General
+- [Installation](/nova-calendar/installation.html)
   - [Requirements](/nova-calendar/installation.html#requirements)
   - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
   - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
-- Calendar usage
+- [Upgrading from v1.x](/nova-calendar/upgrading.html)
+- [Calendar usage](/nova-calendar/usage.html)
   - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
   - [Clicking events](/nova-calendar/usage.html#clicking-events)
-- Customization
-  - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
-    - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
-    - [Adding badges to calendar day cells](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
-    - [Changing the calendar URI](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-uri)
-    - [Changing the default menu icon and label](/nova-calendar/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
-    - [Changing the first day of the week](/nova-calendar/customizing-the-calendar.html#changing-the-first-day-of-the-week)
-    - [Adding events from other sources](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources)
-  - [Event visibility](/nova-calendar/event-visibility.html)
-    - [What events are shown by default?](/nova-calendar/event-visibility.html#what-events-are-shown-by-default)
-    - [Hiding individual events](/nova-calendar/event-visibility.html#hiding-individual-events)
-  - [Customizing events](/nova-calendar/customizing-events.html)
-    - [The `customizeEvent` method](/nova-calendar/customizing-events.html#the-customizeevent-method)
-    - [Adding badges to events](/nova-calendar/customizing-events.html#adding-badges-to-events)
-    - [Chainable customization methods](/nova-calendar/customizing-events.html#chainable-customization-methods)
-    - [Non-chainable customization methods](/nova-calendar/customizing-events.html#non-chainable-customization-methods)
-    - [Changing what happens when an event is clicked](/nova-calendar/customizing-events.html#changing-what-happens-when-an-event-is-clicked)
-  - [Customizing event styles](/nova-calendar/customizing-events.html#customizing-the-css)
-    - [Customizing the default event style](/nova-calendar/customizing-events.html#customizing-the-default-event-style)
-    - [Adding custom event styles](/nova-calendar/customizing-events.html#adding-custom-event-styles)
-    - [Adding multiple custom event styles to a single event](/nova-calendar/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
-  - [Custom event generators](/nova-calendar/custom-event-generators.html)
-    - [Example: multiple calendar events from a single model](/nova-calendar/custom-event-generators.html#example-multiple-calendar-events-from-a-single-model)
+- [Adding more calendars to your app](/nova-calendar/adding-more-calendar-views.html)
 - [Contributing to this package](/nova-calendar/contributing-to-this-package.html)
     - [Running the test suite](/nova-calendar/contributing-to-this-package.html#running-tests)
 - [Release log](#release-log)
 - [License](#license)
 
+### Calendar customization
+- [Event visibility](/nova-calendar/event-visibility.html)
+  - [What events are shown by default?](/nova-calendar/event-visibility.html#what-events-are-shown-by-default)
+  - [Hiding individual events](/nova-calendar/event-visibility.html#hiding-individual-events)
+- [Event filters](/nova-calendar/event-filters.html)
+- [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
+  - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
+  - [Adding badges to calendar day cells](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
+  - [Changing the calendar URI](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-uri)
+  - [Changing the default menu icon and label](/nova-calendar/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
+  - [Changing the first day of the week](/nova-calendar/customizing-the-calendar.html#changing-the-first-day-of-the-week)
+  - [Adding events from other sources](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources)
+- [Customizing events](/nova-calendar/customizing-events.html)
+  - [The `customizeEvent` method](/nova-calendar/customizing-events.html#the-customizeevent-method)
+  - [Adding badges to events](/nova-calendar/customizing-events.html#adding-badges-to-events)
+  - [Chainable customization methods](/nova-calendar/customizing-events.html#chainable-customization-methods)
+  - [Non-chainable customization methods](/nova-calendar/customizing-events.html#non-chainable-customization-methods)
+  - [Changing what happens when an event is clicked](/nova-calendar/customizing-events.html#changing-what-happens-when-an-event-is-clicked)
+- [Customizing event styles](/nova-calendar/customizing-events.html#customizing-the-css)
+  - [Customizing the default event style](/nova-calendar/customizing-events.html#customizing-the-default-event-style)
+  - [Adding custom event styles](/nova-calendar/customizing-events.html#adding-custom-event-styles)
+  - [Adding multiple custom event styles to a single event](/nova-calendar/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
+- [Custom event generators](/nova-calendar/custom-event-generators.html)
+  - [Example: multiple calendar events from a single model](/nova-calendar/custom-event-generators.html#example-multiple-calendar-events-from-a-single-model)
+
+
 # Release log
-## v1.8
-- Added support for Laravel 10, thanks @pcorrick!
-- Fixed issue where some multi-day events were not properly shown on the calendar in all cases, thanks @SamMakesCode!
+## v2.0
+- Adds support for [multiple instances](/nova-calendar/multiple-calendars.html) of the calendar, each with their own calendar data provider and configuration
+- Adds support for [Event filters](/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
+- The calendar now restores its previous view state on reloading
+- Minor UI and UX improvements
+- Package infrastructure has been prepared for multiple front-end views (weekly, daily, etc.)
+- Package can now be installed under PHP 7.4 (was previously 8.0+ only)
 
-### v1.7
-- Holding Ctrl or Meta key while clicking an Event now opens the target URL in a new browser window, thanks @vesper8!
-- Event notes now support HTML content
-
-### v1.6
-- The URI of the calendar tool is now configurable, thanks @kitchetof!
-- Adds support for [custom event generators](/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
-- For developers of this package: added first set of unit tests
-
-### v1.5
-- The calendar timezone can now be [customized](/nova-calendar/customizing-the-calendar.html)
-
-### v1.4
-- Badges can now be added to calendar day cells
-
-### v1.3
-- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
-- Calendar events for Nova resources can now be excluded from the calendar on an individual basis
-
-### v1.2
-- Adds support for customizing non-Nova events
-- Adds support for applying multiple custom styles to events
-
-### v1.1
-- Adds support for multi-day events
-- Improved visual design
-- Better support for mobile usage
-- Fixes bug where badges could overlap the event title
-- View now uses css grid instead of table
-- New dual licensing model (see the end of this file)
-
-### v1.0
-- Initial release with support for single-day events only
+For the 1.x release log, see the [documentation for the previous version](/nova-calendar/v1).
 
 
 # License
 Copyright © 2022 • Willem Vervuurt, Studio Delfuego, @wdelfuego
-
-Copyright © 2022 • Christophe Francey, kitchetof
 
 This entire copyright and license notice must be included with any copy, back-up, 
 fork or otherwise modified version of this package.

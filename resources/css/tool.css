@@ -59,6 +59,19 @@ cursor: default;
   border: 0px #555 solid;
   position: relative;
   height: 3em;
+  display: flex;
+/*  flex-direction: row;*/
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+#nc-control .left-items,
+#nc-control .center-items,
+#nc-control .right-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* spacing between buttons */
 }
 
 #nc-control a.disabled {
@@ -76,20 +89,16 @@ cursor: default;
   text-align: center;
 }
 
-#nc-control > a.left {
-  left: 0;
-  right: initial;
-}
-
-#nc-control > a.right {
-  right: 0;
-  left: initial;
-}
-
 #nc-control h1 span {
   cursor: pointer;
+  margin-left: 1rem;
 }
 
+#nc-control a.button {
+  border: 1px rgba(var(--colors-gray-500), 0.2) solid;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
 
 /*
  *  Calendar global

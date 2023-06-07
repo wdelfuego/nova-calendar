@@ -14,11 +14,12 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
  
-namespace Wdelfuego\NovaCalendar\Interface;
+namespace Wdelfuego\NovaCalendar\Contracts;
 
-use Illuminate\Support\Carbon;
-
-interface EventGeneratorInterface
+use Wdelfuego\NovaCalendar\Event;
+    
+interface EventFilterInterface
 {
-    public function generateEvents(Carbon $rangeStart, Carbon $rangeEnd) : array;
+    public function hasKey(string $filterKey) : bool;
+    public function showEvent(Event $event): bool;
 }

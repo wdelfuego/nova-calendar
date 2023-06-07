@@ -13,9 +13,22 @@
  *     using calendar views, but don't embed this package or a modified version
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
+ 
+namespace Wdelfuego\NovaCalendar\Contracts;
 
+interface CalendarDataProviderInterface
+{
+    public function __construct();
 
-use Illuminate\Support\Facades\Route;
-use Wdelfuego\NovaCalendar\Http\Controllers\CalendarController;
-
-Route::get('/{view}/', [CalendarController::class, 'getCalendarData']);
+    // Will be used for the browser window/tab title
+    public function windowTitle() : string;
+    
+    // Will be displayed above the calendar
+    public function titleForView(string $viewSpecifier) : string;
+    
+    // A 1D array with the names of the seven days of the week, in order of display L -> R
+    public function daysOfTheWeek() : array;
+    
+    // A multi-dimensional array of event styles, see documentation
+    public function eventStyles() : array;
+}

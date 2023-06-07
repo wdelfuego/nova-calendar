@@ -1,47 +1,46 @@
-<h1 align="center">Event calendar for Laravel Nova 4</h1>
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+# Support
+For any problems you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
-![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
-# Installation
-```sh
-composer require wdelfuego/nova-calendar
-```
+## Documentation
 
-For help implementing and using the calendar, take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
-
-# License summary
-Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
-Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
-Usage in Nova is not compatible with the AGPLv3 license. More details [below](#license).
-
-# Support & Documentation
-
-For any problems or doubts you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
-
-# What can it do?
-This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
-
-The following features are supported:
-
-- Automatically display Nova resources on a monthly calendar view
-- Mix multiple types of Nova resources on the same calendar
-- Display events that are not related to Nova resources
-- Add badges to events to indicate status or attract attention
-- Customize visual style and content of each individual event
-- Laravel policies are respected to exclude events from the calendar automatically
-- Allows end users to navigate through the calendar with hotkeys
-- Allows end users to navigate to the resources' Detail or Edit views by clicking events
-
-# What can it not do (yet)?
-The following features are not (yet) supported:
-
-- Integration with external calendar services
-- Creating new events directly from the calendar view
-- Drag and drop to change event dates
-
-Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
+- Installation
+  - [Requirements](/nova-calendar/v1/installation.html#requirements)
+  - [Adding the calendar to Nova](/nova-calendar/v1/installation.html#adding-the-calendar-to-nova)
+  - [Publishing the config file](/nova-calendar/v1/installation.html#publishing-the-config-file)
+- Calendar usage
+  - [Navigating the calendar](/nova-calendar/v1/usage.html#navigating-the-calendar)
+  - [Clicking events](/nova-calendar/v1/usage.html#clicking-events)
+- Customization
+  - [Customizing the calendar](/nova-calendar/v1/customizing-the-calendar.html)
+    - [Changing the calendar timezone](/nova-calendar/v1/customizing-the-calendar.html#changing-the-calendar-timezone)
+    - [Adding badges to calendar day cells](/nova-calendar/v1/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
+    - [Changing the calendar URI](/nova-calendar/v1/customizing-the-calendar.html#changing-the-calendar-uri)
+    - [Changing the default menu icon and label](/nova-calendar/v1/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
+    - [Changing the first day of the week](/nova-calendar/v1/customizing-the-calendar.html#changing-the-first-day-of-the-week)
+    - [Adding events from other sources](/nova-calendar/v1/customizing-the-calendar.html#adding-events-from-other-sources)
+  - [Event visibility](/nova-calendar/v1/event-visibility.html)
+    - [What events are shown by default?](/nova-calendar/v1/event-visibility.html#what-events-are-shown-by-default)
+    - [Hiding individual events](/nova-calendar/v1/event-visibility.html#hiding-individual-events)
+  - [Customizing events](/nova-calendar/v1/customizing-events.html)
+    - [The `customizeEvent` method](/nova-calendar/v1/customizing-events.html#the-customizeevent-method)
+    - [Adding badges to events](/nova-calendar/v1/customizing-events.html#adding-badges-to-events)
+    - [Chainable customization methods](/nova-calendar/v1/customizing-events.html#chainable-customization-methods)
+    - [Non-chainable customization methods](/nova-calendar/v1/customizing-events.html#non-chainable-customization-methods)
+    - [Changing what happens when an event is clicked](/nova-calendar/v1/customizing-events.html#changing-what-happens-when-an-event-is-clicked)
+  - [Customizing event styles](/nova-calendar/v1/customizing-events.html#customizing-the-css)
+    - [Customizing the default event style](/nova-calendar/v1/customizing-events.html#customizing-the-default-event-style)
+    - [Adding custom event styles](/nova-calendar/v1/customizing-events.html#adding-custom-event-styles)
+    - [Adding multiple custom event styles to a single event](/nova-calendar/v1/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
+  - [Custom event generators](/nova-calendar/v1/custom-event-generators.html)
+    - [Example: multiple calendar events from a single model](/nova-calendar/v1/custom-event-generators.html#example-multiple-calendar-events-from-a-single-model)
+- [Contributing to this package](/nova-calendar/v1/contributing-to-this-package.html)
+    - [Running the test suite](/nova-calendar/v1/contributing-to-this-package.html#running-tests)
+- [Release log](#release-log)
+- [License](#license)
 
 # Release log
 ## v1.8
@@ -54,11 +53,11 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 ### v1.6
 - The URI of the calendar tool is now configurable, thanks @kitchetof!
-- Adds support for [custom event generators](https://wdelfuego.github.io/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
+- Adds support for [custom event generators](/nova-calendar/v1/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
 - For developers of this package: added first set of unit tests
 
 ### v1.5
-- The calendar timezone can now be [customized](https://wdelfuego.github.io/nova-calendar/customizing-the-calendar.html)
+- The calendar timezone can now be [customized](/nova-calendar/v1/customizing-the-calendar.html)
 
 ### v1.4
 - Badges can now be added to calendar day cells
@@ -82,8 +81,9 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 ### v1.0
 - Initial release with support for single-day events only
 
+
 # License
-Copyright © 2022 • Willem Vervuurt, Studio Delfuego, wdelfuego
+Copyright © 2022 • Willem Vervuurt, Studio Delfuego, @wdelfuego
 
 This entire copyright and license notice must be included with any copy, back-up, 
 fork or otherwise modified version of this package.

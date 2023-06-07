@@ -67,12 +67,42 @@ class ToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], config('nova-calendar.uri', 'wdelfuego/nova-calendar'))
-            ->group(__DIR__.'/../routes/inertia.php');
+        $printedUpdateHelper = false;
+        foreach(config('nova-calendar', []) as $calendarKey => $calendarConfig)
+        {
+            if(php_sapi_name() == 'cli' && !is_array($calendarConfig))
+            {
+                if(!$printedUpdateHelper)
+                {
+                    echo "\n\n\033[31m  WARNING: Your config/nova-calendar.php file does not seem to be updated for Nova Calendar v2.0 yet.\033[0m
+   > Updating the config file for v2.0 is trivial, take a look at the Upgrade Guide at https://wdelfuego.github.io\n\n";
+                    
+                    $printedUpdateHelper = true;
+                }
+            }
+            else if(is_array($calendarConfig))
+            {
+                if(!isset($calendarConfig['uri']))
+                {
+                    throw new \Exception("Missing calendar config option `uri` for calendar `$calendarKey` in config/nova-calendar.php");
+                }
+                else if(!strlen(trim($calendarConfig['uri'])))
+                {
+                    throw new \Exception("Empty calendar config option `uri` for calendar `$calendarKey` in config/nova-calendar.php");
+                }
+                else
+                {
+                    Nova::router(['nova', Authorize::class], $calendarConfig['uri'])
+                        ->group(__DIR__.'/../routes/inertia.php');
 
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/wdelfuego/nova-calendar')
-            ->group(__DIR__.'/../routes/api.php');
+                    Route::middleware(['nova', Authorize::class])
+                        ->prefix('nova-vendor/wdelfuego/nova-calendar/' .$calendarConfig['uri'])
+                        ->group(__DIR__.'/../routes/api.php');
+                }
+            }
+            
+        }
+
     }
 
     /**
