@@ -191,6 +191,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return false;
     }
 
+    public function filters() : array
+    {
+        return [];
+    }
+    
     public function activeFilterKey() : ?string
     {
         return $this->activeFilterKey;
