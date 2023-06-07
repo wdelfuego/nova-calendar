@@ -8,7 +8,6 @@ For any problems you might run into, please [open an issue](https://github.com/w
   - [Requirements](/nova-calendar/installation.html#requirements)
   - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
   - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
-- [Upgrading from v1.0](/nova-calendar/upgrading.html)
 - Calendar usage
   - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
   - [Clicking events](/nova-calendar/usage.html#clicking-events)
@@ -41,15 +40,43 @@ For any problems you might run into, please [open an issue](https://github.com/w
 - [License](#license)
 
 # Release log
-## v2.0
-- Adds support for [multiple instances](/nova-calendar/multiple-calendars.html) of the calendar, each with their own calendar data provider and configuration
-- Adds support for [Event filters](/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
-- The calendar now restores its previous view state on reloading
-- Minor UI and UX improvements
-- Package infrastructure has been prepared for multiple front-end views (weekly, daily, etc.)
-- Package can now be installed under PHP 7.4 (was previously 8.0+ only)
+## v1.8
+- Added support for Laravel 10, thanks @pcorrick!
+- Fixed issue where some multi-day events were not properly shown on the calendar in all cases, thanks @SamMakesCode!
 
-For the 1.x release log, see the [documentation for the previous version](/nova-calendar/v1).
+### v1.7
+- Holding Ctrl or Meta key while clicking an Event now opens the target URL in a new browser window, thanks @vesper8!
+- Event notes now support HTML content
+
+### v1.6
+- The URI of the calendar tool is now configurable, thanks @kitchetof!
+- Adds support for [custom event generators](/nova-calendar/custom-event-generators.html) to define your own mapping from Nova resource to calendar event(s)
+- For developers of this package: added first set of unit tests
+
+### v1.5
+- The calendar timezone can now be [customized](/nova-calendar/customizing-the-calendar.html)
+
+### v1.4
+- Badges can now be added to calendar day cells
+
+### v1.3
+- Calendar events for Nova resources the user isn't authorized to see are now automatically hidden from the calendar
+- Calendar events for Nova resources can now be excluded from the calendar on an individual basis
+
+### v1.2
+- Adds support for customizing non-Nova events
+- Adds support for applying multiple custom styles to events
+
+### v1.1
+- Adds support for multi-day events
+- Improved visual design
+- Better support for mobile usage
+- Fixes bug where badges could overlap the event title
+- View now uses css grid instead of table
+- New dual licensing model (see the end of this file)
+
+### v1.0
+- Initial release with support for single-day events only
 
 
 # License

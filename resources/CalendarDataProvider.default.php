@@ -25,6 +25,12 @@ class CalendarDataProvider extends AbstractDataProvider
     //      that will be used as the event's starting date and time (eg.: 'starts_at'),
     //      the second will be used as the event's ending date and time (eg.: 'ends_at').
     //
+    //      OR
+    //
+    //   3. an instance of a custom Event generator, which is generally only required
+    //      if you want to create more than 1 calendar event for individual Nova resource instances
+    //      
+    //
     // See https://github.com/wdelfuego/nova-calendar to find out
     // how to customize the way the events are displayed
     // 
@@ -37,6 +43,11 @@ class CalendarDataProvider extends AbstractDataProvider
             
             // Events with an ending timestamp can be multi-day events:
             // SomeResource::class => ['starts_at', 'ends_at'],
+            
+            // Custom event generators allow you to take complete control of how
+            // events are added to the calendar for your Nova resources
+            // Take a look at the documentation if you want to implement custom event generators.
+            // SomeResource::class => new MyCustomEventGenerator(),
         ];
     }
 

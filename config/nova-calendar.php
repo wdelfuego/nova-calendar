@@ -14,12 +14,12 @@
  *     of it in free or paid-for software libraries and packages aimed at developers).
  */
 
-use App\Nova\Calendar\CalendarDataProvider;
-// use App\Nova\Calendar\SecondCalendarDataProvider;
+use App\Providers\CalendarDataProvider;
+// use App\Providers\SecondCalendarDataProvider;
 
 return [
 
-    'calendar' => [
+    'my-calendar' => [
 
         /*
          * The class of the calendar data provider for this Nova Calendar
@@ -32,7 +32,7 @@ return [
          * URI for this Nova Calendar (will be appended to the Nova path, /nova by default)
            This key is required.
          */
-        'uri' => 'wdelfuego/calendar',
+        'uri' => 'my-calendar',
 
         /*
          * Browser window/tab title for this Nova Calendar.

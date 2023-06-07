@@ -36,7 +36,7 @@ class CreateDefaultCalendarDataProvider extends Command
      *
      * @var string
      */
-    protected $description = 'Creates an empty CalendarDataProvider at the default location';
+    protected $description = 'Creates an example CalendarDataProvider at the default location';
 
     /**
      * Execute the console command.

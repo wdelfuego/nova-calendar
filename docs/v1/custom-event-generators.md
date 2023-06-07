@@ -47,9 +47,9 @@ If you want to add events to the calendar that are not mappable to the Nova reso
      You must add _where_ clauses to the query builder using those timestamps to select the proper Eloquent models, then return the query builder.
 
     ```php
-    protected function resourceToEvents(NovaResource $resource, Carbon $startOfCalendar, Carbon $endOfCalendar) : array
+    protected function resourceToEvents(NovaResource $resource) : array
     ```
-    The `resourceToEvents` method is used to generate an array with 0 or more `Event` objects given a single Nova resource instance and the current calendar date range.
+    The `resourceToEvents` method is used to generate an array with 0 or more `Event` objects given a single Nova resource instance.
     
     In this method, you don't have to worry about end user permissions. The calendar data provider automatically [hides events](/nova-calendar/event-visibility.html#what-events-are-shown-by-default) for Nova resources the user has no access to. 
         
@@ -114,7 +114,7 @@ class FlightEventGenerator extends CustomEventGenerator
 
     }
 
-    protected function resourceToEvents(NovaResource $resource, Carbon $startOfCalendar, Carbon $endOfCalendar) : array
+    protected function resourceToEvents(NovaResource $resource) : array
     {
         // Implement this method to return an array of Event objects for
         // the supplied Nova resource instance
