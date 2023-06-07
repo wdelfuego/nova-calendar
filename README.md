@@ -28,7 +28,8 @@ The following features are supported:
 - Automatically display Nova resources on a monthly calendar view
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
-- Add badges to events to indicate status or attract attention
+- Use event filters to limit the amount of events shown on the calendar
+- Add badges to events and calendar days to indicate status or attract attention
 - Customize visual style and content of each individual event
 - Laravel policies are respected to exclude events from the calendar automatically
 - Allows end users to navigate through the calendar with hotkeys
@@ -44,7 +45,15 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.8
+## v2.0
+- Adds support for [multiple instances](https://wdelfuego.github.io/nova-calendar/multiple-calendars.html) of the calendar, each with their own calendar data provider and configuration
+- Adds support for [Event filters](https://wdelfuego.github.io/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
+- The calendar now restores its previous view state on reloading
+- Minor UI and UX improvements
+- Package infrastructure has been prepared for multiple front-end views (weekly, daily, etc.)
+- Package can now be installed under PHP 7.4 (was previously 8.0+ only)
+
+### v1.8
 - Added support for Laravel 10, thanks @pcorrick!
 - Fixed issue where some multi-day events were not properly shown on the calendar in all cases, thanks @SamMakesCode!
 
