@@ -11,6 +11,8 @@ Follow these steps in order.
 
 If you encounter *any* issues or unclarities, **please** 🙏,[ open a GitHub issue](https://github.com/wdelfuego/nova-calendar/issues) and let me know so I can make the upgrade process smoother for the next reader.
 
+Creating, maintaining and supporting this package is a lot of work, but I want to deliver the best quality code and support that I can. 
+If you are using this package commercially and find it helpful, please consider [sponsoring](https://github.com/sponsors/wdelfuego) me to help me make time for maintaining this project and supporting the users.
 
 ## 1. Create or update the config file
 
@@ -167,6 +169,8 @@ Update the minimal version of `wdelfuego/nova-calendar` to `^2.0` in your projec
 If everything went well, your calendar is now visible and functional running the new version. The 'previous month' and 'next month' buttons are now grouped together on the left side above the calendar. If you see that and your calendar works, the upgrade was successful.
 
 You can now make use of new features such as [adding event filters](/nova-calendar/event-filters.html) and [adding more calendar views](/nova-calendar/adding-more-calendar-views.html) to your application.
+
+It's been a lot of work to finalize this release and write the documentation, such as this Upgrade Guide. If you are using this package commercially and find it helpful, please consider [sponsoring](https://github.com/sponsors/wdelfuego) me to help me make time for maintaining this project and supporting the users. Thanks and happy calendaring ;)!
 
 ---
 
