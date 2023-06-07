@@ -12,7 +12,9 @@ composer require wdelfuego/nova-calendar
 For help implementing and using the calendar, take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
 
 # Upgrade
-Version 2.0 of this package was released on June 7th, 2023. Existing users can find the Upgrade Guide here: [documentation](https://wdelfuego.github.io/nova-calendar/upgrading.html)
+Version 2.0 of this package was released on June 7th, 2023.
+
+There's an [Upgrade Guide](https://wdelfuego.github.io/nova-calendar/upgrading.html) for users of v1.x. You shouldn't need more than 15 minutes to upgrade.
 
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
