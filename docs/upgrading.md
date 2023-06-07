@@ -70,7 +70,7 @@ Check if `config/nova-calender.php` already exists in your project.
     If you find that you are still referencing that class somewhere in the `NovaServiceProvider`, don't remove it but update the `use` statement to:
 
     ```php
-    use Wdelfuego\NovaCalendar\Contract\CalendarDataProviderInterface;
+    use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
     ```
 
 1. In the `tools` method of your `NovaServiceProvider`, where you create a `new NovaCalendar`, supply the calendar key to the constructor (the key used in the config file, in this example: `my-calendar`).
