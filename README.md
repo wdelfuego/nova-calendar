@@ -11,6 +11,9 @@ composer require wdelfuego/nova-calendar
 
 For help implementing and using the calendar, take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
 
+# Upgrade
+Version 2.0 of this package was released on June 7th, 2023. Existing users can find the Upgrade Guide here: [documentation](https://wdelfuego.github.io/nova-calendar/upgrading.html)
+
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
 Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
@@ -46,7 +49,7 @@ Please create or upvote [feature request discussions](https://github.com/wdelfue
 
 # Release log
 ## v2.0
-- Adds support for [multiple instances](https://wdelfuego.github.io/nova-calendar/multiple-calendars.html) of the calendar, each with their own calendar data provider and configuration
+- Adds support for [multiple instances](https://wdelfuego.github.io/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
 - Adds support for [Event filters](https://wdelfuego.github.io/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
 - The calendar now restores its previous view state on reloading
 - Minor UI and UX improvements
