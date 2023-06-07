@@ -59,6 +59,18 @@ Check if `config/nova-calender.php` already exists in your project.
     });
     ```
 
+1. Confirm that you are not using the `CalendarDataProviderInterface` class anywhere else in your `NovaServiceProvider`, then remove this use statement from the top of the file:
+
+    ```php
+    use Wdelfuego\NovaCalendar\Interface\CalendarDataProviderInterface;
+    ```
+
+    If you find that you are still referencing that class somewhere in the `NovaServiceProvider`, don't remove it but update the `use` statement to:
+
+    ```php
+    use Wdelfuego\NovaCalendar\Contract\CalendarDataProviderInterface;
+    ```
+
 1. In the `tools` method of your `NovaServiceProvider`, where you create a `new NovaCalendar`, supply the calendar key to the constructor (the key used in the config file, in this example: `my-calendar`).
 
     ```php
@@ -90,7 +102,8 @@ In your calendar data provider, perform the following changes:
     public function novaResources() : array
     ```
 1. If your calendar data provider implements the `exclude()` method, rename it to `excludeResource()`.
-1. Rename the `title` method to `titleForView` and add a `string $viewSpecifier` argument:
+
+1. If your calendar data provider implements the `title()` method, rename it to `titleForView` and add a `string $viewSpecifier` argument:
 
     ```php
 	// Change this:
