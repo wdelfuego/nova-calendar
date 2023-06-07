@@ -1,4 +1,7 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
@@ -10,7 +13,7 @@ Before you begin coding;
 
 - check out the project's [GitHub page](https://github.com/wdelfuego/nova-calendar) where we talk about possible enhancements, new features and implementation strategies.
 
-- check out the project's [dual license](/nova-calendar/index.html#license) model and make sure you agree to release your contribution under the same terms.
+- check out the project's [dual license](/nova-calendar/v1/index.html#license) model and make sure you agree to release your contribution under the same terms.
 
 Before you make a pull request;
 

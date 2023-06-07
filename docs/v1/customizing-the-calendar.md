@@ -1,4 +1,7 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
@@ -82,7 +85,7 @@ You can use html in badges and their tooltips, so you can use mark-up or include
 
 ### Changing the calendar URI
 By default, the calendar is exposed to your end users under the `wdelfuego/nova-calendar` URI.
-To change the URI, [publish the config file](/nova-calendar/installation.html#publishing-the-config-file) and set the `uri` option to the URI of your choice.
+To change the URI, [publish the config file](/nova-calendar/v1/installation.html#publishing-the-config-file) and set the `uri` option to the URI of your choice.
 
 
 ### Changing the default menu icon and label
@@ -135,4 +138,4 @@ Any events you return here that fall outside that date range are never displayed
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar)
+[⬅️ Back to Documentation overview](/nova-calendar/v1)

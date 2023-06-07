@@ -1,19 +1,22 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
   
 # Custom event generators
 
-By default, a single event is generated for each instance of the Nova resource classes specified in the `novaResources()` method of the calendar data provider, using the attribute name(s) you supply there as start and optional end timestamp. Nova resources the user has no access to see are [automatically excluded](/nova-calendar/event-visibility.html#what-events-are-shown-by-default) from the calendar.
+By default, a single event is generated for each instance of the Nova resource classes specified in the `novaResources()` method of the calendar data provider, using the attribute name(s) you supply there as start and optional end timestamp. Nova resources the user has no access to see are [automatically excluded](/nova-calendar/v1/event-visibility.html#what-events-are-shown-by-default) from the calendar.
 
-You don't need custom event generators if all you want to do is customize the content or the style of these events, since you can [customize event properties](/nova-calendar/customizing-events.html) and [customize event styles](/nova-calendar/customizing-events.html#customizing-the-css) directly from the calendar data provider.
+You don't need custom event generators if all you want to do is customize the content or the style of these events, since you can [customize event properties](/nova-calendar/v1/customizing-events.html) and [customize event styles](/nova-calendar/v1/customizing-events.html#customizing-the-css) directly from the calendar data provider.
 
 
 If you want to go beyond specifying attribute names for start and end timestamps and take full control of the way a Nova resource is translated to one or more calendar events, you can do so by implementing a custom event generator. This is especially useful if you want to be able to generate multiple calendar events from single model instances.
 
 
-If you want to add events to the calendar that are not mappable to the Nova resources in your project, you can't do that with a custom event generator because custom event generators still require a Nova resource. Instead, you can implement the [`nonNovaEvents()`](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources) method in your calendar data provider and construct your non-Nova events there.
+If you want to add events to the calendar that are not mappable to the Nova resources in your project, you can't do that with a custom event generator because custom event generators still require a Nova resource. Instead, you can implement the [`nonNovaEvents()`](/nova-calendar/v1/customizing-the-calendar.html#adding-events-from-other-sources) method in your calendar data provider and construct your non-Nova events there.
 
 
 ## Setting up a custom event generator
@@ -51,7 +54,7 @@ If you want to add events to the calendar that are not mappable to the Nova reso
     ```
     The `resourceToEvents` method is used to generate an array with 0 or more `Event` objects given a single Nova resource instance.
     
-    In this method, you don't have to worry about end user permissions. The calendar data provider automatically [hides events](/nova-calendar/event-visibility.html#what-events-are-shown-by-default) for Nova resources the user has no access to. 
+    In this method, you don't have to worry about end user permissions. The calendar data provider automatically [hides events](/nova-calendar/v1/event-visibility.html#what-events-are-shown-by-default) for Nova resources the user has no access to. 
         
     See the example implementation and explanations of these methods [below](#example-multiple-calendar-events-from-a-single-model) for more info.
 
@@ -146,4 +149,4 @@ class FlightEventGenerator extends CustomEventGenerator
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar)
+[⬅️ Back to Documentation overview](/nova-calendar/v1)

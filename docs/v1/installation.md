@@ -1,4 +1,7 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
@@ -84,7 +87,7 @@ The calendar just needs a single data provider class that supplies event data to
 	
     Any attributes specified here must be cast to a `DateTime` object by the underlying Eloquent model. You can add more Nova resources to the calendar by simply adding more class names and attributes to the array returned by `novaResources()`.
 
-    This is the only method that is required in your calendar data provider. If you return an empty array, the calendar will work but will not contain any events. For more complex scenarios like generating multiple calendar events from a single Nova resource instance, you can implement your own mapping from resource to calendar event(s) using [custom event generators](/nova-calendar/custom-event-generators.html).
+    This is the only method that is required in your calendar data provider. If you return an empty array, the calendar will work but will not contain any events. For more complex scenarios like generating multiple calendar events from a single Nova resource instance, you can implement your own mapping from resource to calendar event(s) using [custom event generators](/nova-calendar/v1/custom-event-generators.html).
 
 4. If you're using Nova's default main menu, you're already done. 
 
@@ -121,4 +124,4 @@ The following options exist:
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar)
+[⬅️ Back to Documentation overview](/nova-calendar/v1)

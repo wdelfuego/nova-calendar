@@ -1,4 +1,7 @@
-[⬅️ Back to Documentation overview](/nova-calendar)
+| :exclamation:  Warning: this documentation is for version 1.x of the package.   |
+|---------------------------------------------------------------------------------|
+
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
 
 ---
 
@@ -87,7 +90,7 @@ You can use html in a badge, so you can use mark-up or include hero icons using 
 
 The use of 'X' as a badge isn't recommended because it could be mistaken for a close button.
 
-Event badges do not currently support tooltips; [calendar day badges](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells) do.
+Event badges do not currently support tooltips; [calendar day badges](/nova-calendar/v1/customizing-the-calendar.html#adding-badges-to-calendar-day-cells) do.
 
 ## Chainable customization methods
 The following customization methods with regard to the display of the `Event` in the calendar view are available:
@@ -238,4 +241,4 @@ protected function customizeEvent(Event $event) : Event
 
 ---
 
-[⬅️ Back to Documentation overview](/nova-calendar)
+[⬅️ Back to Documentation overview](/nova-calendar/v1)
