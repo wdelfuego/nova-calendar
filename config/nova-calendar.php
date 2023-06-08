@@ -26,7 +26,7 @@ return [
            Don't forget to add the proper use statement above.
            This key is required.
          */
-        'dataProvider' => CalendarDataProvider::class
+        'dataProvider' => CalendarDataProvider::class,
 
         /*
          * URI for this Nova Calendar (will be appended to the Nova path, /nova by default)
