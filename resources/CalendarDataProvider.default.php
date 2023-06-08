@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Wdelfuego\NovaCalendar\DataProvider\AbstractDataProvider;
+use Wdelfuego\NovaCalendar\DataProvider\AbstractCalendarDataProvider;
 use Wdelfuego\NovaCalendar\Event;
 use App\Nova\User;
 
-class CalendarDataProvider extends AbstractDataProvider
+class CalendarDataProvider extends AbstractCalendarDataProvider
 {
     //
     // Add the Nova resources that should be displayed on the calendar to this method
