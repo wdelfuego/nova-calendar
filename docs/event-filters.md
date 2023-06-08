@@ -24,12 +24,12 @@ Event filters do *not* combine; the user either applies 1 event filter, or none.
 Add the following method to the calendar data provider of the calendar that you want to add filters to:
 
 ```php
-    public function filters() : array
-    {
-        return [
-        
-        ];
-    }
+public function filters() : array
+{
+    return [
+    
+    ];
+}
 ```
 
 Then, add one or more instances of the following filters to the array in the order that you want them to be shown to the end user.

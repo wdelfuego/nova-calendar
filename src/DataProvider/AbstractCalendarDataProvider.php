@@ -231,7 +231,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
             }
         }
         
-        throw new \Exception("Calendar event filter not found for key: $filterKey");
+        return null;
     }
     
     public function defaultFilterKey() : ?string
@@ -286,7 +286,15 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         if($this->activeFilterKey)
         {
             $filter = $this->filterWithKey($this->activeFilterKey);
-            $this->allEvents = array_filter($this->allEvents, function($event) use ($filter) { return $filter->showEvent($event); });
+            if($filter)
+            {
+                $this->allEvents = array_filter($this->allEvents, function($event) use ($filter) { return $filter->showEvent($event); });
+            }
+            else
+            {
+                // Front-end requested a non-existent filter, we're returning to a non-filtered situation
+                $this->activeFilterKey = null;
+            }
         }
         
         // Third, set all event timezones to calendar timezone
