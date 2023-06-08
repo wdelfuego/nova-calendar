@@ -27,7 +27,7 @@ class ExcludeNovaResourceFilter extends NovaResourceFilter
         {
             if($event->hasNovaResource($novaResourceClass))
             {
-                return !$this->passesCustomFilter($event);;
+                return !$this->passesCallbackFilter($event);;
             }
         }
         

@@ -13,7 +13,7 @@ Event filters do *not* combine; the user either applies 1 event filter, or none.
 - [Available filter types](#available-filter-types)
   - [`NovaResourceFilter`](#novaresourcefilter)
   - [`ExcludeNovaResourceFilter`](#excludenovaresourcefilter)
-  - [`CustomFilter`](#customfilter)
+  - [`CallbackFilter`](#callbackfilter)
   - A [custom event filter](#custom-event-filters)
 - [Customization options](#customization-options)
   - [Setting a default event filter](#setting-a-default-event-filter)
@@ -38,7 +38,7 @@ Then, add one or more instances of the following filters to the array in the ord
 
 * [`NovaResourceFilter`](#novaresourcefilter) to show only Nova resources of one or more specific classes
 * [`ExcludeNovaResourceFilter`](#excludenovaresourcefilter) to exclude Nova resources of one or more specific classes
-* [`CustomFilter`](#excludenovaresourcefilter) to define your own filtering logic using a callback method
+* [`CallbackFilter`](#callbackfilter) to define your own filtering logic using a callback method
 * A [custom event filter](#custom-event-filters) subclass that you implement yourself for better code organization and filter reusability across calendar data providers
 
 The first argument to a filter constructor is always the filter label, the rest of the arguments define how the filter works.
@@ -107,17 +107,17 @@ As with a `NovaResourceFilter`, the callback method receives the calendar event 
 
 
 
-### `CustomFilter`
+### `CallbackFilter`
 Define your own custom filtering logic using just a callback method.
 
 ```php
-use Wdelfuego\NovaCalendar\EventFilter\CustomFilter;
+use Wdelfuego\NovaCalendar\EventFilter\CallbackFilter;
 
 public function filters() : array
 {
     return [
         // Only show events that have an underlying Eloquent model that has an even id
-        new CustomFilter(__('Eloquent models with an even id'), function($event) { return $event->model() && $event->model()->id % 2 == 0; }),
+        new CallbackFilter(__('Eloquent models with an even id'), function($event) { return $event->model() && $event->model()->id % 2 == 0; }),
     ];
 }
 ```
@@ -127,11 +127,11 @@ Since this filter is applied to any event on your calendar, the event is *not* s
 In practice, this is only required if your `nonNovaEvents` method returns calendar events, because otherwise all events on your calendar have underlying Nova resources and Eloquent models anyway, but not doing those checks could cause problems in the future if you start using the `nonNovaEvents` method without checking your filter implementations.
 
 ### Custom event filters
-Writing complex filtering logic into a `CustomFilter` callback method gets ugly quickly, so it's best to define custom filtering logic in your own filter classes. That has the added advantage of being able to reuse the filter across different calendar data providers and it's better for testing.
+Writing complex filtering logic into a callback method gets ugly quickly, so it's best to define custom filtering logic in your own filter classes. That has the added advantage of being able to reuse the filter across different calendar data providers and it's better for testing.
 
 Implement a subclass of `Wdelfuego\NovaCalendar\EventFilter\AbstractEventFilter`. The only method that you have to implement is `showEvent(Event $event): bool`. Implement it however you see fit and you can add an instance of the custom filter class to the `filters()` method in your CalendarDataProvider.
 
-The inline `CustomFilter` example above, that only shows Eloquent models with an even `id`, would be implemented as a custom filter class as follows:
+The inline `CallbackFilter` example above that only shows Eloquent models with an even `id` would be implemented as a custom filter class as follows:
 
 ```php
 use Wdelfuego\NovaCalendar\EventFilter\AbstractEventFilter;
