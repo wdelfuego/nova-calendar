@@ -34,11 +34,6 @@ abstract class AbstractEventFilter implements EventFilterInterface
         $this->setKey(md5(implode('-',[get_called_class(), $label])));
     }
 
-    protected function setKey(string $filterKey) : void
-    {
-        $this->key = $filterKey;
-    }
-    
     public function getKey() : string
     {
         if(!strlen(trim($this->key)))
@@ -75,7 +70,12 @@ abstract class AbstractEventFilter implements EventFilterInterface
         $this->customFilter = $callable;
     }
 
-    public function passesCustomFilter(Event $event) : bool
+    protected function setKey(string $filterKey) : void
+    {
+        $this->key = $filterKey;
+    }
+    
+    protected function passesCustomFilter(Event $event) : bool
     {
         if($this->customFilter)
         {
