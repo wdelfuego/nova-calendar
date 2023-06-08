@@ -31,6 +31,15 @@ For any problems you might run into, please [open an issue](https://github.com/w
   - [Hiding individual events](/nova-calendar/event-visibility.html#hiding-individual-events)
   
 - [Event filters](/nova-calendar/event-filters.html)
+  - [Adding event filters to the calendar](/nova-calendar/event-filters.html#adding-event-filters-to-the-calendar)
+  - [Available filter types](/nova-calendar/event-filters.html#available-filter-types)
+    - [`NovaResourceFilter`](/nova-calendar/event-filters.html#novaresourcefilter)
+    - [`ExcludeNovaResourceFilter`](/nova-calendar/event-filters.html#excludenovaresourcefilter)
+    - [`CustomFilter`](/nova-calendar/event-filters.html#customfilter)
+    - A [custom event filter](/nova-calendar/event-filters.html#custom-event-filters)
+  - [Customization options](#customization-options)
+    - [Setting a default event filter](#setting-a-default-event-filter)
+    - [Customizing the 'Show all' label](#customizing-the-show-all-label)
 
 - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
   - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)

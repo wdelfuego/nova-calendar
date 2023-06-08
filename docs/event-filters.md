@@ -11,9 +11,14 @@ Event filters do *not* combine; the user either applies 1 event filter, or none.
 ## Table of Contents
 - [Adding event filters to the calendar](#adding-event-filters-to-the-calendar)
 - [Available filter types](#available-filter-types)
+  - [`NovaResourceFilter`](#novaresourcefilter)
+  - [`ExcludeNovaResourceFilter`](#excludenovaresourcefilter)
+  - [`CustomFilter`](#customfilter)
+  - A [custom event filter](#custom-event-filters)
 - [Customization options](#customization-options)
-  - [Customizing the 'Show all' label](#customizing-the-show-all-label)
   - [Setting a default event filter](#setting-a-default-event-filter)
+  - [Customizing the 'Show all' label](#customizing-the-show-all-label)
+
 
 ## Adding event filters to the calendar
 Add the following method to the calendar data provider of the calendar that you want to add filters to:
@@ -155,6 +160,18 @@ public function filters() : array
 
 ## Customization options
 
+### Setting a default event filter
+When a user opens the calendar view for the first time, the default behavior is to show all events. If you want the calendar to open with an active filter by default, add a call to `useAsDefaultFilter()` to one of the filters returned by `filters()` in your calendar data provider:
+
+```php
+// Show only resources of one specific class
+(new NovaResourceFilter(__('Only users'), NovaUser::class))->useAsDefaultFilter(),
+```
+
+The `useAsDefaultFilter` method has an optional boolean argument that when it's `false` will not set the filter as the default, so you can easily make the behavior dynamic if you want.
+
+Note that as of version 2.0 of this package, the calendar stores its state in localStorage and resumes it when you open it again. That means the default filter will not be applied if you've visited the calendar before and changed the filter settings.
+
 ### Customizing the 'Show all' label
 When your calendar offers event filters and the end user has an active filter, the filter menu shows an option to reset the filter and show all events. The default label used for that option is 'Show all' (localized).
 
@@ -167,17 +184,7 @@ public function resetFiltersLabel() : string
 }
 ```
 
-### Setting a default event filter
-When a user opens the calendar view for the first time, the default behavior is to show all events. If you want the calendar to open with an active filter by default, add a call to `useAsDefaultFilter()` to one of the filters returned by `filters()` in your calendar data provider:
 
-```php
-// Show only resources of one specific class
-(new NovaResourceFilter(__('Only users'), NovaUser::class))->useAsDefaultFilter(),
-```
-
-The `useAsDefaultFilter` method has an optional boolean argument that when it's `false` will not set the filter as the default, so you can easily make the behavior dynamic if you want.
-
-Note that as of version 2.0 of this package, the calendar stores its state in localStorage and resumes it when you open it again. That means the default filter will not be applied if you've visited the calendar before and changed the filter settings.
 
 ---
 
