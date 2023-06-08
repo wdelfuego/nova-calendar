@@ -14,6 +14,14 @@ If you encounter *any* issues or unclarities, **please** 🙏,[ open a GitHub is
 Creating, maintaining and supporting this package is a lot of work, but I want to deliver the best quality code and support that I can. 
 If you are using this package commercially and find it helpful, please consider [sponsoring](https://github.com/sponsors/wdelfuego) me to help me make time for maintaining this project and supporting the users.
 
+## Table of Contents
+1. [Create or update the config file](#1-create-or-update-the-config-file)
+1. [Update the `NovaServiceProvider`](#2-update-the-novaserviceprovider)
+1. [Update your calendar data provider](#3-update-your-calendar-data-provider)
+1. [Update your custom event generators](#4-update-your-custom-event-generators)
+1. [Namespace change for interfaces](#5-namespace-change-for-interfaces)
+1. [Do the update](#6-do-the-update)
+
 ## 1. Create or update the config file
 
 Config file `config/nova-calender.php` was optional in v1 but is required in v2, and its structure has changed to accomodate configuring multiple calendar instances.
