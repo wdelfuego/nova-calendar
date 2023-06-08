@@ -30,36 +30,36 @@ Check if `config/nova-calender.php` already exists in your project.
 
 If it doesn't exist yet; publish it first by running the following command.
 
-    ```sh
-    php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
-    ```
+```sh
+php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
+```
 
 Now that you're guaranteed to have a config file, upgrade the structure as follows:
 
-    1. If it contains an entry with key `title`, change that key to `windowTitle`.
-    1. Add a key `dataProvider` and set it to the full class name of your `CalendarDataProvider`. 
+1. If it contains an entry with key `title`, change that key to `windowTitle`.
+1. Add a key `dataProvider` and set it to the full class name of your `CalendarDataProvider`. 
 
-       If you don't know where to find your `CalendarDataProvider`, it's the class that is currently being bound to `CalendarDataProviderInterface` in the `register` method of your `NovaServiceProvider`. You can move the `use` statement from your `NovaServiceProvider` to the config file and set the `dataProvider` entry to `CalendarDataProvider::class`.
+   If you don't know where to find your `CalendarDataProvider`, it's the class that is currently being bound to `CalendarDataProviderInterface` in the `register` method of your `NovaServiceProvider`. You can move the `use` statement from your `NovaServiceProvider` to the config file and set the `dataProvider` entry to `CalendarDataProvider::class`.
 
-    1. Finally, to accomodate multiple calendar instances, the existing top-level config now turns into a specific calendar config; wrap another array around the current contents of the config file and use a string key as a uniquely identifying *calendar key*, to point to this config. 
+1. Finally, to accomodate multiple calendar instances, the existing top-level config now turns into a specific calendar config; wrap another array around the current contents of the config file and use a string key as a uniquely identifying *calendar key*, to point to this config. 
 
-        If you're not going to add more calendars, `my-calendar` will do just fine as a calendar key. The calendar key is for internal use and is never exposed to the end user.
+    If you're not going to add more calendars, `my-calendar` will do just fine as a calendar key. The calendar key is for internal use and is never exposed to the end user.
 
-    1. You should end up with a `config/nova-calendar.php` file that looks something like this:
+1. You should end up with a `config/nova-calendar.php` file that looks something like this:
 
-        ```php
-        use App\Providers\CalendarDataProvider;
+    ```php
+    use App\Providers\CalendarDataProvider;
 
-        return [
-            // This key `my-calendar` is the calendar key. You can use whatever.
-            'my-calendar' => [
-                'dataProvider' => CalendarDataProvider::class,
-                'uri' => 'calendar/my-calendar',
-                'windowTitle' => 'My calendar'
-            ]
-        ];
-        ```
-        Adding more calendar views to your app will be as simple as adding an entry to this file under a new calendar key and implementing its calendar data provider.
+    return [
+        // This key `my-calendar` is the calendar key. You can use whatever.
+        'my-calendar' => [
+            'dataProvider' => CalendarDataProvider::class,
+            'uri' => 'calendar/my-calendar',
+            'windowTitle' => 'My calendar'
+        ]
+    ];
+    ```
+    Adding more calendar views to your app will be as simple as adding an entry to this file under a new calendar key and implementing its calendar data provider.
 
 ## 2. Update the `NovaServiceProvider`
 1. Get rid of the binding between `CalendarDataProviderInterface` and your `CalendarDataProvider` in the `register` method of your `NovaServiceProvider`:
