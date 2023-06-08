@@ -34,14 +34,14 @@ Add the following method to the calendar data provider of the calendar that you 
 
 Then, add one or more instances of the following filters to the array in the order that you want them to be shown to the end user.
 
+## Available filter types
+
 * [`NovaResourceFilter`](#novaresourcefilter) to show only Nova resources of one or more specific classes
 * [`ExcludeNovaResourceFilter`](#excludenovaresourcefilter) to exclude Nova resources of one or more specific classes
 * [`CustomFilter`](#excludenovaresourcefilter) to define your own filtering logic using a callback method
 * A [custom event filter](#custom-event-filters) subclass that you implement yourself for better code organization and filter reusability across calendar data providers
 
 The first argument to a filter constructor is always the filter label, the rest of the arguments define how the filter works.
-
-## Available filter types
 
 ### `NovaResourceFilter`
 Show only calendar events for Nova resources of one or more specific classes.
