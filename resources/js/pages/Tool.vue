@@ -247,7 +247,7 @@ export default {
       
       // Work out the apiPath from the current Tool path, this works
       // because the ToolServiceProvider enforces that both use the same configurable uri part
-      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + this.calendarUrl() + '/month?y='+vue.year+'&m='+vue.month;
+      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar/' + this.calendarUrl() + '/month?y='+vue.year+'&m='+vue.month;
       if(vue.activeFilterKey) {
         apiUrl += '&filter='+vue.activeFilterKey;
       }
