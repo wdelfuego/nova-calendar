@@ -42,10 +42,11 @@ class Month extends AbstractView
     public function viewData(CalendarDataProviderInterface $dataProvider) : array
     {
         return [
+            'shouldShowWeekNumbers' => $dataProvider->shouldShowWeekNumbers(),
             'year' => $this->year,
             'month' => $this->month,
             'columns' => $dataProvider->daysOfTheWeek(),
-            'weeks' => $this->eventsByWeek($dataProvider),
+            'weeks' => $this->eventsByWeek($dataProvider)
         ];
     }
     
@@ -69,6 +70,9 @@ class Month extends AbstractView
 
         for($i = 0; $i < self::N_CALENDAR_WEEKS; $i++)
         {
+            $weekYear = $dateCursor->year;
+            $weekNumber = $dateCursor->weekOfYear;
+
             $week = [];
             for($j = 0; $j < 7; $j++)
             {
@@ -78,7 +82,12 @@ class Month extends AbstractView
                 
                 $dateCursor = $dateCursor->addDay();
             }
-            $out[] = $week;
+            $out[] = [
+                'year' => $weekYear,
+                'number' => $weekNumber,
+                'days' => $week
+            ];
+            // $out[] = $week;
         }
         
         return $out;

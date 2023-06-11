@@ -42,6 +42,13 @@ return [
          */
         'windowTitle' => 'Nova Calendar',
 
+        /*
+        * Define if week numbers should be displayed on the Month view.
+          This key is optional.
+          If you remove it or set, week numbers will be displayed on the Month view by default.
+        */
+        'shouldShowWeekNumbers' => true
+
     ],
 
     // 'calendar2' => [

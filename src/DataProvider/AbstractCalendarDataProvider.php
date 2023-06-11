@@ -76,7 +76,12 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     {
         return $this->configValue('windowTitle') ?? '';
     }
-    
+
+    public function shouldShowWeekNumbers() : bool
+    {
+        return $this->configValue('shouldShowWeekNumbers') ?? true;
+    }
+
     public function timezone(): string
     {
         return config('app.timezone') ?? 'UTC';

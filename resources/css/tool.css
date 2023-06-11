@@ -143,6 +143,32 @@ div.nova-calendar .nc-event.multi.span-5 { grid-column-end: span 5; }
 div.nova-calendar .nc-event.multi.span-6 { grid-column-end: span 6; }
 div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
 
+/*
+ *  Week numbers
+ */
+
+div.nova-calendar .shouldShowWeekNumbers {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3em 1fr;
+}
+
+div.nova-calendar .weeknumber {
+  z-index: 0;
+  grid-row: 1/-1;
+  min-height: 9em;
+  border: none;
+}
+
+div.nova-calendar .weeknumberheader {
+  z-index: 1;
+  padding: 0.4em;
+}
+
+div.nova-calendar .weeknumberlabel {
+  font-size: 8pt;
+  font-weight: bold;
+}
 
 /*
  *  Day cells

@@ -22,10 +22,13 @@ interface CalendarDataProviderInterface
 
     // Will be used for the browser window/tab title
     public function windowTitle() : string;
-    
+   
     // Will be displayed above the calendar
     public function titleForView(string $viewSpecifier) : string;
-    
+
+    // Trigers Week numbers to be displayed
+    public function shouldShowWeekNumbers(): bool;
+
     // A 1D array with the names of the seven days of the week, in order of display L -> R
     public function daysOfTheWeek() : array;
     
