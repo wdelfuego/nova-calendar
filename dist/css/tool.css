@@ -148,24 +148,24 @@ div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
 div.nova-calendar .shouldShowWeekNumbers {
   width: 100%;
   display: grid;
-  grid-template-columns: 3em 1fr;
+  grid-template-columns: 1.8em 1fr;
 }
 
 div.nova-calendar .weeknumber {
   z-index: 0;
   grid-row: 1/-1;
-  min-height: 9em;
-  border: none;
+  border-width: 0.5px;
+  border-color: rgba(var(--colors-gray-500), 0.15);
 }
 
 div.nova-calendar .weeknumberheader {
   z-index: 1;
-  padding: 0.4em;
 }
 
 div.nova-calendar .weeknumberlabel {
   font-size: 8pt;
-  font-weight: bold;
+  transform: rotate(270deg);
+  margin-top: 1em;
 }
 
 /*

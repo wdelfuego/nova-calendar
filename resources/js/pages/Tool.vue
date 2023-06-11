@@ -141,8 +141,8 @@
               <div v-if="shouldShowWeekNumbers" class="weeknumber dark:bg-gray-900 dark:border-gray-800 nc-col-0">
               
                 <!-- week numbers column-->
-                <div class="weeknumberheader text-gray-400 noselect">
-                  <span class="weeknumberlabel">{{ __('W') }}{{ week.number }}</span>
+                <div class="weeknumberheader text-gray-400 noselect relative">
+                  <div class="weeknumberlabel absolute">{{ __('W') }}{{ week.number }}</div>
                 </div>
               
               </div>
