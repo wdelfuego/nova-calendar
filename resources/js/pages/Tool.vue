@@ -142,7 +142,7 @@
               
                 <!-- week numbers column-->
                 <div class="weeknumberheader text-gray-400 noselect relative">
-                  <div class="weeknumberlabel absolute">{{ __('W') }}{{ week.number }}</div>
+                  <div class="weeknumberlabel absolute w-full text-right">{{ __('W') }}{{ week.number }}</div>
                 </div>
               
               </div>

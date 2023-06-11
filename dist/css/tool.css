@@ -148,7 +148,7 @@ div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
 div.nova-calendar .shouldShowWeekNumbers {
   width: 100%;
   display: grid;
-  grid-template-columns: 1.8em 1fr;
+  grid-template-columns: 2em 1fr;
 }
 
 div.nova-calendar .weeknumber {
@@ -164,8 +164,8 @@ div.nova-calendar .weeknumberheader {
 
 div.nova-calendar .weeknumberlabel {
   font-size: 8pt;
+  transform-origin: 75% 80%;
   transform: rotate(270deg);
-  margin-top: 1em;
 }
 
 /*

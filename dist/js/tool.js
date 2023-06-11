@@ -273,7 +273,7 @@ var _hoisted_23 = {
   "class": "weeknumberheader text-gray-400 noselect relative"
 };
 var _hoisted_24 = {
-  "class": "weeknumberlabel absolute"
+  "class": "weeknumberlabel absolute w-full text-right"
 };
 var _hoisted_25 = {
   "class": "week"
