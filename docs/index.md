@@ -7,8 +7,8 @@ For any problems you might run into, please [open an issue](https://github.com/w
 ### General
 - [Installation](/nova-calendar/installation.html)
   - [Requirements](/nova-calendar/installation.html#requirements)
-  - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
-  - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
+  - [Adding your first calendar to Nova](/nova-calendar/installation.html#adding-your-first-calendar-to-nova)
+  - [Config file structure](/nova-calendar/installation.html#config-file-structure)
   
 - [Upgrading from v1.x](/nova-calendar/upgrading.html)
 
