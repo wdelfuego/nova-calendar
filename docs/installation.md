@@ -83,7 +83,7 @@ This package requires:
 
     ```
 
-1. In the data provider created under step 1, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends. 
+1. In the data provider created under step 3, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends. 
 
 	This `novaResources()` method **must** return an array that maps Nova resource class names to either:
 	- a single attribute name, for single day events that only have a start timestamp, or
