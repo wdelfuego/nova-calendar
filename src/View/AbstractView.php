@@ -63,7 +63,6 @@ abstract class AbstractView implements ViewInterface
         $this->updateViewRanges($dataProvider);
 
         return array_merge([
-            'windowTitle' => $dataProvider->windowTitle(),
             'title' => $dataProvider->titleForView($this->specifier()),
             'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
             'filters' => $dataProvider->filtersToArray(),

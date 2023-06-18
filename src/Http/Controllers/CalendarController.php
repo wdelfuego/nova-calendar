@@ -80,6 +80,52 @@ class CalendarController extends BaseController
         $view->initFromRequest($this->request);
         return $view->calendarData($this->request, $dataProvider);
     }
-    
+
+    /**
+     * gets calendar views defined by in nova-calendar config file and checked against allowed calendar views.
+     *
+     * @return array
+     */
+    public function getCalendarViews(): array
+    {
+        $requestUri = substr($this->request->url(), strlen($this->request->schemeAndHttpHost()));
+
+        // Get calendar URI from full request URI by ditching the prefix and the last path element (view)
+        $calendarUri = substr($requestUri, strlen(self::API_PATH_PREFIX));
+        $calendarUri = substr($calendarUri, 0, strrpos($calendarUri, '/'));
+
+        $dataProvider = $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+
+        return [
+            'calendar_views' => $this->sanitizeCalendarViews($dataProvider->calendarViews()),
+            'windowTitle' => $dataProvider->windowTitle(),
+        ];
+    }
+
+    /**
+     * Sanitizes array of provided calendar views. Chcecks if view name exists in A_AVAILABLE_VIEWS constant, removes duplicates.
+     *
+     * @param  array $cv
+     * @return array
+     */
+    protected function sanitizeCalendarViews(array $cv): array
+    {
+        if (empty($cv) || ($cv == View::VIEWS)) {
+            return View::VIEWS;
+        }
+
+        $out = [];
+        foreach ($cv as $view) {
+            if (in_array($view, View::VIEWS) && !in_array($view, $out)) {
+                $out[] = $view;
+            }
+        }
+
+        if (empty($out)) {
+            return View::VIEWS;
+        } else {
+            return $out;
+        }
+    }
 
 }

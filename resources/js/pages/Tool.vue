@@ -13,10 +13,19 @@
  */
  
 <template>
-  <component 
-    :is="activeView"
-    @set-active-view="setActiveView">
-  </component>
+  <LoadingView :loading="loading">
+    
+    <Head :title="$data.windowTitle" />
+    <div>
+      {{ $data.calendarViews }}
+
+    </div>
+    <component 
+      :is="activeView"
+      @set-active-view="setActiveView">
+    </component>
+
+  </LoadingView>
 </template>
 
 <script>
@@ -30,19 +39,78 @@ export default {
 
   data() {
     return {
+      loading: true,
       calendarViews: Array(),
+      windowTitle: '',
       activeView: null,
     }
   },
 
   mounted() {
-    this.setActiveView('Month');
+    this.init();
   },
 
   methods: {
+    init() {
+      if (this.hasStoredSettings()) {
+        this.restoreSettings();
+        this.reload(false);
+      }
+      else {
+        this.reload(true);
+      }
+    },
+
+    reload(isInitRequest = false) {
+      let vue = this;
+      vue.loading = true;
+
+      let apiUrl = '/nova-vendor/wdelfuego/nova-calendar' + this.calendarUrl() + '/calendar-views/'
+
+      Nova.request().get(apiUrl)
+        .then(response => {
+          vue.calendarViews = response.data.calendar_views;
+          vue.windowTitle = response.data.windowTitle;
+
+          if (isInitRequest) {
+            this.setActiveView(vue.calendarViews[0]);
+          } else {
+            this.setActiveView(this.activeView);
+          }
+
+          vue.loading = false;
+        });
+    },
+
     setActiveView(view) {
       this.activeView = view;
-    }
+      this.storeSettings();
+    },
+
+    calendarUrl() {
+      return window.location.pathname.substring(Nova.url('').length);
+    },
+
+    storageKey() {
+      return 'wdelfuego-nova-calendar-' + this.calendarUrl() + '-views';
+    },
+
+    hasStoredSettings() {
+      return (localStorage.getItem(this.storageKey()) !== null);
+    },
+
+    storeSettings() {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        activeView: this.activeView
+      }));
+    },
+
+    restoreSettings() {
+      const storedData = JSON.parse(localStorage.getItem(this.storageKey()));
+      if (storedData) {
+        this.activeView = storedData.activeView;
+      }
+    },
   }
 }
 

@@ -13,10 +13,7 @@
  */
  
 <template>
-    <div>
-
-        <Head :title="$data.windowTitle || $data.title" />
-
+    <LoadingView :loading="loading">
         <div id="nc-control">
 
             <div class="left-items">
@@ -222,7 +219,7 @@
             </Card>
         </div>
 
-    </div>
+    </LoadingView>
 </template>
 
 <script>
@@ -282,7 +279,6 @@ export default {
                     vue.styles = response.data.styles;
                     vue.year = response.data.year;
                     vue.month = response.data.month;
-                    vue.windowTitle = response.data.windowTitle;
                     vue.resetFiltersLabel = response.data.resetFiltersLabel;
                     vue.availableFilters = response.data.filters;
                     vue.activeFilterKey = response.data.activeFilterKey;
@@ -379,10 +375,9 @@ export default {
             activeFilterKey: null,
             activeFilterLabel: null,
             shouldShowWeekNumbers: false,
+            title: '',
             year: null,
             month: null,
-            windowTitle: '',
-            title: '',
             columns: Array(7).fill('-'),
             weeks: Array(6).fill(Array(7).fill({})),
             styles: {
