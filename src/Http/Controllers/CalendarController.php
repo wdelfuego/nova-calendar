@@ -103,21 +103,28 @@ class CalendarController extends BaseController
     }
 
     /**
-     * Sanitizes array of provided calendar views. Chcecks if view name exists in A_AVAILABLE_VIEWS constant, removes duplicates.
+     * Sanitizes array of provided calendar views. Chcecks if view name exists in View::VIEWS constant, removes duplicates, 
+     * throws an exception, if wrong view name defined in config/nova-calendar.php file.
      *
      * @param  array $cv
      * @return array
      */
     protected function sanitizeCalendarViews(array $cv): array
     {
-        if (empty($cv) || ($cv == View::VIEWS)) {
+        if (empty($cv)) {
             return View::VIEWS;
         }
 
         $out = [];
         foreach ($cv as $view) {
-            if (in_array($view, View::VIEWS) && !in_array($view, $out)) {
-                $out[] = $view;
+            if (View::isValidView($view))
+            {
+                if (!in_array($view, $out))
+                {
+                    $out[] = $view;
+                }
+            } else {
+                throw new \Exception("Unknown view: $view");
             }
         }
 

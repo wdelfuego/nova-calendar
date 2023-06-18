@@ -13,7 +13,7 @@
  */
  
 <template>
-    <LoadingView :loading="loading">
+   
         <div id="nc-control">
 
             <div class="left-items">
@@ -93,7 +93,6 @@
                         </DropdownMenu>
                     </template>
                 </Dropdown>
-
 
             </div>
 
@@ -219,7 +218,6 @@
             </Card>
         </div>
 
-    </LoadingView>
 </template>
 
 <script>

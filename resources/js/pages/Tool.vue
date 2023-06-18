@@ -14,12 +14,8 @@
  
 <template>
   <LoadingView :loading="loading">
-    
     <Head :title="$data.windowTitle" />
-    <div>
-      {{ $data.calendarViews }}
-
-    </div>
+    
     <component 
       :is="activeView"
       @set-active-view="setActiveView">

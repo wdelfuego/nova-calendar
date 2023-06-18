@@ -84,7 +84,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
 
     public function calendarViews(): array
     {
-        return $this->configValue('calendar-views') ?? [];
+        return $this->configValue('calendarViews') ?? [];
     }
 
     public function timezone(): string
