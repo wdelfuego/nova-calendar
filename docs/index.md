@@ -62,7 +62,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 
 # Release log
-## v2.0
+## v2.1
+- Adds a year/month picker dropdown to the top of the calendar view
+
+### v2.0
 - Adds support for [multiple instances](/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
 - Adds support for [Event filters](/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
 - The calendar now restores its previous view state on reloading
