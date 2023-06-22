@@ -123,7 +123,7 @@ public function filters() : array
 }
 ```
 
-The callback function only gets called on the event if it has an Eloquent model, so `$event->model()` is guaranteed to return a valid model.
+The callback function only gets called on the event if it has an Eloquent model, so `$event->model()` is guaranteed to return a valid model in callback methods passed to this type of filter.
 
 ### `CallbackFilter`
 Define your own custom filtering logic using just a callback method.
@@ -140,7 +140,7 @@ public function filters() : array
 }
 ```
 
-Since this filter is applied to any event on your calendar, the event is *not* strictly guaranteed to contain a Nova resource and an Eloquent model before the callback method gets called, so you need to do checks before using the `model()` and `resource()` methods. If you only want to show calendar events that have underlying Eloquent models anyway, use an [`EloquentCallbackFilter`](#eloquentcallbackfilter) instead.
+Since this filter is applied to any event on your calendar, the event is *not* strictly guaranteed to contain a Nova resource and an Eloquent model before the callback method gets called, so you need to do checks before using the `model()` and `resource()` methods. If you want the filter to show only calendar events that have underlying Eloquent models anyway, use an [`EloquentCallbackFilter`](#eloquentcallbackfilter) instead.
 
 In practice, using this filter type is only required if your `nonNovaEvents` method returns calendar events without Eloquent models.
 
