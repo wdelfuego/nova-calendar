@@ -257,6 +257,21 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return $this->allEvents;
     }
     
+    public function monthLabel(int $n) : string
+    {
+        return __(Carbon::createFromDate(null, $n, 1)->monthName);
+    }
+    
+    public function monthLabels() : array
+    {
+        $out = [];
+        for($i = 1; $i <= 12; $i++)
+        {
+            $out[$i] = $this->monthLabel($i);
+        }
+        return $out;
+    }
+    
     private function loadAllEvents() : void
     {
         $this->allEvents = [];

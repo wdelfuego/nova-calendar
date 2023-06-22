@@ -31,13 +31,59 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
         </a>
         
-        <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
+        <Dropdown
+          :handle-internal-clicks="true"
+          class="flex h-9 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+          dusk="month-picker"
+        >
+          <DropdownTrigger
+            class="toolbar-button px-2"
+            style="padding-left:0"
+          >
+          </DropdownTrigger>
+
+          <template #menu>
+            <DropdownMenu width="220">
+
+              <ScrollWrap :height="350" class="bg-white dark:bg-gray-900">
+                <div
+                  ref="theForm"
+                  class="divide-y divide-gray-200 dark:divide-gray-800 divide-solid"
+                >
+
+                <div class="p-3 text-center">
+                  <select name="month" class="mr-3" v-model="month" @change="reload()">
+                    <option v-for="(monthLabel, monthNum) in $data.monthLabels" :value="monthNum">
+                    {{ monthLabel }}
+                    </option>
+                  </select>
+                
+                  <select name="year" v-model="year" @change="reload()">
+                    <template v-for="index in 25">
+                      <option :value="year + (25 - index)">{{ year + (25 - index) }}</option>
+                    </template>
+                    <template v-for="index in 100">
+                      <option :value="year - index">{{ year - index }}</option>
+                    </template>
+                  </select>
+                </div>
+              
+                </div>
+              </ScrollWrap>
+            </DropdownMenu>
+          </template>
+        </Dropdown>
+        
+        <h1 class="text-90 font-normal text-xl md:text-2xl noselect">
           <span>{{ $data.title }}</span>
         </h1>
-
+        
       </div>
 
       <div class="center-items">
+
+
+      
       </div>
       
       <div class="right-items">
@@ -259,6 +305,7 @@ export default {
             vue.styles = response.data.styles;
             vue.year = response.data.year;
             vue.month = response.data.month;
+            vue.monthLabels = response.data.monthLabels;
             vue.windowTitle = response.data.windowTitle;
             vue.resetFiltersLabel = response.data.resetFiltersLabel;
             vue.availableFilters = response.data.filters;
@@ -361,6 +408,7 @@ export default {
           activeFilterLabel: null,
           year: null,
           month: null,
+          monthLabels: Array(12).fill(''),
           windowTitle: '',
           title: '',
           columns: Array(7).fill('-'),
