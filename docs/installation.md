@@ -134,6 +134,8 @@ This package requires:
 
 That's it! Your calendar should now be up and running. 
 
+As of v2.0, you can now [add multiple calendar views](/nova-calendar/adding-more-calendar-views.html) and offer [event filters](/nova-calendar/event-filters.html) to your end users.
+
 [Go back to the documentation overview](/nova-calendar) to learn how you can customize the calendar, the events on it, their CSS styles and much more.
 
 
