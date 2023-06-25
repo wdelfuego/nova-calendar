@@ -18,6 +18,7 @@
     
     <component 
       :is="activeView"
+      :calendar-views="calendarViews"
       @set-active-view="setActiveView">
     </component>
 
@@ -27,10 +28,11 @@
 <script>
 
 import Month from '../components/Month'
+import Week from '../components/Week'
 
 export default {
   components: {
-    Month
+    Month, Week
   },
 
   data() {

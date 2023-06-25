@@ -16,7 +16,7 @@
  
 namespace Wdelfuego\NovaCalendar;
 
-use DateTimeInterface;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
@@ -45,8 +45,8 @@ class Event
     
     public function __construct(
         string $name, 
-        DateTimeInterface $start,
-        DateTimeInterface $end = null, 
+        CarbonInterface $start,
+        CarbonInterface $end = null, 
         string $notes = '', 
         array $badges = [])
     {
@@ -63,6 +63,9 @@ class Event
             'name' => $this->name,
             'startDate' => $this->start->format("Y-m-d"),
             'startTime' => $this->start->format($this->timeFormat),
+            'startHour' => intval($this->start->format("G")),
+            'startMinute' => intval($this->start->format("i")),
+            'durationInMinutes' => $this->end ? $this->end->diffInMinutes($this->start): 0,
             'endDate' => $this->end ? $this->end->format("Y-m-d") : null,
             'endTime' => $this->end ? $this->end->format($this->timeFormat) : null,
             'isWithinRange' => $this->touchesRange($startOfRange, $endOfRange),
@@ -249,7 +252,7 @@ class Event
         return $this;
     }
     
-    public function start(DateTimeInterface $v = null) : DateTimeInterface
+    public function start(CarbonInterface $v = null) : CarbonInterface
     {
         if(!is_null($v)) {
             $this->start = $v;
@@ -258,13 +261,13 @@ class Event
         return $this->start;
     }
     
-    public function withStart(DateTimeInterface $v) : self
+    public function withStart(CarbonInterface $v) : self
     {
         $this->start($v);
         return $this;
     }
 
-    public function end(DateTimeInterface $v = null) : ?DateTimeInterface
+    public function end(CarbonInterface $v = null) : ?CarbonInterface
     {
         if(!is_null($v)) {
             $this->end = $v;
@@ -273,7 +276,7 @@ class Event
         return $this->end;
     }
     
-    public function withEnd(DateTimeInterface $v) : self
+    public function withEnd(CarbonInterface $v) : self
     {
         $this->end($v);
         return $this;

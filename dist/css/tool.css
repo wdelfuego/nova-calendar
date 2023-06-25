@@ -23,7 +23,7 @@
   --nc-highlight-border: rgba(var(--colors-primary-500), 0.4);
   --nc-weekend-border: rgba(var(--colors-gray-500), 0.2);
   --nc-weekend-bg: rgba(var(--colors-gray-900), 0);
-  --nc-event-height-multi-day: 2.2em;
+  --nc-event-height-multi-day: 2em;
   --nc-event-border: rgba(10, 10, 10, 0.3);
   --nc-event-border-radius: 7px;
 }
@@ -106,12 +106,6 @@ div.nova-calendar {
   width: 100%;
 }
 
-div.nova-calendar div.nc-header {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(7, 1fr);
-}
-
 div.nova-calendar div.nc-header div {
   padding: 0.6em 0.6em 0.5em 0.6em;
   text-align: left;
@@ -119,53 +113,144 @@ div.nova-calendar div.nc-header div {
   word-break: break-all;
 }
 
-div.nova-calendar .week {
+/*
+ *  Month View
+ */
+
+div.nova-calendar.month-view div.nc-header {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+div.nova-calendar.month-view .week {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 }
 
-div.nova-calendar .nc-col-1 { grid-column: 1 / 2; }
-div.nova-calendar .nc-col-2 { grid-column: 2 / 3; }
-div.nova-calendar .nc-col-3 { grid-column: 3 / 4; }
-div.nova-calendar .nc-col-4 { grid-column: 4 / 5; }
-div.nova-calendar .nc-col-5 { grid-column: 5 / 6; }
-div.nova-calendar .nc-col-6 { grid-column: 6 / 7; }
-div.nova-calendar .nc-col-7 { grid-column: 7 / -1; }
+div.nova-calendar.month-view .nc-col-1 { grid-column: 1 / 2; }
+div.nova-calendar.month-view .nc-col-2 { grid-column: 2 / 3; }
+div.nova-calendar.month-view .nc-col-3 { grid-column: 3 / 4; }
+div.nova-calendar.month-view .nc-col-4 { grid-column: 4 / 5; }
+div.nova-calendar.month-view .nc-col-5 { grid-column: 5 / 6; }
+div.nova-calendar.month-view .nc-col-6 { grid-column: 6 / 7; }
+div.nova-calendar.month-view .nc-col-7 { grid-column: 7 / -1; }
 
-div.nova-calendar .nc-event.multi.span-1 { grid-column-end: span 1; }
-div.nova-calendar .nc-event.multi.span-2 { grid-column-end: span 2; }
-div.nova-calendar .nc-event.multi.span-3 { grid-column-end: span 3; }
-div.nova-calendar .nc-event.multi.span-4 { grid-column-end: span 4; }
-div.nova-calendar .nc-event.multi.span-5 { grid-column-end: span 5; }
-div.nova-calendar .nc-event.multi.span-6 { grid-column-end: span 6; }
-div.nova-calendar .nc-event.multi.span-7 { grid-column-end: span 7; }
+div.nova-calendar.month-view .nc-event.multi.span-1 { grid-column-end: span 1; }
+div.nova-calendar.month-view .nc-event.multi.span-2 { grid-column-end: span 2; }
+div.nova-calendar.month-view .nc-event.multi.span-3 { grid-column-end: span 3; }
+div.nova-calendar.month-view .nc-event.multi.span-4 { grid-column-end: span 4; }
+div.nova-calendar.month-view .nc-event.multi.span-5 { grid-column-end: span 5; }
+div.nova-calendar.month-view .nc-event.multi.span-6 { grid-column-end: span 6; }
+div.nova-calendar.month-view .nc-event.multi.span-7 { grid-column-end: span 7; }
 
-/*
- *  Week numbers
- */
-
-div.nova-calendar .shouldShowWeekNumbers {
+div.nova-calendar.month-view .shouldShowWeekNumbers {
   width: 100%;
   display: grid;
   grid-template-columns: 2em 1fr;
 }
 
-div.nova-calendar .weeknumber {
+div.nova-calendar.month-view .weeknumber {
   z-index: 0;
   grid-row: 1/-1;
   border-width: 0.5px;
   border-color: rgba(var(--colors-gray-500), 0.15);
 }
 
-div.nova-calendar .weeknumberheader {
+div.nova-calendar.month-view .weeknumberheader {
   z-index: 1;
 }
 
-div.nova-calendar .weeknumberlabel {
+div.nova-calendar.month-view .weeknumberlabel {
   font-size: 8pt;
   transform-origin: 75% 80%;
   transform: rotate(270deg);
+}
+
+div.nova-calendar.month-view .week-events {
+  z-index: 2;
+  margin-top: 2.2em;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-flow: column dense;
+}
+
+/*
+ *  Week View
+ */
+
+div.nova-calendar.week-view .week {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3em repeat(7, 1fr);
+}
+
+div.nova-calendar.week-view div.nc-header {
+  display: grid;
+  grid-row: 1 / 2;
+  width: 100%;
+  grid-template-columns: 3em repeat(7, 1fr);
+}
+
+div.nova-calendar.week-view .nc-col-0 { grid-column: 1 / 2; }
+div.nova-calendar.week-view .nc-col-1 { grid-column: 2 / 3; }
+div.nova-calendar.week-view .nc-col-2 { grid-column: 3 / 4; }
+div.nova-calendar.week-view .nc-col-3 { grid-column: 4 / 5; }
+div.nova-calendar.week-view .nc-col-4 { grid-column: 5 / 6; }
+div.nova-calendar.week-view .nc-col-5 { grid-column: 6 / 7; }
+div.nova-calendar.week-view .nc-col-6 { grid-column: 7 / 8; }
+div.nova-calendar.week-view .nc-col-7 { grid-column: 8 / -1; }
+
+div.nova-calendar.week-view .nc-event.multi.span-1 { grid-column-end: span 1; }
+div.nova-calendar.week-view .nc-event.multi.span-2 { grid-column-end: span 2; }
+div.nova-calendar.week-view .nc-event.multi.span-3 { grid-column-end: span 3; }
+div.nova-calendar.week-view .nc-event.multi.span-4 { grid-column-end: span 4; }
+div.nova-calendar.week-view .nc-event.multi.span-5 { grid-column-end: span 5; }
+div.nova-calendar.week-view .nc-event.multi.span-6 { grid-column-end: span 6; }
+div.nova-calendar.week-view .nc-event.multi.span-7 { grid-column-end: span 7; }
+div.nova-calendar.week-view .nc-event.multi.span-8 { grid-column-end: span 8; }
+
+div.nova-calendar.week-view .allday {
+  z-index: 0;
+  
+  border-color: rgba(var(--colors-gray-500), 0.15);
+}
+
+div.nova-calendar.week-view .allday-header {
+  z-index: 1;
+}
+
+div.nova-calendar.week-view .allday-label {
+  font-size: 8pt;
+  transform-origin: 75% 80%;
+  transform: rotate(270deg);
+}
+
+div.nova-calendar.week-view .hour-label {
+  font-size: 0.6rem;
+  opacity: 0.84;
+  text-align: right;
+  border: none;
+  padding-right: 0.5rem;
+}
+
+div.nova-calendar.week-view .day-events-container {
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+div.nova-calendar.week-view .week-events {
+  z-index: 2;
+  margin-top: 0;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 3em repeat(7, 1fr);
+  grid-auto-flow: column dense;
 }
 
 /*
@@ -178,6 +263,11 @@ div.nova-calendar .day {
   min-height: 9em;
   border-width: 0.5px;
   border-color: rgba(var(--colors-gray-500), 0.15);
+}
+
+div.nova-calendar .day.multi {
+  border-bottom: none;
+  min-height: 0;
 }
 
 div.nova-calendar .day:not(.withinRange) {
@@ -205,7 +295,7 @@ div.nova-calendar .day .dayheader .daylabel {
   opacity: 0.84;
 }
 
-div.nova-calendar .day.today .dayheader .daylabel {
+div.nova-calendar .today .dayheader .daylabel {
   font-size: 10pt;
   font-weight: bold;
   opacity: 1.0;
@@ -214,6 +304,19 @@ div.nova-calendar .day.today .dayheader .daylabel {
   border-radius: 100%;
 }
 
+/*
+ *  Hour cells
+ */
+
+div.nova-calendar .slot {
+  
+}
+
+div.nova-calendar .day-events-container {
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
 
 /*
  *  Day Badges
@@ -237,16 +340,6 @@ div.nova-calendar .dayheader span.badge {
  *  Events, general
  */
 
-div.nova-calendar .week-events {
-  z-index: 2;
-  margin-top: 2.2em;
-  grid-column: 1 / -1;
-  grid-row: 1;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-auto-flow: column dense;
-}
-
 div.nova-calendar .single-day-events {
   border: 0px #f00 solid;      
   grid-row-start: span 9000;
@@ -260,8 +353,8 @@ div.nova-calendar .nc-event {
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-  align-items: center;
+  grid-template-rows: max-content auto;
+  align-items: start;
   min-height: var(--nc-event-height-multi-day);
   margin: 0.1em 0.1em;
   padding: 0.2em;
@@ -278,6 +371,10 @@ div.nova-calendar .nc-event:hover {
   opacity: 1.0;
 }
 
+div.nova-calendar div.nc-event.clickable {
+  cursor: pointer;
+}
+
 div.nova-calendar .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
   border-bottom-left-radius: var(--nc-event-border-radius);
@@ -288,10 +385,30 @@ div.nova-calendar .nc-event.ends {
   border-bottom-right-radius: var(--nc-event-border-radius);
 }
 
-div.nova-calendar div.nc-event.clickable {
-  cursor: pointer;
+/*
+ *  Event content
+ */
+
+div.nova-calendar .nc-event div.content {
+  grid-row: 2 / 3;
+  grid-column: 1 / span 2;
+  align-items: start;
+  overflow: scroll;
+  border: 0px #f00 dashed;
+  padding-left: 0.2em;
 }
 
+div.nova-calendar div.nc-event span.time {
+  display: inline-block;
+  font-size: 9pt;
+  opacity: 0.8;
+  margin-right: 0.2em;
+}
+
+div.nova-calendar div.nc-event span.notes {
+  font-size: 9pt;
+  line-height: 10pt;
+}
 
 /*
  *  Events, single day
@@ -345,31 +462,6 @@ div.nova-calendar div.nc-event div.badges span.badge {
   min-width: 22px;
   text-align: center;
   padding: 0.25em;
-}
-
-
-/*
- *  Event content
- */
-
-div.nova-calendar .nc-event div.content {
-  grid-row: 2 / 3;
-  grid-column: 1 / span 2;
-  overflow: scroll;
-  border: 0px #f00 dashed;
-  padding-left: 0.2em;
-}
-
-div.nova-calendar div.nc-event span.time {
-  display: inline-block;
-  font-size: 9pt;
-  opacity: 0.8;
-  margin-right: 0.2em;
-}
-
-div.nova-calendar div.nc-event span.notes {
-  font-size: 9pt;
-  line-height: 10pt;
 }
 
 
