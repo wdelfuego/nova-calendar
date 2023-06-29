@@ -25,8 +25,8 @@ use Wdelfuego\NovaCalendar\CalendarDay;
 class Week extends AbstractView
 {
     const LAYOUT = [
-        'openingHour' => 6,         // calendar not rendered prior this hour on timeline, day, week views unless there are Events before this hour
-        'closingHour' => 20,        // calendar not rendered after this hour on timeline, day, week views unless there are Events after this hour
+        'openingHour' => 8,         // calendar not rendered prior this hour on Week views, 0 means opening hour is 0:00
+        'closingHour' => 20,        // calendar not rendered after this hour on Week views, 24 means closing hour is 0:00
         'timelineInterval' => 30    // for UI purposes, sets granulation of timeslots
     ];
 
@@ -37,6 +37,7 @@ class Week extends AbstractView
     private $openingHour = 9;
     private $closingHour = 17;
     private $timelineInterval = 30;
+    private $timeline = null;
     
     public function specifier() : string
     {
@@ -62,7 +63,7 @@ class Week extends AbstractView
             'columns' => $dataProvider->daysOfTheWeek(),
             'layout' => $this->calendarDayLayout(),
             'weekData' => $this->eventsByWeek($dataProvider),
-            'timeline' => $this->timeline(),
+            'timeline' => $this->timeline,
         ];
     }
 

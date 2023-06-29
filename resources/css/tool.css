@@ -239,6 +239,10 @@ div.nova-calendar.week-view .hour-label {
   padding-right: 0.5rem;
 }
 
+div.nova-calendar.week-view .hour-label div {
+  margin-top: -1em;
+}
+
 div.nova-calendar.week-view .day-events-container {
   grid-column: 2;
   display: grid;
@@ -248,6 +252,7 @@ div.nova-calendar.week-view .day-events-container {
 div.nova-calendar.week-view .week-events {
   z-index: 2;
   margin-top: 0;
+  min-height: 4.4em;
   grid-column: 1 / -1;
   grid-row: 2;
   display: grid;
@@ -311,7 +316,19 @@ div.nova-calendar .today .dayheader .daylabel {
  */
 
 div.nova-calendar .slot {
-  
+  border-width: 0.5px;
+  border-color: rgba(var(--colors-gray-500), 0.15);
+}
+
+div.nova-calendar .slot:not(.withinRange) {
+  opacity: 0.5;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(225,225,255, 0.1),
+    rgba(225,225,255, 0.1) 4px,
+    rgba(100,100,100, 0.1) 4px,
+    rgba(100,100,100, 0.1) 6px
+  );
 }
 
 div.nova-calendar .day-events-container {
@@ -377,14 +394,47 @@ div.nova-calendar div.nc-event.clickable {
   cursor: pointer;
 }
 
-div.nova-calendar .nc-event.starts {
+/*
+ *  Event content - month view
+ */
+
+
+div.nova-calendar.month-view .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
   border-bottom-left-radius: var(--nc-event-border-radius);
 }
 
-div.nova-calendar .nc-event.ends {
+div.nova-calendar.month-view .nc-event.ends {
   border-top-right-radius: var(--nc-event-border-radius);
   border-bottom-right-radius: var(--nc-event-border-radius);
+}
+
+/*
+ *  Event content - week view
+ */
+
+div.nova-calendar.week-view .nc-event.starts {
+  border-top-left-radius: var(--nc-event-border-radius);
+  border-top-right-radius: var(--nc-event-border-radius);
+}
+
+div.nova-calendar.week-view .nc-event.ends  {
+  border-bottom-left-radius: var(--nc-event-border-radius);
+  border-bottom-right-radius: var(--nc-event-border-radius);
+}
+
+div.nova-calendar.week-view .nc-event:not(.starts):not(.ends) {
+  border-top-left-radius: var(--nc-event-border-radius);
+  border-top-right-radius: var(--nc-event-border-radius);
+  border-bottom-left-radius: var(--nc-event-border-radius);
+  border-bottom-right-radius: var(--nc-event-border-radius);
+}
+
+div.nova-calendar.week-view .nc-event:not(.starts):not(.ends) div.name {
+  font-weight: normal;
+  font-size: 9pt;
+  opacity: 0.8;
+  padding-top: 0.1em;
 }
 
 /*
@@ -427,7 +477,7 @@ div.nova-calendar div.nc-event div.name {
   margin-left: 0.2em;
 }
 
-div.nova-calendar div.nc-event:not(.starts) div.name {
+div.nova-calendar .week.events div.nc-event:not(.starts) div.name {
   font-weight: normal;
   font-size: 9pt;
   opacity: 0.8;

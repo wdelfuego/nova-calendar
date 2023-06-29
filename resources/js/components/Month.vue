@@ -140,7 +140,14 @@
                             class="weeknumber dark:bg-gray-900 dark:border-gray-800 nc-col-0">
 
                             <!-- week numbers column-->
-                            <div class="weeknumberheader text-gray-400 noselect relative">
+                            <a v-if="this.weekViewEnabled"
+                                @click="$emit('set-active-view', 'week')">
+                                <div class="weeknumberheader text-gray-400 button relative">
+                                    <div class="weeknumberlabel absolute w-full text-right">{{ __('W') }}{{ week.number }}
+                                    </div>
+                                </div>
+                            </a>
+                            <div v-else class="weeknumberheader text-gray-400 noselect relative">
                                 <div class="weeknumberlabel absolute w-full text-right">{{ __('W') }}{{ week.number }}
                                 </div>
                             </div>
@@ -392,6 +399,12 @@ export default {
             styles: {
                 default: { color: '#fff', 'background-color': 'rgba(var(--colors-primary-500), 0.9)' }
             }
+        }
+    },
+
+    computed: {
+        weekViewEnabled() {
+            return this.calendarViews.includes('week');
         }
     }
 
