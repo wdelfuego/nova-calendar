@@ -28,6 +28,7 @@ class Month extends AbstractView
 
     protected $year = null;
     protected $month = null;
+    protected $week = null;
     
     public function specifier() : string
     {
@@ -45,6 +46,7 @@ class Month extends AbstractView
             'shouldShowWeekNumbers' => $dataProvider->shouldShowWeekNumbers(),
             'year' => $this->year,
             'month' => $this->month,
+            'week' => $this->week,
             'columns' => $dataProvider->daysOfTheWeek(),
             'weeks' => $this->eventsByWeek($dataProvider)
         ];
@@ -54,11 +56,19 @@ class Month extends AbstractView
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+
         while($month > 12) { $year += 1; $month -= 12; }
         while($month < 1)  { $year -= 1; $month += 12; }
-        
+
+        if (($year == now()->year) && ($month == now()->month)) {
+            $week = now()->weekOfYear;
+        } else {
+            $week = Carbon::createFromDate($year, $month, 1)->weekOfYear;
+        }
+
         $this->year = $year;
         $this->month = $month;
+        $this->week = $week;
 
         return $this;
     }

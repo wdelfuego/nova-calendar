@@ -57,7 +57,7 @@ return [
         'calendarViews' => [
           'month',
           'week'
-        ]     
+        ]
     ],
 
     // 'calendar2' => [

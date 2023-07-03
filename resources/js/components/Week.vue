@@ -112,6 +112,9 @@
             <div class="nova-calendar week-view noselect">
 
                 <div class="nc-header">
+                    <div class="border-gray-200 dark:border-gray-900 dark:text-gray-300 nc-col-0">
+                        <span>{{ __('W') }}{{ this.week }}</span>
+                    </div>
                     <div v-for="(column, index) in $data.columns"
                         class="border-gray-200 dark:border-gray-900 dark:text-gray-300" :class="['nc-col-' + (index + 1)]">
                         <span>{{ column }}</span>
@@ -128,9 +131,9 @@
                     <!-- multi-da events, overlaid -->
                     <div class="week-events">
 
-                        <div class="allday dark:bg-gray-900 nc-col-0">
-                            <div class="allday-header text-gray-400 noselect relative">
-                                <div class="allday-label dark:bg-gray-900 nc-col-0">{{ __('All day') }}</div>
+                        <div class="rotated dark:bg-gray-900 nc-col-0">
+                            <div class="rotated-header text-gray-400 noselect relative">
+                                <div class="rotated-label dark:bg-gray-900 nc-col-0">{{ __('All day') }}</div>
                             </div>
                         </div>
 
@@ -166,7 +169,7 @@
                             <!-- multi-day events -->
                             <template v-for="event in day.eventsMultiDay">
                                 <div :class="['nc-event', 'multi', 'nc-col-' + day.weekdayColumn, 'span-' + event.spansDaysN]"
-                                    @click="open(event.url)" :style="this.stylesForEvent(event)"
+                                    @click="open($event, event.url)" :style="this.stylesForEvent(event)"
                                     v-bind:class="{ 'clickable': event.url, 'starts': event.startsEvent, 'ends': event.endsEvent, 'withinRange': event.isWithinRange }">
                                     <div class="name noscrollbar">{{ event.name }}</div>
                                     <div class="badges noscrollbar">
@@ -215,14 +218,14 @@
                         <div :class="['nc-col-' + day.weekdayColumn]"
                             :style="['grid-row: 1 / span ' + this.gridRows + ';', 'display: grid;', 'grid-template-rows: repeat(' + this.gridRows + ', 10px);']">
                             <template v-for="event in day.eventsSingleDay">
-                                <div :class="['nc-event']" @click="open(event.url)" 
+                                <div :class="['nc-event']" @click="open($event, event.url)" 
                                     :style="[
                                         this.stylesForEvent(event),
                                         'grid-row-start: ' + eventStartRow(event.startHour, event.startMinute) + ';',
                                         'grid-row-end: ' + eventEndRow(event.startHour, (event.startMinute + event.durationInMinutes)) + ';'
                                         
                                     ]"
-                                    v-bind:class="{ 'clickable': event.url, 'starts': withinTimeline(event.startHour, event.startMinute), 'ends': withinTimeline(event.startHour, event.startMinute + event.durationInMinutes), 'withinRange': event.isWithinRange }">
+                                    v-bind:class="{ 'clickable': event.url, 'starts': withinView(event.startHour, event.startMinute), 'ends': withinView(event.startHour, event.startMinute + event.durationInMinutes), 'withinRange': event.isWithinRange }">
                                     <div class="name noscrollbar">{{ event.name }}</div>
                                     <div class="badges">
                                         <span class="badge-bg text-gray-200" v-for="badge in event.badges"><span
@@ -251,6 +254,10 @@ export default {
 
     props: [
         'calendarViews'
+    ],
+
+    emits: [
+        'set-active-view'
     ],
 
     mounted() {
@@ -410,7 +417,7 @@ export default {
                 return 1;
             }
 
-            if (row > this.gridRows) {
+            if (row > this.gridRows - 2) {
                 return this.gridRows - 2;
             }
 
@@ -420,18 +427,22 @@ export default {
         eventEndRow(hour, minute) {
             let row = this.rowForTime(hour, minute);
 
-            if (row < 1) {
-                return 1;
+            if (row < 3) {
+                return 3;
             }
 
             if (row > this.gridRows) {
-                return this.gridRows;
+                return -1;
             }
             return row;
         },
 
         withinTimeline(hour, minute) {
             return ((this.minuteForTime(hour, minute) >= this.openingMinute) && (this.minuteForTime(hour, minute) <= this.closingMinute));
+        },
+
+        withinView(hour, minute) {
+            return ((this.minuteForTime(hour, minute) > this.morningOffset) && (this.minuteForTime(hour, minute) < this.eveningOffset));
         },
 
         slotIsShown(hour, minute) {
@@ -473,11 +484,11 @@ export default {
         },
 
         morningOffset() {
-            return this.openingMinute - 30;
+            return this.openingMinute - 60;
         },
 
         eveningOffset() {
-            return this.closingMinute + 30;
+            return this.closingMinute + 60;
         },
 
         morningOffsetRow() {
@@ -489,7 +500,7 @@ export default {
         },
 
         gridRows() {
-            return 144 - (this.morningOffsetRow + 144 - this.eveningOffsetRow);
+            return 145 - (this.morningOffsetRow + 145 - this.eveningOffsetRow);
         },
 
         dayViewEnabled() {

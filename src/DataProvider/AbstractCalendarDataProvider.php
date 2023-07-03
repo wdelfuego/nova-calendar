@@ -94,11 +94,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     
     public function titleForView(string $viewSpecifier) : string
     {
-        if($viewSpecifier == View::MONTH)
+        if($viewSpecifier == View::MONTH || $viewSpecifier == View::WEEK)
         {
             return ucfirst($this->startOfRange()->translatedFormat('F \'y'));
         }
-        
+
         return __('Calendar');
     }
     

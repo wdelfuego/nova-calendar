@@ -185,14 +185,14 @@ div.nova-calendar.month-view .week-events {
 div.nova-calendar.week-view .week {
   width: 100%;
   display: grid;
-  grid-template-columns: 3em repeat(7, 1fr);
+  grid-template-columns: 4em repeat(7, 1fr);
 }
 
 div.nova-calendar.week-view div.nc-header {
   display: grid;
   grid-row: 1 / 2;
   width: 100%;
-  grid-template-columns: 3em repeat(7, 1fr);
+  grid-template-columns: 4em repeat(7, 1fr);
 }
 
 div.nova-calendar.week-view .nc-col-0 { grid-column: 1 / 2; }
@@ -213,17 +213,17 @@ div.nova-calendar.week-view .nc-event.multi.span-6 { grid-column-end: span 6; }
 div.nova-calendar.week-view .nc-event.multi.span-7 { grid-column-end: span 7; }
 div.nova-calendar.week-view .nc-event.multi.span-8 { grid-column-end: span 8; }
 
-div.nova-calendar.week-view .allday {
+div.nova-calendar.week-view .rotated {
   z-index: 0;
   
   border-color: rgba(var(--colors-gray-500), 0.15);
 }
 
-div.nova-calendar.week-view .allday-header {
+div.nova-calendar.week-view .rotated-header {
   z-index: 1;
 }
 
-div.nova-calendar.week-view .allday-label {
+div.nova-calendar.week-view .rotated-label {
   font-size: 8pt;
   transform-origin: 75% 80%;
   transform: rotate(270deg);
@@ -248,13 +248,13 @@ div.nova-calendar.week-view .day-events-container {
 }
 
 div.nova-calendar.week-view .week-events {
-  z-index: 2;
+  z-index: 0;
   margin-top: 0;
-  min-height: 4.4em;
+  min-height: 6em;
   grid-column: 1 / -1;
   grid-row: 2;
   display: grid;
-  grid-template-columns: 3em repeat(7, 1fr);
+  grid-template-columns: 4em repeat(7, 1fr);
   grid-auto-flow: column dense;
 }
 
@@ -364,7 +364,7 @@ div.nova-calendar .single-day-events {
   margin-bottom: 1em;
 }
 
-div.nova-calendar .nc-event {
+ div.nova-calendar .nc-event {
   transition: opacity 0.25s;
   opacity: 0.92;
   overflow: hidden;
@@ -395,7 +395,6 @@ div.nova-calendar div.nc-event.clickable {
 /*
  *  Event content - month view
  */
-
 
 div.nova-calendar.month-view .nc-event.starts {
   border-top-left-radius: var(--nc-event-border-radius);
@@ -527,15 +526,6 @@ div.nova-calendar .nc-event.multi {
   grid-template-rows: auto;
 }
 
-div.nova-calendar .nc-event:not(.starts) {
-  border-left: 1px rgba(228,228,228,0.6) dashed;
-  opacity: 0.8;
-}
-
-div.nova-calendar .nc-event:not(.ends) {
-  border-right: 1px rgba(228,228,228,0.6) dashed;
-}
-
 div.nova-calendar div.nc-event.multi div.name {
   white-space: nowrap; 
   overflow: scroll;
@@ -556,3 +546,29 @@ div.nova-calendar div.nc-event.multi div.content {
   grid-row: 1 / -1;
   grid-column: 2 / 3;
 }
+
+/*
+ *  Events, multi day - month view
+ */
+
+div.nova-calendar.month-view .nc-event:not(.starts) {
+  border-left: 1px rgba(228,228,228,0.6) dashed;
+  opacity: 0.8;
+}
+
+div.nova-calendar.month-view .nc-event:not(.ends) {
+  border-right: 1px rgba(228,228,228,0.6) dashed;
+}
+
+/*
+ *  Events, multi day - week view
+ */
+
+div.nova-calendar.week-view .nc-event:not(.starts) {
+  border-top: 1px rgba(228,228,228,0.6) dashed;
+}
+
+div.nova-calendar.week-view .nc-event:not(.ends) {
+  border-bottom: 1px rgba(228,228,228,0.6) dashed;
+}
+

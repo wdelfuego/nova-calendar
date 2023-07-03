@@ -78,9 +78,15 @@ class Week extends AbstractView
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
         $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
-        $month = Carbon::today()->setISODate($year, $week)->month;
+                  
         while ($week > 52) { $year += 1; $week -= 52; }
         while ($week < 1)  { $year -= 1; $week += 52; }
+
+        if (($year == now()->year) && ($week == now()->weekOfYear)) {
+            $month = now()->month;
+        } else {
+            $month = Carbon::today()->setISODate($year, $week)->month;
+        }
         
         $this->year = $year;
         $this->month = $month;
@@ -109,8 +115,8 @@ class Week extends AbstractView
     
     protected function startOfRange() : Carbon
     {
-        $day = Carbon::now()->setISODate($this->year, $this->week)->day;
-        return Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $this->month . '-' . $day . ' 00:00:00');
+        $start = Carbon::now()->setISODate($this->year, $this->week);
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $start->month . '-' . $start->day . ' 00:00:00');
     }
     
     protected function endOfRange() : Carbon

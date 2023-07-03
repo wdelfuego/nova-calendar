@@ -141,7 +141,8 @@
 
                             <!-- week numbers column-->
                             <a v-if="this.weekViewEnabled"
-                                @click="$emit('set-active-view', 'week')">
+                                href="#"
+                                @click=chooseWeek(week.number)>
                                 <div class="weeknumberheader text-gray-400 button relative">
                                     <div class="weeknumberlabel absolute w-full text-right">{{ __('W') }}{{ week.number }}
                                     </div>
@@ -245,6 +246,10 @@ export default {
         'calendarViews'
     ],
 
+    emits: [
+        'set-active-view'
+    ],
+
     mounted() {
         this.init();
 
@@ -258,6 +263,7 @@ export default {
         reset() {
             this.month = null;
             this.year = null;
+            this.week = null;
             this.reload();
         },
 
@@ -281,6 +287,11 @@ export default {
             this.reload();
         },
 
+        chooseWeek(weekNo) {
+            this.week = weekNo;
+            this.$emit('set-active-view', 'week');
+        },
+
         reload(isInitRequest = false) {
             let vue = this;
             vue.loading = true;
@@ -299,6 +310,7 @@ export default {
                     vue.styles = response.data.styles;
                     vue.year = response.data.year;
                     vue.month = response.data.month;
+                    vue.week = response.data.week;
                     vue.resetFiltersLabel = response.data.resetFiltersLabel;
                     vue.availableFilters = response.data.filters;
                     vue.activeFilterKey = response.data.activeFilterKey;
@@ -368,6 +380,7 @@ export default {
             localStorage.setItem(this.storageKey(), JSON.stringify({
                 year: this.year,
                 month: this.month,
+                week: this.week,
                 activeFilterKey: this.activeFilterKey
             }));
         },
@@ -377,6 +390,7 @@ export default {
             if (storedData) {
                 this.year = storedData.year;
                 this.month = storedData.month;
+                this.week = storedData.week;
                 this.activeFilterKey = storedData.activeFilterKey;
             }
         },
@@ -394,6 +408,7 @@ export default {
             title: '',
             year: null,
             month: null,
+            week: null,
             columns: Array(7).fill('-'),
             weeks: Array(6).fill(Array(7).fill({})),
             styles: {
