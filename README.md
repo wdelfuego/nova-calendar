@@ -1,6 +1,6 @@
 <h1 align="center">Event calendar for Laravel Nova 4</h1>
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly and / or weekly calendar view that adapts nicely to clear and dark mode.</p>
 
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
@@ -30,7 +30,7 @@ This calendar tool for Nova 4 shows existing Nova resources and, if you want, dy
 
 The following features are supported:
 
-- Automatically display Nova resources on a monthly calendar view
+- Automatically display Nova resources on a monthly and / or weekly calendar view
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
 - Use event filters to limit the amount of events shown on the calendar
@@ -50,6 +50,10 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
+
+### v2.1
+- Adds week view
+
 ## v2.0
 - Adds support for [multiple instances](https://wdelfuego.github.io/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
 - Adds support for [Event filters](https://wdelfuego.github.io/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
