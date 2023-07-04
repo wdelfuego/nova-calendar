@@ -38,6 +38,20 @@ class CalendarDay implements CalendarDayInterface
             $date->isWeekend(),
         );
     }
+
+    public static function forDateInYearAndWeek(Carbon $date, int $year, int $week, int $firstDayOfWeek = null): self
+    {
+        $firstDayOfWeek = $firstDayOfWeek ?? NovaCalendar::MONDAY;
+
+        return new self(
+            $date->copy()->setTime(0, 0),
+            self::weekdayColumn($date, $firstDayOfWeek),
+            $date->format('j'),
+            $date->year == $year && $date->week == $week,
+            $date->isToday(),
+            $date->isWeekend(),
+        );
+    }
     
     public static function weekdayColumn(Carbon $date, int $firstDayOfWeek = 1) : int
     {

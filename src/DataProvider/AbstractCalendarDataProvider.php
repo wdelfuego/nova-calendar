@@ -76,7 +76,17 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     {
         return $this->configValue('windowTitle') ?? '';
     }
-    
+
+    public function shouldShowWeekNumbers() : bool
+    {
+        return $this->configValue('shouldShowWeekNumbers') ?? true;
+    }
+
+    public function calendarViews(): array
+    {
+        return $this->configValue('calendarViews') ?? [];
+    }
+
     public function timezone(): string
     {
         return config('app.timezone') ?? 'UTC';
@@ -84,11 +94,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     
     public function titleForView(string $viewSpecifier) : string
     {
-        if($viewSpecifier == View::MONTH)
+        if($viewSpecifier == View::MONTH || $viewSpecifier == View::WEEK)
         {
             return ucfirst($this->startOfRange()->translatedFormat('F \'y'));
         }
-        
+
         return __('Calendar');
     }
     

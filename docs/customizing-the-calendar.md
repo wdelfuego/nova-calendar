@@ -55,7 +55,7 @@ You can add tooltips to calendar day badges to show more details to the user.
 Simply supply a second string argument to the `addBadge` method:
 
 ```php
-protected function customizeCalendarDay(CalendarDay $day) : CalendarDay
+public function customizeCalendarDay(CalendarDay $day) : CalendarDay
 {
     if($day->start->format('d') % 2 == 0)
     {
