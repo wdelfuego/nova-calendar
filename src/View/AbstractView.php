@@ -24,9 +24,10 @@ use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
 
 abstract class AbstractView implements ViewInterface
 {
-    const VIEWS = ['month'];
+    const VIEWS = ['month','week'];
     const MONTH = 'month';
-    
+    const WEEK = 'week';
+
     public static function isValidView(string $view) : bool
     {
         return in_array($view, self::VIEWS);
@@ -39,6 +40,10 @@ abstract class AbstractView implements ViewInterface
             throw new \Exception("Unknown view: $view");
         }
         
+        if ($view == self::WEEK) {
+            return new Week();
+        }
+
         return new Month();
     }
 
@@ -63,7 +68,6 @@ abstract class AbstractView implements ViewInterface
         $this->updateViewRanges($dataProvider);
 
         return array_merge([
-            'windowTitle' => $dataProvider->windowTitle(),
             'title' => $dataProvider->titleForView($this->specifier()),
             'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
             'filters' => $dataProvider->filtersToArray(),

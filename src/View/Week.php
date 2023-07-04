@@ -22,22 +22,35 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
 use Wdelfuego\NovaCalendar\CalendarDay;
 
-class Month extends AbstractView
+class Week extends AbstractView
 {
-    const N_CALENDAR_WEEKS = 6;
+    const LAYOUT = [
+        'openingHour' => 8,         // calendar not rendered prior this hour on Week views, 0 means opening hour is 0:00
+        'closingHour' => 20,        // calendar not rendered after this hour on Week views, 24 means closing hour is 0:00
+        'timelineInterval' => 30    // for UI purposes, sets granulation of timeslots
+    ];
 
     protected $year = null;
     protected $month = null;
     protected $week = null;
+
+    private $openingHour = 9;
+    private $closingHour = 17;
+    private $timelineInterval = 30;
+    private $timeline = null;
     
     public function specifier() : string
     {
-        return self::MONTH;
+        return self::WEEK;
     }
     
     public function initFromRequest(NovaRequest $request)
     {
-        $this->setYearAndMonth($request->query('y'), $request->query('m'));
+        $this->setYearAndWeek($request->query('y'), $request->query('w'));
+        $this->openingHour = $this->calendarDayLayout()['openingHour'];
+        $this->closingHour = $this->calendarDayLayout()['closingHour'];
+        $this->timelineInterval = $this->calendarDayLayout()['timelineInterval'];
+        $this->timeline = $this->timeline();
     }
     
     public function viewData(CalendarDataProviderInterface $dataProvider) : array
@@ -48,82 +61,77 @@ class Month extends AbstractView
             'month' => $this->month,
             'week' => $this->week,
             'columns' => $dataProvider->daysOfTheWeek(),
-            'weeks' => $this->eventsByWeek($dataProvider)
+            'layout' => $this->calendarDayLayout(),
+            'weekData' => $this->eventsByWeek($dataProvider),
+            'timeline' => $this->timeline,
         ];
     }
-    
-    public function setYearAndMonth($year, $month) : self
+
+    /**
+     * Sets Year and Week for week view
+     *
+     * @param  int $year
+     * @param  int $week
+     * @return self
+     */
+    public function setYearAndWeek($year, $week) : self
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);
-        $month = is_null($month) || !is_numeric($month) ? now()->month : intval($month);
+        $week = is_null($week) || !is_numeric($week) ? now()->weekOfYear : intval($week);
+                  
+        while ($week > 52) { $year += 1; $week -= 52; }
+        while ($week < 1)  { $year -= 1; $week += 52; }
 
-        while($month > 12) { $year += 1; $month -= 12; }
-        while($month < 1)  { $year -= 1; $month += 12; }
-
-        if (($year == now()->year) && ($month == now()->month)) {
-            $week = now()->weekOfYear;
+        if (($year == now()->year) && ($week == now()->weekOfYear)) {
+            $month = now()->month;
         } else {
-            $week = Carbon::createFromDate($year, $month, 1)->weekOfYear;
+            $month = Carbon::today()->setISODate($year, $week)->month;
         }
-
+        
         $this->year = $year;
         $this->month = $month;
         $this->week = $week;
-
+        
         return $this;
     }
     
     public function eventsByWeek(CalendarDataProviderInterface $dataProvider) : array
     {
-        $out = [];
         $dateCursor = $dataProvider->startOfCalendar();
 
-        for($i = 0; $i < self::N_CALENDAR_WEEKS; $i++)
+        $week = [];
+        for($j = 0; $j < 7; $j++)
         {
-            $weekYear = $dateCursor->year;
-            $weekNumber = $dateCursor->weekOfYear;
-
-            $week = [];
-            for($j = 0; $j < 7; $j++)
-            {
-                $calendarDay = CalendarDay::forDateInYearAndMonth($dateCursor, $this->year, $this->month, $this->firstDayOfWeek());
-                $calendarDay = $dataProvider->customizeCalendarDay($calendarDay);
-                $week[] = $calendarDay->withEvents($this->eventDataForDate($dataProvider, $dateCursor))->toArray();
-                
-                $dateCursor = $dateCursor->addDay();
-            }
-            $out[] = [
-                'year' => $weekYear,
-                'number' => $weekNumber,
-                'days' => $week
-            ];
-            // $out[] = $week;
+            $calendarDay = CalendarDay::forDateInYearAndWeek($dateCursor, $this->year, $this->week, $this->firstDayOfWeek());
+            $calendarDay = $dataProvider->customizeCalendarDay($calendarDay);
+            $week[] = $calendarDay->withEvents($this->eventDataForDate($dataProvider, $dateCursor))->toArray();
+            
+            $dateCursor = $dateCursor->addDay();
         }
         
-        return $out;
+        return $week;
     }
     
     
     protected function startOfRange() : Carbon
     {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $this->year.'-'.$this->month.'-1 00:00:00');
+        $start = Carbon::now()->setISODate($this->year, $this->week);
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->year . '-' . $start->month . '-' . $start->day . ' 00:00:00');
     }
     
     protected function endOfRange() : Carbon
     {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $this->year.'-'.(int)($this->month+1).'-1 00:00:00')->subSeconds(1);
+        return $this->startOfRange()->addWeek()->subSecond();
     }
     
     protected function startOfCalendar() : Carbon
     {
-        $nDaysToSub = ($this->startOfRange()->dayOfWeekIso - ($this->firstDayOfWeek() % 7)) % 7;
-        while($nDaysToSub < 0) { $nDaysToSub += 7; }
-        return $this->startOfRange()->copy()->subDays($nDaysToSub)->setTime(0,0);
+        return $this->startOfRange();
     }
     
     protected function endOfCalendar() : Carbon
     {
-        return $this->startOfCalendar()->copy()->addDays(7 * self::N_CALENDAR_WEEKS + 1)->subSeconds(1);
+        return $this->endOfRange();
     }
     
     protected function eventDataForDate(CalendarDataProviderInterface $dataProvider, Carbon $date) : array
@@ -175,6 +183,49 @@ class Month extends AbstractView
             $dataProvider->endOfRange(), 
             $dataProvider->firstDayOfWeek()
         ), $events);
+    }
+
+    /**
+     * Gets defualt calendar layout 
+     *
+     * @return array
+     */
+    public function calendarDayLayout(): array
+    {
+        return self::LAYOUT;
+    }
+
+    /**
+     * Gets default hours timeline for rendering purposes. 
+     * ToDo: add time locale support
+     *
+     * @return array
+     */
+    public function timeline(): array
+    {
+        $openingMinute = $this->openingHour * 60;
+        $closingMinute = $this->closingHour * 60;
+
+        $timeCursor = Carbon::today()->copy();
+        $end = $timeCursor->copy()->addDay()->subSecond();
+
+        $out = [];
+        while ($timeCursor->lessThanOrEqualTo($end)) {
+            $h = $timeCursor->hour;
+            $m = $timeCursor->minute;
+            $mm = $h * 60 + $m;
+            $hm = $timeCursor->format('G:i');
+            $out[] = [
+                'hour' => $h,
+                'minute' => $m,
+                'hour_minute' => $hm,
+                'is_open' => (($openingMinute <= $mm) && ($mm < $closingMinute)),
+            ];
+
+            $timeCursor->addMinutes($this->timelineInterval);
+        }
+
+        return $out;
     }
 
 }
