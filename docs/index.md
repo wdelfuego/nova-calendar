@@ -7,8 +7,8 @@ For any problems you might run into, please [open an issue](https://github.com/w
 ### General
 - [Installation](/nova-calendar/installation.html)
   - [Requirements](/nova-calendar/installation.html#requirements)
-  - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
-  - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
+  - [Adding your first calendar to Nova](/nova-calendar/installation.html#adding-your-first-calendar-to-nova)
+  - [Config file structure](/nova-calendar/installation.html#config-file-structure)
   
 - [Upgrading from v1.x](/nova-calendar/upgrading.html)
 
@@ -33,9 +33,9 @@ For any problems you might run into, please [open an issue](https://github.com/w
 - [Event filters](/nova-calendar/event-filters.html)
   - [Adding event filters to the calendar](/nova-calendar/event-filters.html#adding-event-filters-to-the-calendar)
   - [Available filter types](/nova-calendar/event-filters.html#available-filter-types)
-  - [Customization options](#customization-options)
-    - [Setting a default event filter](#setting-a-default-event-filter)
-    - [Customizing the 'Show all' label](#customizing-the-show-all-label)
+  - [Customization options](/nova-calendar/event-filters.html#customization-options)
+    - [Setting a default event filter](/nova-calendar/event-filters.html#setting-a-default-event-filter)
+    - [Customizing the 'Show all' label](/nova-calendar/event-filters.html#customizing-the-show-all-label)
 
 - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
   - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
@@ -62,7 +62,10 @@ For any problems you might run into, please [open an issue](https://github.com/w
 
 
 # Release log
-## v2.0
+## v2.1
+- Adds a year/month picker dropdown to the top of the calendar view
+
+### v2.0
 - Adds support for [multiple instances](/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
 - Adds support for [Event filters](/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
 - The calendar now restores its previous view state on reloading

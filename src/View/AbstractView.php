@@ -72,7 +72,8 @@ abstract class AbstractView implements ViewInterface
             'styles' => array_replace_recursive($this->defaultStyles(), $dataProvider->eventStyles()),
             'filters' => $dataProvider->filtersToArray(),
             'resetFiltersLabel' => $dataProvider->resetFiltersLabel(),
-            'activeFilterKey' => $dataProvider->activeFilterKey()
+            'activeFilterKey' => $dataProvider->activeFilterKey(),
+            'monthLabels' => $dataProvider->monthLabels()
         ], $this->viewData($dataProvider));
     }
     

@@ -86,7 +86,8 @@ export default {
     },
 
     calendarUrl() {
-      return window.location.pathname.substring(Nova.url('').length);
+      const url = window.location.pathname.substring(Nova.url('').length);
+      return url.startsWith('/') ? url : '/' + url;
     },
 
     storageKey() {
@@ -109,6 +110,7 @@ export default {
         this.activeView = storedData.activeView;
       }
     },
+
   }
 }
 

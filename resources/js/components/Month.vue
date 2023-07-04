@@ -38,6 +38,49 @@
                 </svg>
             </a>
 
+            <Dropdown
+              :handle-internal-clicks="true"
+              class="flex h-9 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              dusk="month-picker"
+            >
+              <DropdownTrigger
+                class="toolbar-button px-2"
+                style="padding-left:0"
+              >
+              </DropdownTrigger>
+
+              <template #menu>
+                <DropdownMenu width="220">
+
+                  <ScrollWrap :height="350" class="bg-white dark:bg-gray-900">
+                    <div
+                      ref="theForm"
+                      class="divide-y divide-gray-200 dark:divide-gray-800 divide-solid"
+                    >
+
+                    <div class="p-3 text-center">
+                      <select name="month" class="mr-3" v-model="month" @change="reload()">
+                        <option v-for="(monthLabel, monthNum) in $data.monthLabels" :value="monthNum">
+                        {{ monthLabel }}
+                        </option>
+                      </select>
+                
+                      <select name="year" v-model="year" @change="reload()">
+                        <template v-for="index in 25">
+                          <option :value="year + (25 - index)">{{ year + (25 - index) }}</option>
+                        </template>
+                        <template v-for="index in 100">
+                          <option :value="year - index">{{ year - index }}</option>
+                        </template>
+                      </select>
+                    </div>
+              
+                    </div>
+                  </ScrollWrap>
+                </DropdownMenu>
+              </template>
+            </Dropdown>
+
             <h1 @click="reset" class="text-90 font-normal text-xl md:text-2xl noselect">
                 <span>{{ $data.title }}</span>
             </h1>
@@ -310,6 +353,7 @@ export default {
                     vue.styles = response.data.styles;
                     vue.year = response.data.year;
                     vue.month = response.data.month;
+                    vue.monthLabels = response.data.monthLabels;
                     vue.week = response.data.week;
                     vue.resetFiltersLabel = response.data.resetFiltersLabel;
                     vue.availableFilters = response.data.filters;
@@ -408,6 +452,7 @@ export default {
             title: '',
             year: null,
             month: null,
+            monthLabels: Array(12).fill(''),
             week: null,
             columns: Array(7).fill('-'),
             weeks: Array(6).fill(Array(7).fill({})),

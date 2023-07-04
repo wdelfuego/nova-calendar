@@ -225,7 +225,7 @@ protected function customizeEvent(Event $event) : Event
 {
     if($event->model())
     {
-        if($event->model() && $event->model()->isInACertainState())
+        if($event->model()->isInACertainState())
         {
             // 'warning' takes precedence over 'special'
             $event->addStyles('special', 'warning');

@@ -38,6 +38,7 @@ Then, add one or more instances of the following filters to the array in the ord
 
 * [`NovaResourceFilter`](#novaresourcefilter) to show only Nova resources of one or more specific classes
 * [`ExcludeNovaResourceFilter`](#excludenovaresourcefilter) to exclude Nova resources of one or more specific classes
+* [`EloquentCallbackFilter`](#eloquentcallbackfilter) to show only events with Eloquent models, using a custom callback method
 * [`CallbackFilter`](#callbackfilter) to define your own filtering logic using a callback method
 * A [custom event filter](#custom-event-filters) subclass that you implement yourself for better code organization and filter reusability across calendar data providers
 
@@ -105,7 +106,24 @@ new ExcludeNovaResourceFilter(__('Hide gmail users'), NovaUser::class, function(
 
 As with a `NovaResourceFilter`, the callback method receives the calendar event `$event`, so you can use the `resource()` method to get the related Nova resource or the `model()` method for the underlying Eloquent model, and the event is guaranteed to contain both a Nova resource and an Eloquent model before the callback method gets called, so you don't need to do any checks.
 
+### `EloquentCallbackFilter`
+Show only events that have an Eloquent model and pass a custom callback method.
 
+You can get the Eloquent model from the Event using `model()`.
+
+```php
+use Wdelfuego\NovaCalendar\EventFilter\EloquentCallbackFilter;
+
+public function filters() : array
+{
+    return [
+        // Only show events that have an underlying Eloquent model that has an even id
+        new EloquentCallbackFilter(__('Eloquent models with an even id'), function($event) { return $event->model()->id % 2 == 0; }),
+    ];
+}
+```
+
+The callback function only gets called on the event if it has an Eloquent model, so `$event->model()` is guaranteed to return a valid model in callback methods passed to this type of filter.
 
 ### `CallbackFilter`
 Define your own custom filtering logic using just a callback method.
@@ -122,9 +140,9 @@ public function filters() : array
 }
 ```
 
-Since this filter is applied to any event on your calendar, the event is *not* strictly guaranteed to contain a Nova resource and an Eloquent model before the callback method gets called, so you need to do checks before using the `model()` and `resource()` methods.
+Since this filter is applied to any event on your calendar, the event is *not* strictly guaranteed to contain a Nova resource and an Eloquent model before the callback method gets called, so you need to do checks before using the `model()` and `resource()` methods. If you want the filter to show only calendar events that have underlying Eloquent models anyway, use an [`EloquentCallbackFilter`](#eloquentcallbackfilter) instead.
 
-In practice, this is only required if your `nonNovaEvents` method returns calendar events, because otherwise all events on your calendar have underlying Nova resources and Eloquent models anyway, but not doing those checks could cause problems in the future if you start using the `nonNovaEvents` method without checking your filter implementations.
+In practice, using this filter type is only required if your `nonNovaEvents` method returns calendar events without Eloquent models.
 
 ### Custom event filters
 Writing complex filtering logic into a callback method gets ugly quickly, so it's best to define custom filtering logic in your own filter classes. That has the added advantage of being able to reuse the filter across different calendar data providers and it's better for testing.
