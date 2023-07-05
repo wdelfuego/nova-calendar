@@ -52,7 +52,7 @@ return [
         /*
           * Define what calendar views should be rendered and visible to the end user. 
             Array order determines sequence of views selector on frontend.
-            This key is optional. if not set, all NovaCalendar views will be rendered.
+            This key is optional. if not set, only month view will be rendered.
         */
         'calendarViews' => [
           'month',
