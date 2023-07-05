@@ -111,10 +111,6 @@ class CalendarController extends BaseController
      */
     protected function sanitizeCalendarViews(array $cv): array
     {
-        if (empty($cv)) {
-            return View::VIEWS;
-        }
-
         $out = [];
         foreach ($cv as $view) {
             if (View::isValidView($view))
@@ -127,12 +123,7 @@ class CalendarController extends BaseController
                 throw new \Exception("Unknown view: $view");
             }
         }
-
-        if (empty($out)) {
-            return View::VIEWS;
-        } else {
-            return $out;
-        }
+        return $out;
     }
 
 }

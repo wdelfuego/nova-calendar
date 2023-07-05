@@ -45,18 +45,18 @@ return [
         /*
           * Define if week numbers should be displayed on the Month view.
             This key is optional.
-            If you remove it or set, week numbers will be displayed on the Month view by default.
+            Week numbers will not be displayed on the month view if not true.
         */
         'shouldShowWeekNumbers' => true,
 
         /*
           * Define what calendar views should be rendered and visible to the end user. 
             Array order determines sequence of views selector on frontend.
-            This key is optional. if not set, all NovaCalendar views will be rendered.
+            This key is optional. if not set, only month view will be rendered.
         */
         'calendarViews' => [
-          'month',
-          'week'
+          'week',
+          'month'
         ]
     ],
 
