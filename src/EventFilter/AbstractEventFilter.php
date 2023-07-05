@@ -24,7 +24,7 @@ abstract class AbstractEventFilter implements EventFilterInterface
     private string $key = '';
     private string $label = '';
     private bool $isDefault = false;
-    private $customFilter = null;
+    private $callbackFilter = null;
     
     abstract public function showEvent(Event $event): bool;
     
@@ -34,11 +34,6 @@ abstract class AbstractEventFilter implements EventFilterInterface
         $this->setKey(md5(implode('-',[get_called_class(), $label])));
     }
 
-    protected function setKey(string $filterKey) : void
-    {
-        $this->key = $filterKey;
-    }
-    
     public function getKey() : string
     {
         if(!strlen(trim($this->key)))
@@ -70,16 +65,21 @@ abstract class AbstractEventFilter implements EventFilterInterface
         return $this->isDefault;
     }
     
-    public function setCustomFilter($callable)
+    public function setCallbackFilter($callable)
     {
-        $this->customFilter = $callable;
+        $this->callbackFilter = $callable;
     }
 
-    public function passesCustomFilter(Event $event) : bool
+    protected function setKey(string $filterKey) : void
     {
-        if($this->customFilter)
+        $this->key = $filterKey;
+    }
+    
+    protected function passesCallbackFilter(Event $event) : bool
+    {
+        if($this->callbackFilter)
         {
-            return ($this->customFilter)($event);
+            return ($this->callbackFilter)($event);
         }
         
         return true;

@@ -7,23 +7,36 @@ For any problems you might run into, please [open an issue](https://github.com/w
 ### General
 - [Installation](/nova-calendar/installation.html)
   - [Requirements](/nova-calendar/installation.html#requirements)
-  - [Adding the calendar to Nova](/nova-calendar/installation.html#adding-the-calendar-to-nova)
-  - [Publishing the config file](/nova-calendar/installation.html#publishing-the-config-file)
+  - [Adding your first calendar to Nova](/nova-calendar/installation.html#adding-your-first-calendar-to-nova)
+  - [Config file structure](/nova-calendar/installation.html#config-file-structure)
+  
 - [Upgrading from v1.x](/nova-calendar/upgrading.html)
+
 - [Calendar usage](/nova-calendar/usage.html)
   - [Navigating the calendar](/nova-calendar/usage.html#navigating-the-calendar)
   - [Clicking events](/nova-calendar/usage.html#clicking-events)
+  
 - [Adding more calendars to your app](/nova-calendar/adding-more-calendar-views.html)
+
 - [Contributing to this package](/nova-calendar/contributing-to-this-package.html)
     - [Running the test suite](/nova-calendar/contributing-to-this-package.html#running-tests)
+    
 - [Release log](#release-log)
+
 - [License](#license)
 
 ### Calendar customization
 - [Event visibility](/nova-calendar/event-visibility.html)
   - [What events are shown by default?](/nova-calendar/event-visibility.html#what-events-are-shown-by-default)
   - [Hiding individual events](/nova-calendar/event-visibility.html#hiding-individual-events)
+  
 - [Event filters](/nova-calendar/event-filters.html)
+  - [Adding event filters to the calendar](/nova-calendar/event-filters.html#adding-event-filters-to-the-calendar)
+  - [Available filter types](/nova-calendar/event-filters.html#available-filter-types)
+  - [Customization options](/nova-calendar/event-filters.html#customization-options)
+    - [Setting a default event filter](/nova-calendar/event-filters.html#setting-a-default-event-filter)
+    - [Customizing the 'Show all' label](/nova-calendar/event-filters.html#customizing-the-show-all-label)
+
 - [Customizing the calendar](/nova-calendar/customizing-the-calendar.html)
   - [Changing the calendar timezone](/nova-calendar/customizing-the-calendar.html#changing-the-calendar-timezone)
   - [Adding badges to calendar day cells](/nova-calendar/customizing-the-calendar.html#adding-badges-to-calendar-day-cells)
@@ -31,23 +44,29 @@ For any problems you might run into, please [open an issue](https://github.com/w
   - [Changing the default menu icon and label](/nova-calendar/customizing-the-calendar.html#changing-the-default-menu-icon-and-label)
   - [Changing the first day of the week](/nova-calendar/customizing-the-calendar.html#changing-the-first-day-of-the-week)
   - [Adding events from other sources](/nova-calendar/customizing-the-calendar.html#adding-events-from-other-sources)
+  
 - [Customizing events](/nova-calendar/customizing-events.html)
   - [The `customizeEvent` method](/nova-calendar/customizing-events.html#the-customizeevent-method)
   - [Adding badges to events](/nova-calendar/customizing-events.html#adding-badges-to-events)
   - [Chainable customization methods](/nova-calendar/customizing-events.html#chainable-customization-methods)
   - [Non-chainable customization methods](/nova-calendar/customizing-events.html#non-chainable-customization-methods)
   - [Changing what happens when an event is clicked](/nova-calendar/customizing-events.html#changing-what-happens-when-an-event-is-clicked)
+
 - [Customizing event styles](/nova-calendar/customizing-events.html#customizing-the-css)
   - [Customizing the default event style](/nova-calendar/customizing-events.html#customizing-the-default-event-style)
   - [Adding custom event styles](/nova-calendar/customizing-events.html#adding-custom-event-styles)
   - [Adding multiple custom event styles to a single event](/nova-calendar/customizing-events.html#adding-multiple-custom-event-styles-to-a-single-event)
+
 - [Custom event generators](/nova-calendar/custom-event-generators.html)
   - [Example: multiple calendar events from a single model](/nova-calendar/custom-event-generators.html#example-multiple-calendar-events-from-a-single-model)
 
 
 # Release log
-## v2.0
-- Adds support for [multiple instances](/nova-calendar/multiple-calendars.html) of the calendar, each with their own calendar data provider and configuration
+## v2.1
+- Adds a year/month picker dropdown to the top of the calendar view
+
+### v2.0
+- Adds support for [multiple instances](/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
 - Adds support for [Event filters](/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
 - The calendar now restores its previous view state on reloading
 - Minor UI and UX improvements

@@ -16,33 +16,30 @@ This package requires:
 - [PHP](https://www.php.net) 7.4 or newer
 
 
-1. If your installation meets the requirements, start by requiring the package:
+## Adding your first calendar to Nova
+
+1. Start by requiring the package:
 
     ```sh
     composer require wdelfuego/nova-calendar
     ```
 
 
-2. Publish this project's config file by running the following command:
+1. Publish the config file by running the following command:
 
     ```sh
     php artisan vendor:publish --provider="Wdelfuego\NovaCalendar\ToolServiceProvider" --tag="config"
     ```
 
-	The published config file `config/nova-calendar.php` contains a working starting config.
+	  The published config file `config/nova-calendar.php` contains a working starting config.
 
-	Two important config values for every calendar view are:
-	- the *calendar key*, which is the string array key in the config file (`my-calendar`)
-	- *dataProvider*, which is the class that will generate the calendar event data (`App\Providers\CalendarDataProvider`)
+	  Two important config values for every calendar view are:
+	  - the *calendar key*, which is the string array key in the config file (`my-calendar`)
+	  - *dataProvider*, which is the class that will generate the calendar event data (`App\Providers\CalendarDataProvider`)
 
-	You are free to change both to your liking, but it is not required.
+	  You are free to change both to your liking, but it is not required.
 
     Read the comments in the published config file or [look at the example config](#config-file-structure) at the end of this page to learn more.
-
-
-## Adding your first calendar to Nova
-
-You only need to create a single calendar data provider class to get a working calendar in your Nova app. 
 
 1. Create the data provider class:
 
@@ -56,7 +53,7 @@ You only need to create a single calendar data provider class to get a working c
 
 	An absolutely minimal data provider implementation that generates an empty calendar looks like this:
 
-	```php
+    ```php
     namespace App\Providers;
 
     use Wdelfuego\NovaCalendar\DataProvider\AbstractDataProvider;
@@ -68,8 +65,9 @@ You only need to create a single calendar data provider class to get a working c
             return [];
         }
     }
+    ```
 
-2. Edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar Tool to its `tools()` method.
+1. Edit your `NovaServiceProvider` at `app/NovaServiceProvider.php` to add the calendar Tool to its `tools()` method.
 
     Supply the calendar key to the constructor:
 
@@ -85,7 +83,7 @@ You only need to create a single calendar data provider class to get a working c
 
     ```
 
-3. In the data provider created under step 1, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends. 
+1. In the data provider created under step 3, implement the `novaResources()` method to specify which Nova resources are to be included and which of their model's `DateTime` attributes define when the event starts and, optionally, when it ends. 
 
 	This `novaResources()` method **must** return an array that maps Nova resource class names to either:
 	- a single attribute name, for single day events that only have a start timestamp, or
@@ -123,7 +121,7 @@ You only need to create a single calendar data provider class to get a working c
 
     For more complex scenarios like generating multiple calendar events from a single Nova resource instance, you can implement your own mapping from resource to calendar event(s) using [custom event generators](/nova-calendar/custom-event-generators.html).
 
-4. If you're using Nova's default main menu, you're already done :). 
+1. If you're using Nova's default main menu, you're already done :). 
 
     If you've defined your main menu manually in the `boot()` method of your `NovaServiceProvider`, don't forget to add a `MenuSection` or `MenuLink` that links to the calendar, passing the calendar key to `NovaCalendar::pathToCalendar`:
 
@@ -135,6 +133,8 @@ You only need to create a single calendar data provider class to get a working c
     ````
 
 That's it! Your calendar should now be up and running. 
+
+As of v2.0, you can now [add multiple calendar views](/nova-calendar/adding-more-calendar-views.html) and offer [event filters](/nova-calendar/event-filters.html) to your end users.
 
 [Go back to the documentation overview](/nova-calendar) to learn how you can customize the calendar, the events on it, their CSS styles and much more.
 

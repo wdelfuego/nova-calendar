@@ -1,6 +1,6 @@
 <h1 align="center">Event calendar for Laravel Nova 4</h1>
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly and / or weekly calendar view that adapts nicely to clear and dark mode.</p>
 
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
@@ -10,6 +10,11 @@ composer require wdelfuego/nova-calendar
 ```
 
 For help implementing and using the calendar, take a look at the [documentation](https://wdelfuego.github.io/nova-calendar).
+
+# Upgrade
+Version 2.0 of this package was released on June 7th, 2023.
+
+There's an [Upgrade Guide](https://wdelfuego.github.io/nova-calendar/upgrading.html) for users of v1.x. You shouldn't need more than 15 minutes to upgrade.
 
 # License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
@@ -25,10 +30,11 @@ This calendar tool for Nova 4 shows existing Nova resources and, if you want, dy
 
 The following features are supported:
 
-- Automatically display Nova resources on a monthly calendar view
+- Automatically display Nova resources on a monthly and / or weekly calendar view
 - Mix multiple types of Nova resources on the same calendar
 - Display events that are not related to Nova resources
-- Add badges to events to indicate status or attract attention
+- Use event filters to limit the amount of events shown on the calendar
+- Add badges to events and calendar days to indicate status or attract attention
 - Customize visual style and content of each individual event
 - Laravel policies are respected to exclude events from the calendar automatically
 - Allows end users to navigate through the calendar with hotkeys
@@ -44,7 +50,21 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
-## v1.8
+## v2.2
+- Adds week view support
+
+### v2.1
+- Adds a year/month picker dropdown to the top of the calendar view
+
+### v2.0
+- Adds support for [multiple instances](https://wdelfuego.github.io/nova-calendar/adding-more-calendar-views.html) of the calendar, each with their own calendar data provider and configuration
+- Adds support for [Event filters](https://wdelfuego.github.io/nova-calendar/event-filters.html), allowing the end user to show different subsets of events within a calendar
+- The calendar now restores its previous view state on reloading
+- Minor UI and UX improvements
+- Package infrastructure has been prepared for multiple front-end views (weekly, daily, etc.)
+- Package can now be installed under PHP 7.4 (was previously 8.0+ only)
+
+### v1.8
 - Added support for Laravel 10, thanks @pcorrick!
 - Fixed issue where some multi-day events were not properly shown on the calendar in all cases, thanks @SamMakesCode!
 

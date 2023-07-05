@@ -42,14 +42,15 @@ You can run the test suite directly from the Nova project in which you are using
     phpunit --testsuite NovaCalendar
    ```
 
-    If the test suite completes as expected, you should see something like this:
 
-    ```console
-    PHPUnit 9.5.23 #StandWithUkraine    
+If the test suite completes as expected, you should see something like this:
 
-    ...........................                                       27 / 27 (100%)
+```console
+PHPUnit 9.5.23 #StandWithUkraine    
 
-    Time: 00:02.155, Memory: 26.00 MB
+...........................                                       27 / 27 (100%)
 
-    OK (27 tests, 106 assertions)
-    ```
+Time: 00:02.155, Memory: 26.00 MB
+
+OK (27 tests, 106 assertions)
+```

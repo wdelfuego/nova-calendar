@@ -76,7 +76,17 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     {
         return $this->configValue('windowTitle') ?? '';
     }
-    
+
+    public function shouldShowWeekNumbers() : bool
+    {
+        return $this->configValue('shouldShowWeekNumbers') ?? false;
+    }
+
+    public function calendarViews(): array
+    {
+        return $this->configValue('calendarViews') ?? ['month'];
+    }
+
     public function timezone(): string
     {
         return config('app.timezone') ?? 'UTC';
@@ -84,11 +94,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     
     public function titleForView(string $viewSpecifier) : string
     {
-        if($viewSpecifier == View::MONTH)
+        if($viewSpecifier == View::MONTH || $viewSpecifier == View::WEEK)
         {
             return ucfirst($this->startOfRange()->translatedFormat('F \'y'));
         }
-        
+
         return __('Calendar');
     }
     
@@ -191,6 +201,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         return false;
     }
 
+    public function filters() : array
+    {
+        return [];
+    }
+    
     public function activeFilterKey() : ?string
     {
         return $this->activeFilterKey;
@@ -226,7 +241,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
             }
         }
         
-        throw new \Exception("Calendar event filter not found for key: $filterKey");
+        return null;
     }
     
     public function defaultFilterKey() : ?string
@@ -250,6 +265,21 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         }
         
         return $this->allEvents;
+    }
+    
+    public function monthLabel(int $n) : string
+    {
+        return __(Carbon::createFromDate(null, $n, 1)->monthName);
+    }
+    
+    public function monthLabels() : array
+    {
+        $out = [];
+        for($i = 1; $i <= 12; $i++)
+        {
+            $out[$i] = $this->monthLabel($i);
+        }
+        return $out;
     }
     
     private function loadAllEvents() : void
@@ -281,7 +311,15 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
         if($this->activeFilterKey)
         {
             $filter = $this->filterWithKey($this->activeFilterKey);
-            $this->allEvents = array_filter($this->allEvents, function($event) use ($filter) { return $filter->showEvent($event); });
+            if($filter)
+            {
+                $this->allEvents = array_filter($this->allEvents, function($event) use ($filter) { return $filter->showEvent($event); });
+            }
+            else
+            {
+                // Front-end requested a non-existent filter, we're returning to a non-filtered situation
+                $this->activeFilterKey = null;
+            }
         }
         
         // Third, set all event timezones to calendar timezone

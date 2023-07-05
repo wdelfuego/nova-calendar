@@ -16,21 +16,18 @@
  
 namespace Wdelfuego\NovaCalendar\EventFilter;
 
-use Laravel\Nova\Resource as NovaResource;
 use Wdelfuego\NovaCalendar\Event;
 
-class ExcludeNovaResourceFilter extends NovaResourceFilter
+class CallbackFilter extends AbstractEventFilter
 {
+    public function __construct(string $label, $callback)
+    {
+        parent::__construct($label);
+        $this->setCallbackFilter($callback);
+    }
+    
     public function showEvent(Event $event): bool
     {
-        foreach($this->novaResourceClasses as $novaResourceClass)
-        {
-            if($event->hasNovaResource($novaResourceClass))
-            {
-                return !$this->passesCallbackFilter($event);;
-            }
-        }
-        
-        return true;
+        return $this->passesCallbackFilter($event);
     }
 }

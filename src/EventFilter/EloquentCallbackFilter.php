@@ -18,16 +18,12 @@ namespace Wdelfuego\NovaCalendar\EventFilter;
 
 use Wdelfuego\NovaCalendar\Event;
 
-class CustomFilter extends AbstractEventFilter
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+
+class EloquentCallbackFilter extends CallbackFilter
 {
-    public function __construct(string $label, $customFilter)
-    {
-        parent::__construct($label);
-        $this->setCustomFilter($customFilter);
-    }
-    
     public function showEvent(Event $event): bool
     {
-        return $this->passesCustomFilter($event);
+        return ($event->model() instanceof EloquentModel) && $this->passesCallbackFilter($event);
     }
 }

@@ -23,7 +23,7 @@ class NovaResourceFilter extends AbstractEventFilter
 {
     protected $novaResourceClasses = [];
     
-    public function __construct(string $label, $novaResourceClasses, $customFilter = null)
+    public function __construct(string $label, $novaResourceClasses, $callbackFilter = null)
     {
         if(is_string($novaResourceClasses))
         {
@@ -44,7 +44,7 @@ class NovaResourceFilter extends AbstractEventFilter
         
         parent::__construct($label);
         $this->novaResourceClasses = $novaResourceClasses;
-        $this->setCustomFilter($customFilter);
+        $this->setCallbackFilter($callbackFilter);
     }
     
     public function showEvent(Event $event): bool
@@ -53,7 +53,7 @@ class NovaResourceFilter extends AbstractEventFilter
         {
             if($event->hasNovaResource($novaResourceClass))
             {
-                return $this->passesCustomFilter($event);
+                return $this->passesCallbackFilter($event);
             }
         }
         
