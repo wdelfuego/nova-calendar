@@ -45,7 +45,7 @@ return [
         /*
           * Define if week numbers should be displayed on the Month view.
             This key is optional.
-            If you remove it or set, week numbers will be displayed on the Month view by default.
+            Week numbers will not be displayed on the month view if not true.
         */
         'shouldShowWeekNumbers' => true,
 
@@ -55,8 +55,8 @@ return [
             This key is optional. if not set, only month view will be rendered.
         */
         'calendarViews' => [
-          'month',
-          'week'
+          'week',
+          'month'
         ]
     ],
 
