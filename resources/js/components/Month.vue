@@ -92,6 +92,18 @@
 
         <div class="right-items">
 
+            <div v-if="calendarViews.length > 1">
+                <a v-for="view in calendarViews"
+                    href="#"
+                    @click="$emit('set-active-view', view)"
+                    class="button hover:bg-gray-100 dark:hover:bg-gray-700 ml-2"
+                    :class="[{ 'bg-primary-500 text-white': view === 'month' }]">
+                    <span class="font-bold capitalize">
+                        {{ __(view) }}
+                    </span>
+                </a>
+            </div>
+            
             <Dropdown v-if="Object.keys(availableFilters).length" :handle-internal-clicks="true" :class="{
                 'bg-primary-500 hover:bg-primary-600 border-primary-500':
                     activeFilterKey != null,
@@ -137,17 +149,6 @@
                 </template>
             </Dropdown>
 
-            <div v-if="calendarViews.length > 1">
-                <a v-for="view in calendarViews"
-                    href="#"
-                    @click="$emit('set-active-view', view)"
-                    class="button hover:bg-gray-100 dark:hover:bg-gray-700 ml-2"
-                    :class="[{ 'bg-primary-500 text-white': view === 'month' }]">
-                    <span class="font-bold capitalize">
-                        {{ __(view) }}
-                    </span>
-                </a>
-            </div>
         </div>
 
     </div>

@@ -16,7 +16,6 @@
  
 namespace Wdelfuego\NovaCalendar;
 
-use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
@@ -45,8 +44,8 @@ class Event
     
     public function __construct(
         string $name, 
-        CarbonInterface $start,
-        CarbonInterface $end = null, 
+        Carbon $start,
+        Carbon $end = null, 
         string $notes = '', 
         array $badges = [])
     {
@@ -252,7 +251,7 @@ class Event
         return $this;
     }
     
-    public function start(CarbonInterface $v = null) : CarbonInterface
+    public function start(Carbon $v = null) : Carbon
     {
         if(!is_null($v)) {
             $this->start = $v;
@@ -261,13 +260,13 @@ class Event
         return $this->start;
     }
     
-    public function withStart(CarbonInterface $v) : self
+    public function withStart(Carbon $v) : self
     {
         $this->start($v);
         return $this;
     }
 
-    public function end(CarbonInterface $v = null) : ?CarbonInterface
+    public function end(Carbon $v = null) : ?Carbon
     {
         if(!is_null($v)) {
             $this->end = $v;
@@ -276,7 +275,7 @@ class Event
         return $this->end;
     }
     
-    public function withEnd(CarbonInterface $v) : self
+    public function withEnd(Carbon $v) : self
     {
         $this->end($v);
         return $this;

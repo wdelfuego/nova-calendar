@@ -26,10 +26,10 @@ interface CalendarDataProviderInterface
     // Will be displayed above the calendar
     public function titleForView(string $viewSpecifier) : string;
 
-    // Trigers Week numbers to be displayed
+    // Triggers Week numbers to be displayed
     public function shouldShowWeekNumbers(): bool;
 
-    // A 1D array of calendar views to be rendered
+    // A 1D array of calendar view specifiers to be offered to the end user
     public function calendarViews(): array;
 
     // A 1D array with the names of the seven days of the week, in order of display L -> R

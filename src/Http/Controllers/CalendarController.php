@@ -21,8 +21,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 use Wdelfuego\NovaCalendar\View\AbstractView as View;
-// use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
-// use Wdelfuego\NovaCalendar\Contracts\ViewInterface;
 
 class CalendarController extends BaseController
 {
@@ -58,15 +56,26 @@ class CalendarController extends BaseController
         return $this->dataProviders[$calendarUri];
     }
     
-    public function getCalendarData(string $view = 'month')
+    protected function getCalendarDataProviderForCurrentRequest()
     {
+        if(!$this->request)
+        {
+            throw new \Exception("A request needs to be set in order to determine the calendar data provider");
+        }
+        
         $requestUri = substr($this->request->url(), strlen($this->request->schemeAndHttpHost()));
 
         // Get calendar URI from full request URI by ditching the prefix and the last path element (view)
         $calendarUri = substr($requestUri, strlen(self::API_PATH_PREFIX));
         $calendarUri = substr($calendarUri, 0, strrpos($calendarUri, '/'));
 
-        $dataProvider = $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+        return $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+    }
+    
+    public function getCalendarData(string $view = 'month')
+    {
+        $dataProvider = $this->getCalendarDataProviderForCurrentRequest();
+
         if($this->request->query('isInitRequest'))
         {
             $dataProvider->setActiveFilterKey($dataProvider->defaultFilterKey());
@@ -88,42 +97,20 @@ class CalendarController extends BaseController
      */
     public function getCalendarViews(): array
     {
-        $requestUri = substr($this->request->url(), strlen($this->request->schemeAndHttpHost()));
+        $dataProvider = $this->getCalendarDataProviderForCurrentRequest();
 
-        // Get calendar URI from full request URI by ditching the prefix and the last path element (view)
-        $calendarUri = substr($requestUri, strlen(self::API_PATH_PREFIX));
-        $calendarUri = substr($calendarUri, 0, strrpos($calendarUri, '/'));
-
-        $dataProvider = $this->getCalendarDataProviderForUri($calendarUri)->withRequest($this->request);
+        $viewSpecifiers = array_filter($dataProvider->calendarViews(), function($viewSpecifier) { 
+            if(!View::isValidView($viewSpecifier))
+            {
+                throw new \Exception("Invalid view specifier: '$viewSpecifier'");
+            }
+            return true;
+        });
 
         return [
-            'calendar_views' => $this->sanitizeCalendarViews($dataProvider->calendarViews()),
+            'calendar_views' => array_unique($viewSpecifiers),
             'windowTitle' => $dataProvider->windowTitle(),
         ];
-    }
-
-    /**
-     * Sanitizes array of provided calendar views. Chcecks if view name exists in View::VIEWS constant, removes duplicates, 
-     * throws an exception, if wrong view name defined in config/nova-calendar.php file.
-     *
-     * @param  array $cv
-     * @return array
-     */
-    protected function sanitizeCalendarViews(array $cv): array
-    {
-        $out = [];
-        foreach ($cv as $view) {
-            if (View::isValidView($view))
-            {
-                if (!in_array($view, $out))
-                {
-                    $out[] = $view;
-                }
-            } else {
-                throw new \Exception("Unknown view: $view");
-            }
-        }
-        return $out;
     }
 
 }

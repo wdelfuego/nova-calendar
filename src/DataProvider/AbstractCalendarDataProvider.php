@@ -37,6 +37,7 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
 {
     protected $firstDayOfWeek;
     protected $request = null;    
+    protected $calendarViews = [View::MONTH];
     
     // Start/end of calendar = date range that is _visible_ in the front-end (ie 42 days in month calendar)
     // Start/end of range = date range that is considered _active_ in the front-end (ie 31 days in month calendar)
@@ -79,12 +80,12 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
 
     public function shouldShowWeekNumbers() : bool
     {
-        return $this->configValue('shouldShowWeekNumbers') ?? false;
+        return false;
     }
 
     public function calendarViews(): array
     {
-        return $this->configValue('calendarViews') ?? ['month'];
+        return $this->calendarViews;
     }
 
     public function timezone(): string
@@ -94,9 +95,13 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
     
     public function titleForView(string $viewSpecifier) : string
     {
-        if($viewSpecifier == View::MONTH || $viewSpecifier == View::WEEK)
+        if($viewSpecifier == View::MONTH)
         {
             return ucfirst($this->startOfRange()->translatedFormat('F \'y'));
+        }
+        else if($viewSpecifier == View::WEEK)
+        {
+            return $this->startOfRange()->translatedFormat('Y') .', ' .__('week') .' ' .$this->startOfRange()->format('W');
         }
 
         return __('Calendar');
