@@ -52,13 +52,13 @@
                 >
 
                 <div class="p-3 text-center">
-                  <select name="month" class="mr-3" v-model="month" @change="reload()">
+                  <select name="month" class="mr-3 dark:bg-gray-900" v-model="month" @change="reload()" @click.stop>
                     <option v-for="(monthLabel, monthNum) in $data.monthLabels" :value="monthNum">
                     {{ monthLabel }}
                     </option>
                   </select>
                 
-                  <select name="year" v-model="year" @change="reload()">
+                  <select name="year" class="dark:bg-gray-900" v-model="year" @change="reload()" @click.stop>
                     <template v-for="index in 25">
                       <option :value="year + (25 - index)">{{ year + (25 - index) }}</option>
                     </template>
@@ -288,6 +288,7 @@ export default {
     },
 
     reload(isInitRequest = false) {
+      console.log('reloading');
       let vue = this;
       vue.loading = true;
       
