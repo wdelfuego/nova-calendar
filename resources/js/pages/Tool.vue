@@ -288,7 +288,6 @@ export default {
     },
 
     reload(isInitRequest = false) {
-      console.log('reloading');
       let vue = this;
       vue.loading = true;
       
