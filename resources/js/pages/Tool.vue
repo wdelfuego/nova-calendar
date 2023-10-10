@@ -14,7 +14,20 @@
  
 <template>
 
-  <component :is="loadProjectResourceComponent" :resourceId="395" style="height:200px"></component>
+  <div id="resourceToolOverlay" style="height:950px"
+    v-if="currentResourceId > 0"
+    v-bind:class="{'visible': showResourceTool }">
+    
+    <!-- Updating the :key with the resource ID is crucial to proper element reloading
+         in between event selects on the calendar. Otherwise old data tends to linger. -->
+    <flight-filler 
+      ref="flightFillerRef"
+      :key="this.currentResourceId"
+      :resourceId="this.currentResourceId" 
+      context="modal"
+      @close="closeResourceTool()">
+    </flight-filler>
+  </div>
 
   <div>
     <Head :title="$data.windowTitle || $data.title" />
@@ -251,14 +264,19 @@
 </template>
 
 <script>
+import { watch } from 'vue';
+
 export default {
         
   mounted() {
     this.init();
+
+
     
     Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
     Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
     Nova.addShortcut('alt+h', event =>    {   this.reset(); });
+    Nova.addShortcut('esc', event =>    {     this.closeResourceTool() });
   },
 
   methods: {
@@ -278,6 +296,17 @@ export default {
       {
         this.reload(true);
       }
+
+    },
+
+    closeResourceTool() {
+      this.showResourceTool = false;
+      setTimeout(() => {
+        if (this.$refs.flightFillerRef) {
+          this.$refs.flightFillerRef.reset();
+        }
+      }, 300);
+      
     },
 
     prevMonth() {
@@ -323,16 +352,6 @@ export default {
         });
     },
     
-    loadProjectResourceComponent() {
-      const componentToLoad = this.projectResourceComponent || null;
-      console.log(componentToLoad);
-      if(componentToLoad)
-      {   
-        console.log('importing');
-        return () => import({$novaCalendarResourceComponentPath});
-      }
-    },
-    
     open(e, url) {
       if (e.metaKey || e.ctrlKey) {
         window.open(Nova.url(url))
@@ -342,8 +361,14 @@ export default {
     },
 
     clickedEvent(calendarEvent, clickEvent) {
-      console.log('click!');
-      this.loadProjectResourceComponent();    
+      if (clickEvent.metaKey || clickEvent.ctrlKey) {
+        window.location = Nova.url(calendarEvent.url);
+        // let newWindow = window.open(Nova.url(calendarEvent.url));
+      }
+      else if(calendarEvent.resource_class == 'App\\Flight') {
+        this.currentResourceId = calendarEvent.resource_id;
+        this.showResourceTool = true;
+      }
     },
 
     stylesForEvent(event) {
@@ -413,13 +438,11 @@ export default {
     
   },
 
-  props: {
-
-  },
-
   data () {
       return {
           loading: true,
+          showResourceTool: false,
+          currentResourceId: -1,
           resetFiltersLabel: 'All events',
           availableFilters: {},
           activeFilterKey: null,

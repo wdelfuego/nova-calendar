@@ -390,3 +390,35 @@ div.nova-calendar div.nc-event.multi div.content {
   grid-row: 1 / -1;
   grid-column: 2 / 3;
 }
+
+/*
+ * Resource tool overlay (FlightFiller)
+ */
+#resourceToolOverlay {
+  position: fixed;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, top 0.2s ease-out;
+  pointer-events: none;
+  border: 2px solid rgba(var(--colors-primary-500), 0.3);
+  border-radius: 1rem;
+  background-color: rgba(255,255,255,0);
+  top: 9%;
+  left: 2rem;
+  right: 2rem;
+  z-index: 9999; /* Make sure it's on top of everything else */
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2); /* Drop shadow */
+  overflow: auto; /* Scrollable if content exceeds height */
+}
+
+#resourceToolOverlay.visible {
+  top: 7.5%;
+  pointer-events: auto;
+  opacity : 1;
+}
+
+@media (min-width:1080px) {
+  
+  #resourceToolOverlay {
+    left:18rem;
+  }
+}
