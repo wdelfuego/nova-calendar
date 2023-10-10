@@ -14,22 +14,22 @@
  
 <template>
 
-  <div id="resourceToolOverlay" style="height:950px"
-
-    v-bind:class="{'visible': showResourceTool }">
-    
-    <!-- Updating the :key with the resource ID is crucial to proper element reloading
-         in between event selects on the calendar. Otherwise old data tends to linger. -->
-    <flight-filler 
-      ref="flightFillerRef"
-      :key="this.currentResourceId"
-      :resourceId="this.currentResourceId" 
-      context="modal"
-      @close="closeResourceTool()">
-    </flight-filler>
-  </div>
-
   <div>
+  
+    <div id="resourceToolOverlay" style="height:950px"
+      v-bind:class="{'visible': showResourceTool }">
+    
+      <!-- Updating the :key with the resource ID is crucial to proper element reloading
+           in between event selects on the calendar. Otherwise old data tends to linger. -->
+      <flight-filler 
+        ref="flightFillerRef"
+        :key="this.currentResourceId"
+        :resourceId="this.currentResourceId" 
+        context="modal"
+        @close="closeResourceTool()">
+      </flight-filler>
+    </div>
+  
     <Head :title="$data.windowTitle || $data.title" />
 
     <div id="nc-control">
