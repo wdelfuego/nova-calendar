@@ -15,7 +15,7 @@
 <template>
 
   <div id="resourceToolOverlay" style="height:950px"
-    v-if="currentResourceId > 0"
+
     v-bind:class="{'visible': showResourceTool }">
     
     <!-- Updating the :key with the resource ID is crucial to proper element reloading
@@ -302,6 +302,7 @@ export default {
     closeResourceTool() {
       this.showResourceTool = false;
       setTimeout(() => {
+        this.currentResourceId = -1;
         if (this.$refs.flightFillerRef) {
           this.$refs.flightFillerRef.reset();
         }
