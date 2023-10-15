@@ -271,8 +271,6 @@ export default {
   mounted() {
     this.init();
 
-
-    
     Nova.addShortcut('alt+right', event => {  this.nextMonth(); });
     Nova.addShortcut('alt+left', event => {   this.prevMonth(); });
     Nova.addShortcut('alt+h', event =>    {   this.reset(); });

@@ -40,11 +40,6 @@ class ToolServiceProvider extends ServiceProvider
             $this->routes();
         });
 
-        Nova::serving(function (ServingNova $event) {
-            Nova::provideToScript([
-            ]);
-        });
-        
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateDefaultCalendarDataProvider::class,
