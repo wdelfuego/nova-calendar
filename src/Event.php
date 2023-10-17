@@ -60,7 +60,7 @@ class Event
     public function toArray(Carbon $displayDate, Carbon $startOfRange, Carbon $endOfRange, int $firstDayOfWeek) : array
     {
         return [
-            'resource_class' => get_class($this->novaResource->model()),
+            'resource_class' => $this->novaResource ? get_class($this->novaResource->model()) : null,
             'resource_id' => $this->novaResource->id,
             'name' => $this->name,
             'startDate' => $this->start->format("Y-m-d"),
