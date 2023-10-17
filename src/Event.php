@@ -61,7 +61,7 @@ class Event
     {
         return [
             'resource_class' => $this->novaResource ? get_class($this->novaResource->model()) : null,
-            'resource_id' => $this->novaResource->id,
+            'resource_id' => $this->novaResource ? $this->novaResource->id : null,
             'name' => $this->name,
             'startDate' => $this->start->format("Y-m-d"),
             'startTime' => $this->start->format($this->timeFormat),
