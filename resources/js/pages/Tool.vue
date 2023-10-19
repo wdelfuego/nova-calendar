@@ -299,6 +299,7 @@ export default {
 
     closeResourceTool() {
       this.showResourceTool = false;
+      this.reload();
       setTimeout(() => {
         this.currentResourceId = -1;
         if (this.$refs.flightFillerRef) {
