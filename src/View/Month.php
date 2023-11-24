@@ -49,6 +49,11 @@ class Month extends AbstractView
         ];
     }
     
+    public function forceShowDate(Carbon $date)
+    {
+        $this->setYearAndMonth($date->year, $date->month);
+    }
+    
     public function setYearAndMonth($year, $month) : self
     {
         $year  = is_null($year)  || !is_numeric($year)  ? now()->year  : intval($year);

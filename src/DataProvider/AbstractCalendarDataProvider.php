@@ -62,6 +62,11 @@ abstract class AbstractCalendarDataProvider implements CalendarDataProviderInter
 
     }
     
+    public function customizeView(View $view) : View
+    {
+        return $view;
+    }
+    
     public function setConfig(array $config)
     {
         $this->config = $config;

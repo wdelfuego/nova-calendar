@@ -47,7 +47,8 @@ abstract class AbstractView implements ViewInterface
     abstract public function specifier() : string;    
     abstract public function initFromRequest(NovaRequest $request);
     abstract public function viewData(CalendarDataProviderInterface $dataProvider) : array;
-
+    abstract public function forceShowDate(Carbon $date);
+    
     // The general Range is the date range that the user is interested in.
     // The Calendar range is the date range that will be shown in the front-end.
     // The Range can be shorter than the Calendar, not the other way around.
