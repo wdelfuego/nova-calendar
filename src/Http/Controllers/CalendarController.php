@@ -78,7 +78,7 @@ class CalendarController extends BaseController
             
         $view = View::get($view);
         $view->initFromRequest($this->request);
-        $view = $dataProvider->customizeView($this);
+        $view = $dataProvider->customizeView($view);
         return $view->calendarData($this->request, $dataProvider);
     }
     
