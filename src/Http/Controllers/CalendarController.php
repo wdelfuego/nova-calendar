@@ -21,8 +21,6 @@ use Illuminate\Support\Carbon;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 use Wdelfuego\NovaCalendar\View\AbstractView as View;
-// use Wdelfuego\NovaCalendar\Contracts\CalendarDataProviderInterface;
-// use Wdelfuego\NovaCalendar\Contracts\ViewInterface;
 
 class CalendarController extends BaseController
 {
@@ -31,7 +29,7 @@ class CalendarController extends BaseController
 
     private $dataProviders = [];
 
-    public function __construct(NovaRequest $request)
+    public function __construct()
     {
         // Load data providers, keyed by uri
         foreach(config('nova-calendar', []) as $calendarKey => $calendarConfig)
