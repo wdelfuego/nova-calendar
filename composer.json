@@ -1,5 +1,5 @@
 {
-    "name": "webard/nova-calendar",
+    "name": "wdelfuego/nova-calendar",
     "description": "A powerful event calendar Tool for Laravel's Nova 4.",
     "keywords": [
         "laravel",
