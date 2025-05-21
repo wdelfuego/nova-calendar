@@ -20,8 +20,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
 
-use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
-use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
 use Wdelfuego\NovaCalendar\Event;
 
 class SingleDay extends NovaEventGenerator
@@ -36,15 +34,12 @@ class SingleDay extends NovaEventGenerator
         {
             throw new \Exception("Invalid toEventSpec: expected the name of a datetime attribute that starts the event as a single string");
         }
-        
-        $afterFilter = new AfterOrOnDate('', $toEventSpec);
-        $beforeFilter = new BeforeOrOnDate('', $toEventSpec);
 
         // Since these are single-day events by definition, we only query for the models
         // that have the date attribute within the current calendar range
         $models = $eloquentModelClass::orderBy($toEventSpec);
-        $models = $afterFilter->modulateQuery($models, $rangeStart);
-        $models = $beforeFilter->modulateQuery($models, $rangeEnd);
+        $models = $models->whereDate($toEventSpec, '>=', $rangeStart);
+        $models = $models->whereDate($toEventSpec, '<=', $rangeEnd);
 
         $out = [];
         foreach($models->cursor() as $model)

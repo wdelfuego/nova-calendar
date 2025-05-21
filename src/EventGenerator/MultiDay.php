@@ -20,8 +20,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Laravel\Nova\Resource as NovaResource;
 
-use Wdelfuego\Nova\DateTime\Filters\BeforeOrOnDate;
-use Wdelfuego\Nova\DateTime\Filters\AfterOrOnDate;
 use Wdelfuego\NovaCalendar\Event;
 
 class MultiDay extends NovaEventGenerator
@@ -39,15 +37,12 @@ class MultiDay extends NovaEventGenerator
         
         $dateAttributeStart = $toEventSpec[0];
         $dateAttributeEnd = $toEventSpec[1];
-        
-        $afterFilter = new AfterOrOnDate('', $dateAttributeEnd);
-        $beforeFilter = new BeforeOrOnDate('', $dateAttributeStart);
 
         // Since multi-day events are to be included, we have to query for
         // all models..
         $models = $eloquentModelClass::orderBy($dateAttributeStart);
         // a) that start before the end of the calendar, 
-        $models = $beforeFilter->modulateQuery($models, $rangeEnd);
+        $models = $models->whereDate($dateAttributeStart, '<=', $rangeEnd);
         // and that..
         $models = $models->where(function($query) use ($dateAttributeStart, $dateAttributeEnd, $rangeStart, $rangeEnd) {
             //    b) EITHER don't have an end date AND start on or after the calendar start
