@@ -1,8 +1,19 @@
-<h1 align="center">Event calendar for Laravel Nova 4</h1>
+<h1 align="center">Event calendar for Laravel Nova</h1>
 
 <p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
 
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
+
+# Package is abandoned
+As of 2025, I have moved my development efforts to Filament and am no longer using or working on this package.
+
+Feel free to take over a fork, just make sure you respect the [license](#license):
+
+## License summary
+Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
+Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
+Usage in Nova is not compatible with the AGPLv3 license. More details [below](#license).
+
 
 # Installation
 ```sh
@@ -16,10 +27,6 @@ Version 2.0 of this package was released on June 7th, 2023.
 
 There's an [Upgrade Guide](https://wdelfuego.github.io/nova-calendar/upgrading.html) for users of v1.x. You shouldn't need more than 15 minutes to upgrade.
 
-# License summary
-Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
-Basically the only condition is that you can't sublicense the package or embed it in a framework (unless you do so under the AGPLv3 license).
-Usage in Nova is not compatible with the AGPLv3 license. More details [below](#license).
 
 # Support & Documentation
 
@@ -50,6 +57,9 @@ The following features are not (yet) supported:
 Please create or upvote [feature request discussions](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests) in the GitHub repo for the features you think would be most valuable to have.
 
 # Release log
+## v2.2 (final release)
+- Adds support for Nova 5
+
 ## v2.1
 - Adds a year/month picker dropdown to the top of the calendar view
 
