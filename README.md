@@ -5,7 +5,7 @@
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
 # Package is abandoned
-As of 2025, I have moved my development efforts to Filament and am no longer using or working on this package.
+As of 2025, I have moved my development efforts to [Filament](https://filamentphp.com) and am no longer using or working on this package.
 
 Feel free to take over a fork, just make sure you respect the [license](#license):
 
