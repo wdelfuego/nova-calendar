@@ -7,7 +7,9 @@
 # Package is abandoned
 As of 2025, I have moved my development efforts to [Filament](https://filamentphp.com) and am no longer using or working on this package.
 
-Feel free to take over a fork, just make sure you respect the [license](#license):
+Feel free to take over a fork, just make sure you respect the [license](#license).
+
+You are free to make and distribute modified versions of this package publicly as long as you distribute it for free, as a stand-alone package and under the same dual licensing model.
 
 ## License summary
 Anyone can use and modify this package in any way they want, including commercially, as long as the commercial use is a) creating implemented calendar views and/or b) using the implemented calendar views.
