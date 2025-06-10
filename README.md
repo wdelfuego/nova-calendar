@@ -1,13 +1,11 @@
 <h1 align="center">Event calendar for Laravel Nova</h1>
 
-<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova 4 project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
+<p align="center">An event calendar that displays Nova resources or other time-related data in your Nova project on a monthly calendar view that adapts nicely to clear and dark mode.</p>
 
 ![The design of the calendar in both clear and dark mode](https://github.com/wdelfuego/nova-calendar/blob/main/resources/doc/screenshot.jpg?raw=true)
 
 # Package is abandoned
 As of 2025, I have moved my development efforts to [Filament](https://filamentphp.com) and am no longer using or working on this package.
-
-Feel free to take over a fork, just make sure you respect the [license](#license).
 
 You are free to make and distribute modified versions of this package publicly as long as you distribute it for free, as a stand-alone package and under the same dual licensing model.
 
@@ -35,7 +33,7 @@ There's an [Upgrade Guide](https://wdelfuego.github.io/nova-calendar/upgrading.h
 For any problems or doubts you might run into, please [open an issue](https://github.com/wdelfuego/nova-calendar/issues). For feature requests, please upvote or open a [feature request discussion](https://github.com/wdelfuego/nova-calendar/discussions/categories/ideas-feature-requests). Developers who are interested in working together on this tool are highly welcomed.
 
 # What can it do?
-This calendar tool for Nova 4 shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
+This calendar tool for Laravel Nova shows existing Nova resources and, if you want, dynamically generated events, but comes without database migrations or Eloquent models itself. This is considered a feature. Your project is expected to already contain certain Nova resources for Eloquent models with `DateTime` fields or some other source of time-related data that can be used to generate the calendar events displayed to the end user.
 
 The following features are supported:
 
